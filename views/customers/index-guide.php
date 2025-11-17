@@ -1,9 +1,14 @@
 <div class="container-fluid px-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold"><i class="bi bi-people"></i> Danh sách khách</h2>
-        <a href="<?= BASE_URL ?>?action=tours/view&id=<?= $tour['id'] ?>" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Quay lại
-        </a>
+        <div class="d-flex gap-2">
+            <a href="<?= BASE_URL ?>?action=customers/create&tour_id=<?= $tour['id'] ?>" class="btn btn-success">
+                <i class="bi bi-person-plus"></i> Thêm khách hàng
+            </a>
+            <a href="<?= BASE_URL ?>?action=tours/view&id=<?= $tour['id'] ?>" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Quay lại
+            </a>
+        </div>
     </div>
 
     <!-- Thông tin tour -->

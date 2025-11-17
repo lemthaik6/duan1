@@ -44,6 +44,12 @@
                     </li>
                     
                     <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>?action=bookings/index">
+                            <i class="bi bi-calendar-check"></i> Quản lý Booking
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=reports/index">
                             <i class="bi bi-graph-up"></i> Báo cáo & Thống kê
                         </a>
