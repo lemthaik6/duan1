@@ -13,6 +13,7 @@ class DailyLogController
         $this->assignmentModel = new TourAssignmentModel();
     }
 
+    
     /**
      * Danh sách nhật ký
      */
