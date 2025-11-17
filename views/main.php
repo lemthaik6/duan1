@@ -79,7 +79,6 @@
 
     <footer class="bg-light text-center py-3 mt-5">
         <div class="container">
-            <small class="text-muted">&copy; <?= date('Y') ?> Hệ thống Quản lý Tour Nội bộ</small>
         </div>
     </footer>
 </body>

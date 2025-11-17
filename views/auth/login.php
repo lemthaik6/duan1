@@ -54,9 +54,6 @@
 
         <!-- Main area phải - Gradient background -->
         <div class="col-md-8 login-main-area">
-            <div class="login-copyright">
-                <p class="mb-0">&copy; <?= date('Y') ?> Hệ thống Quản lý Tour Nội bộ</p>
-            </div>
         </div>
     </div>
 </div>
@@ -170,21 +167,6 @@
         padding: 0;
     }
 
-    .login-copyright {
-        position: absolute;
-        bottom: 30px;
-        left: 30px;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 15px 25px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .login-copyright p {
-        color: #333;
-        font-size: 0.9rem;
-        margin: 0;
-    }
 
     /* Responsive */
     @media (max-width: 768px) {

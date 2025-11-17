@@ -27,8 +27,17 @@ $controllers = [
     'costs' => 'CostController',
     'daily-logs' => 'DailyLogController',
     'incidents' => 'IncidentController',
+    'attendance' => 'AttendanceController',
+    'customers' => 'CustomerController',
+    'bookings' => 'BookingController',
+    'hotel-rooms' => 'HotelRoomController',
+    'categories' => 'CategoryController',
+    'tour-policies' => 'TourPolicyController',
+    'suppliers' => 'SupplierController',
+    'tour-suppliers' => 'TourSupplierController',
     'reports' => 'ReportController',
     'profile' => 'ProfileController',
+    'feedbacks' => 'FeedbackController',
 ];
 
 // Kiểm tra và xử lý controller

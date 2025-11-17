@@ -88,12 +88,20 @@ class TourController
         $itineraries = $this->itineraryModel->getByTour($id);
         $customers = $this->customerModel->getByTour($id);
         $costs = $this->costModel->getByTour($id);
-        $totalCost = $this->costModel->getTotalCost($id);
+        $totalCost = $this->costModel->getTotalCost($id, true); // Bao gồm giá gốc nội bộ
+        $costsOnly = $this->costModel->getCostsOnly($id); // Chỉ chi phí phát sinh
         $dailyLogs = $this->dailyLogModel->getByTour($id);
         $incidents = $this->incidentModel->getByTour($id);
         
         $title = 'Chi tiết Tour: ' . $tour['name'];
-        $view = 'tours/view';
+        
+        // Chọn view theo role
+        if (isAdmin()) {
+            $view = 'tours/view-admin';
+        } else {
+            $view = 'tours/view-guide';
+        }
+        
         require_once PATH_VIEW_MAIN;
     }
 
@@ -213,7 +221,7 @@ class TourController
         requireGuide();
         
         $user = getCurrentUser();
-        $tours = $this->tourAssignmentModel->getByGuide($user['id']);
+        $tours = $this->assignmentModel->getByGuide($user['id']);
         
         $title = 'Tour của tôi';
         $view = 'tours/my-tours';

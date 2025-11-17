@@ -2,6 +2,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold"><i class="bi bi-eye"></i> Chi tiết Tour</h2>
         <div>
+            <?php if (isGuide()): ?>
+                <a href="<?= BASE_URL ?>?action=attendance/index&tour_id=<?= $tour['id'] ?>" class="btn btn-success">
+                    <i class="bi bi-person-check"></i> Điểm danh khách
+                </a>
+            <?php endif; ?>
             <?php if (isAdmin()): ?>
                 <a href="<?= BASE_URL ?>?action=tours/edit&id=<?= $tour['id'] ?>" class="btn btn-warning">
                     <i class="bi bi-pencil"></i> Chỉnh sửa
@@ -146,15 +151,21 @@
             <!-- Hướng dẫn viên - Chỉ Admin thấy -->
             <?php if (isAdmin()): ?>
                 <div class="card mb-4">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0"><i class="bi bi-people"></i> Hướng dẫn viên</h5>
+                        <a href="<?= BASE_URL ?>?action=guides/assign&tour_id=<?= $tour['id'] ?>" class="btn btn-sm btn-primary">
+                            <i class="bi bi-person-plus"></i> Phân công
+                        </a>
                     </div>
                     <div class="card-body">
                         <?php if (!empty($assignments)): ?>
                             <?php foreach ($assignments as $assignment): ?>
-                                <div class="mb-2">
+                                <div class="mb-2 pb-2 border-bottom">
                                     <strong><?= htmlspecialchars($assignment['guide_name']) ?></strong><br>
                                     <small class="text-muted"><?= htmlspecialchars($assignment['guide_email'] ?? '') ?></small>
+                                    <?php if ($assignment['guide_phone']): ?>
+                                        <br><small class="text-muted"><i class="bi bi-telephone"></i> <?= htmlspecialchars($assignment['guide_phone']) ?></small>
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -166,16 +177,24 @@
 
             <!-- Khách -->
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="bi bi-person-check"></i> Khách (<?= count($customers) ?>)</h5>
+                    <?php if (isGuide() || isAdmin()): ?>
+                        <a href="<?= BASE_URL ?>?action=customers/index&tour_id=<?= $tour['id'] ?>" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-list"></i> Xem tất cả
+                        </a>
+                    <?php endif; ?>
                 </div>
                 <div class="card-body">
                     <?php if (!empty($customers)): ?>
                         <?php foreach (array_slice($customers, 0, 5) as $customer): ?>
-                            <div class="mb-2">
+                            <div class="mb-2 pb-2 border-bottom">
                                 <strong><?= htmlspecialchars($customer['full_name']) ?></strong>
                                 <?php if ($customer['phone']): ?>
                                     <br><small class="text-muted"><?= htmlspecialchars($customer['phone']) ?></small>
+                                <?php endif; ?>
+                                <?php if (isset($customer['special_requests']) && $customer['special_requests']): ?>
+                                    <br><small class="text-info"><i class="bi bi-info-circle"></i> <?= htmlspecialchars($customer['special_requests']) ?></small>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>

@@ -134,6 +134,9 @@
                         <a href="<?= BASE_URL ?>?action=incidents/index" class="btn btn-outline-warning">
                             <i class="bi bi-exclamation-triangle"></i> Báo cáo sự cố
                         </a>
+                        <a href="<?= BASE_URL ?>?action=feedbacks/index" class="btn btn-outline-info">
+                            <i class="bi bi-chat-left-text"></i> Phản hồi đánh giá
+                        </a>
                     </div>
                 </div>
             </div>

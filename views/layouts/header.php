@@ -74,6 +74,12 @@
                             <i class="bi bi-exclamation-triangle"></i> Báo cáo sự cố
                         </a>
                     </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>?action=feedbacks/index">
+                            <i class="bi bi-chat-left-text"></i> Phản hồi đánh giá
+                        </a>
+                    </li>
                 <?php endif; ?>
             </ul>
             

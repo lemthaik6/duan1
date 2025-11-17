@@ -21,9 +21,75 @@ class TourCostModel extends BaseModel
     }
 
     /**
-     * Tính tổng chi phí tour
+     * Tính tổng chi phí tour (bao gồm giá gốc nội bộ + chi phí phát sinh)
      */
-    public function getTotalCost($tourId)
+    public function getTotalCost($tourId, $includeInternalPrice = true)
+    {
+        // Tính tổng chi phí phát sinh
+        $sql = "SELECT SUM(amount) as total FROM {$this->table} WHERE tour_id = :tour_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['tour_id' => $tourId]);
+        $result = $stmt->fetch();
+        $costsTotal = $result['total'] ?? 0;
+        
+        // Nếu cần bao gồm giá gốc nội bộ
+        if ($includeInternalPrice) {
+            $sql = "SELECT internal_price FROM tours WHERE id = :tour_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['tour_id' => $tourId]);
+            $tour = $stmt->fetch();
+            $internalPrice = $tour['internal_price'] ?? 0;
+            
+            return $costsTotal + $internalPrice;
+        }
+        
+        return $costsTotal;
+    }
+
+    /**
+     * Tính tổng chi phí theo tour hoặc tất cả (bao gồm giá gốc nội bộ)
+     */
+    public function getTotalCostByTour($tourId = null, $includeInternalPrice = true)
+    {
+        // Tính tổng chi phí phát sinh
+        $sql = "SELECT SUM(amount) as total FROM {$this->table}";
+        $params = [];
+        
+        if ($tourId) {
+            $sql .= " WHERE tour_id = :tour_id";
+            $params['tour_id'] = $tourId;
+        }
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        $result = $stmt->fetch();
+        $costsTotal = $result['total'] ?? 0;
+        
+        // Nếu cần bao gồm giá gốc nội bộ
+        if ($includeInternalPrice) {
+            $sql = "SELECT SUM(internal_price) as total FROM tours";
+            $params = [];
+            
+            if ($tourId) {
+                $sql .= " WHERE id = :tour_id";
+                $params['tour_id'] = $tourId;
+            }
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $result = $stmt->fetch();
+            $internalPriceTotal = $result['total'] ?? 0;
+            
+            return $costsTotal + $internalPriceTotal;
+        }
+        
+        return $costsTotal;
+    }
+    
+    /**
+     * Tính chỉ chi phí phát sinh (không bao gồm giá gốc)
+     */
+    public function getCostsOnly($tourId)
     {
         $sql = "SELECT SUM(amount) as total FROM {$this->table} WHERE tour_id = :tour_id";
         $stmt = $this->pdo->prepare($sql);
@@ -52,12 +118,23 @@ class TourCostModel extends BaseModel
      */
     public function create($data)
     {
+        // Đảm bảo tất cả các field đều có giá trị (kể cả null)
+        $params = [
+            'tour_id' => $data['tour_id'],
+            'cost_category_id' => $data['cost_category_id'],
+            'description' => !empty($data['description']) ? $data['description'] : null,
+            'amount' => $data['amount'],
+            'date' => $data['date'] ?? date('Y-m-d'),
+            'invoice_image' => $data['invoice_image'] ?? null,
+            'created_by' => $data['created_by']
+        ];
+
         $sql = "INSERT INTO {$this->table} 
                 (tour_id, cost_category_id, description, amount, date, invoice_image, created_by) 
                 VALUES 
                 (:tour_id, :cost_category_id, :description, :amount, :date, :invoice_image, :created_by)";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute($data);
+        return $stmt->execute($params);
     }
 
     /**

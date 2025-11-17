@@ -182,5 +182,30 @@ class GuideController
         $view = 'guides/assign';
         require_once PATH_VIEW_MAIN;
     }
+
+    /**
+     * Hủy phân công HDV
+     */
+    public function removeAssignment()
+    {
+        requireAdmin();
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? 0;
+            $tourId = $_POST['tour_id'] ?? 0;
+            
+            if ($this->assignmentModel->remove($id)) {
+                $_SESSION['success'] = 'Hủy phân công thành công!';
+            } else {
+                $_SESSION['error'] = 'Có lỗi xảy ra khi hủy phân công';
+            }
+            
+            header('Location: ' . BASE_URL . '?action=guides/assign&tour_id=' . $tourId);
+            exit;
+        }
+        
+        header('Location: ' . BASE_URL . '?action=tours/index');
+        exit;
+    }
 }
 

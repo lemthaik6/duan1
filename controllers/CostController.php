@@ -30,7 +30,8 @@ class CostController
             $tour = $this->tourModel->getById($tourId);
             if ($tour) {
                 $costs = $this->costModel->getByTour($tourId);
-                $totalCost = $this->costModel->getTotalCost($tourId);
+                $totalCost = $this->costModel->getTotalCost($tourId, true); // Bao gồm giá gốc nội bộ
+                $costsOnly = $this->costModel->getCostsOnly($tourId); // Chỉ chi phí phát sinh
                 $costByCategory = $this->costModel->getCostByCategory($tourId);
             }
         }
@@ -58,7 +59,8 @@ class CostController
             $tour = $this->tourModel->getById($tourId);
             if ($tour) {
                 $costs = $this->costModel->getByTour($tourId);
-                $totalCost = $this->costModel->getTotalCost($tourId);
+                // HDV chỉ xem chi phí phát sinh, không bao gồm giá gốc nội bộ
+                $totalCost = $this->costModel->getTotalCost($tourId, false);
             }
         }
 

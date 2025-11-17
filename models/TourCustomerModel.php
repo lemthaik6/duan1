@@ -21,9 +21,9 @@ class TourCustomerModel extends BaseModel
     public function create($data)
     {
         $sql = "INSERT INTO {$this->table} 
-                (tour_id, full_name, phone, email, id_card, notes) 
+                (tour_id, full_name, phone, email, id_card, notes, special_requests) 
                 VALUES 
-                (:tour_id, :full_name, :phone, :email, :id_card, :notes)";
+                (:tour_id, :full_name, :phone, :email, :id_card, :notes, :special_requests)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($data);
     }
@@ -64,6 +64,17 @@ class TourCustomerModel extends BaseModel
         $stmt->execute(['tour_id' => $tourId]);
         $result = $stmt->fetch();
         return $result['total'] ?? 0;
+    }
+
+    /**
+     * Lấy khách theo ID
+     */
+    public function getById($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
     }
 }
 

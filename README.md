@@ -177,12 +177,12 @@ Hệ thống có 17 bảng chính:
 9. `tour_costs` - Chi phí tour
 10. `tour_customers` - Khách nội bộ
 11. `tour_daily_logs` - Nhật ký hàng ngày
-12. `tour_images` - Hình ảnh tour
+12. ~~`tour_images`~~ - Đã xóa (không sử dụng)
 13. `tour_incidents` - Sự cố
-14. `tour_attendance` - Chấm công HDV
-15. `tour_reports` - Báo cáo
+14. ~~`tour_attendance`~~ - Đã xóa (không sử dụng)
+15. ~~`tour_reports`~~ - Đã xóa (không sử dụng)
 16. `tour_feedbacks` - Đánh giá
-17. `tour_documents` - Tài liệu tour
+17. ~~`tour_documents`~~ - Đã xóa (không sử dụng)
 
 Xem chi tiết trong file `database/README.md`
 

@@ -39,7 +39,14 @@ class IncidentController
         }
         
         $title = 'Báo cáo Sự cố';
-        $view = 'incidents/index';
+        
+        // Chọn view theo role
+        if (isAdmin()) {
+            $view = 'incidents/index-admin';
+        } else {
+            $view = 'incidents/index-guide';
+        }
+        
         require_once PATH_VIEW_MAIN;
     }
 

@@ -20,9 +20,22 @@
         <div class="row g-4 mb-4">
             <div class="col-md-6">
                 <div class="card bg-primary text-white">
-                    <div class="card-body text-center">
-                        <h6>Tổng chi phí</h6>
-                        <h2><?= number_format($totalCost, 0, ',', '.') ?> VNĐ</h2>
+                    <div class="card-body">
+                        <h6 class="mb-3">Tổng chi phí</h6>
+                        <?php 
+                        $internalPrice = $tour['internal_price'] ?? 0;
+                        $costsOnly = $costsOnly ?? 0;
+                        ?>
+                        <div class="mb-2">
+                            <small>Giá gốc nội bộ:</small>
+                            <div class="fs-6"><?= number_format($internalPrice, 0, ',', '.') ?> đ</div>
+                        </div>
+                        <div class="mb-2">
+                            <small>Chi phí phát sinh:</small>
+                            <div class="fs-6"><?= number_format($costsOnly, 0, ',', '.') ?> đ</div>
+                        </div>
+                        <hr class="my-2" style="border-color: rgba(255,255,255,0.3);">
+                        <h2 class="mb-0"><?= number_format($totalCost, 0, ',', '.') ?> đ</h2>
                     </div>
                 </div>
             </div>
