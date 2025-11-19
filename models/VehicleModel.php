@@ -13,13 +13,16 @@ class VehicleModel extends BaseModel
         
         if ($status) {
             $sql .= " WHERE status = :status";
+        }
+        
+        $sql .= " ORDER BY license_plate ASC";
+        
+        if ($status) {
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(['status' => $status]);
         } else {
             $stmt = $this->pdo->query($sql);
         }
-        
-        $sql .= " ORDER BY license_plate ASC";
         
         return $stmt->fetchAll();
     }

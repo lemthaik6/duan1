@@ -53,5 +53,65 @@ class VehicleController
         $view = 'vehicles/create';
         require_once PATH_VIEW_MAIN;
     }
+
+    public function view()
+    {
+        requireAdmin();
+        
+        $id = $_GET['id'] ?? 0;
+        $vehicle = $this->vehicleModel->getById($id);
+        
+        if (!$vehicle) {
+            header('Location: ' . BASE_URL . '?action=vehicles/index');
+            exit;
+        }
+        
+        $title = 'Chi tiết Xe: ' . $vehicle['license_plate'];
+        $view = 'vehicles/view';
+        require_once PATH_VIEW_MAIN;
+    }
+
+    public function edit()
+    {
+        requireAdmin();
+        
+        $id = $_GET['id'] ?? 0;
+        $vehicle = $this->vehicleModel->getById($id);
+        
+        if (!$vehicle) {
+            header('Location: ' . BASE_URL . '?action=vehicles/index');
+            exit;
+        }
+
+        $error = null;
+        $success = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'license_plate' => $_POST['license_plate'] ?? '',
+                'vehicle_type' => $_POST['vehicle_type'] ?? '',
+                'capacity' => $_POST['capacity'] ?? 0,
+                'driver_name' => $_POST['driver_name'] ?? '',
+                'driver_phone' => $_POST['driver_phone'] ?? '',
+                'status' => $_POST['status'] ?? 'available',
+                'notes' => $_POST['notes'] ?? ''
+            ];
+
+            if (empty($data['license_plate']) || empty($data['vehicle_type'])) {
+                $error = 'Vui lòng điền đầy đủ thông tin bắt buộc';
+            } else {
+                if ($this->vehicleModel->update($id, $data)) {
+                    $success = 'Cập nhật xe thành công!';
+                    header('refresh:2;url=' . BASE_URL . '?action=vehicles/index');
+                } else {
+                    $error = 'Có lỗi xảy ra khi cập nhật xe';
+                }
+            }
+        }
+        
+        $title = 'Chỉnh sửa Xe';
+        $view = 'vehicles/edit';
+        require_once PATH_VIEW_MAIN;
+    }
 }
 

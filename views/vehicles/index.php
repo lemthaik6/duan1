@@ -72,10 +72,12 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-info" title="Xem">
+                                        <a href="<?= BASE_URL ?>?action=vehicles/view&id=<?= $vehicle['id'] ?>" 
+                                           class="btn btn-sm btn-info" title="Xem">
                                             <i class="bi bi-eye"></i>
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-warning" title="Sửa">
+                                        <a href="<?= BASE_URL ?>?action=vehicles/edit&id=<?= $vehicle['id'] ?>" 
+                                           class="btn btn-sm btn-warning" title="Sửa">
                                             <i class="bi bi-pencil"></i>
                                         </a>
                                     </td>

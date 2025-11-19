@@ -15,8 +15,6 @@
                 <p class="mb-0 text-muted">Mã tour: <?= htmlspecialchars($tour['code']) ?></p>
             </div>
         </div>
-
-        <!-- Tổng chi phí -->
         <div class="row g-4 mb-4">
             <div class="col-md-6">
                 <div class="card bg-primary text-white">
