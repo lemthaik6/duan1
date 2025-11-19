@@ -5,8 +5,6 @@
             <i class="bi bi-plus-circle"></i> Thêm xe mới
         </a>
     </div>
-
-    <!-- Bộ lọc -->
     <div class="card mb-4">
         <div class="card-body">
             <form method="GET" action="" class="row g-3">

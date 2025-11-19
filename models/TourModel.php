@@ -60,6 +60,20 @@ class TourModel extends BaseModel
     }
 
     /**
+     * Lấy tour theo code (dùng cho QR code)
+     */
+    public function getByCode($code)
+    {
+        $sql = "SELECT t.*, tc.name as category_name
+                FROM {$this->table} t
+                LEFT JOIN tour_categories tc ON t.category_id = tc.id
+                WHERE t.code = :code";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['code' => $code]);
+        return $stmt->fetch();
+    }
+
+    /**
      * Tạo tour mới
      */
     public function create($data)

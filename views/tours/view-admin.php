@@ -150,6 +150,22 @@
 
         <!-- Sidebar -->
         <div class="col-md-4">
+            <!-- QR Code -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-qr-code"></i> Mã QR Tour</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div id="qrcode" class="mb-3 d-flex justify-content-center"></div>
+                    <p class="text-muted small mb-2">Quét mã QR để xem thông tin tour</p>
+                    <a href="<?= BASE_URL ?>?action=tours/public-view&code=<?= urlencode($tour['code']) ?>" 
+                       target="_blank" 
+                       class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-box-arrow-up-right"></i> Mở liên kết
+                    </a>
+                </div>
+            </div>
+
             <!-- Hướng dẫn viên -->
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -239,4 +255,40 @@
         </div>
     </div>
 </div>
+
+<script>
+// Tạo QR code cho tour
+document.addEventListener('DOMContentLoaded', function() {
+    const qrUrl = '<?= BASE_URL ?>?action=tours/public-view&code=<?= urlencode($tour['code']) ?>';
+    const qrContainer = document.getElementById('qrcode');
+    
+    if (typeof QRCode !== 'undefined') {
+        // Tạo canvas element
+        const canvas = document.createElement('canvas');
+        qrContainer.appendChild(canvas);
+        
+        QRCode.toCanvas(canvas, qrUrl, {
+            width: 200,
+            margin: 2,
+            color: {
+                dark: '#000000',
+                light: '#FFFFFF'
+            }
+        }, function (error) {
+            if (error) {
+                console.error('Lỗi tạo QR code:', error);
+                // Fallback: sử dụng API online
+                qrContainer.innerHTML = 
+                    '<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + 
+                    encodeURIComponent(qrUrl) + '" alt="QR Code" class="img-fluid">';
+            }
+        });
+    } else {
+        // Fallback: sử dụng API online nếu thư viện không tải được
+        qrContainer.innerHTML = 
+            '<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + 
+            encodeURIComponent(qrUrl) + '" alt="QR Code" class="img-fluid">';
+    }
+});
+</script>
 

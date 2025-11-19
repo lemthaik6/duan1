@@ -201,5 +201,38 @@ class TourController
         $view = 'tours/my-tours';
         require_once PATH_VIEW_MAIN;
     }
+
+    /**
+     * Xem tour công khai qua QR code (không cần đăng nhập)
+     */
+    public function publicView()
+    {
+        $code = $_GET['code'] ?? '';
+        $id = $_GET['id'] ?? 0;
+        
+        // Tìm tour theo code hoặc id
+        if ($code) {
+            $tour = $this->tourModel->getByCode($code);
+        } elseif ($id) {
+            $tour = $this->tourModel->getById($id);
+        } else {
+            $tour = null;
+        }
+        
+        if (!$tour) {
+            $title = 'Tour không tồn tại';
+            $view = 'tours/public-not-found';
+            require_once PATH_VIEW_MAIN;
+            return;
+        }
+
+        // Lấy thông tin bổ sung
+        $itineraries = $this->itineraryModel->getByTour($tour['id']);
+        $assignments = $this->assignmentModel->getByTour($tour['id']);
+        
+        $title = 'Thông tin Tour: ' . $tour['name'];
+        $view = 'tours/public-view';
+        require_once PATH_VIEW_MAIN;
+    }
 }
 
