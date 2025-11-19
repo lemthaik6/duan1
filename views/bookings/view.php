@@ -173,8 +173,23 @@
                         <i class="bi bi-file-earmark-text"></i> Báo giá hợp đồng
                     </a>
                     <a href="<?= BASE_URL ?>?action=bookings/exportInvoice&id=<?= $booking['id'] ?>" 
-                       class="btn btn-success w-100" target="_blank">
+                       class="btn btn-success w-100 mb-2" target="_blank">
                         <i class="bi bi-receipt"></i> Hóa đơn
+                    </a>
+                </div>
+            </div>
+
+            <!-- Xóa booking -->
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Thao tác nguy hiểm</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-3">Xóa booking này sẽ xóa vĩnh viễn tất cả dữ liệu liên quan. Hành động này không thể hoàn tác!</p>
+                    <a href="<?= BASE_URL ?>?action=bookings/delete&id=<?= $booking['id'] ?>" 
+                       class="btn btn-danger w-100"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa booking <?= htmlspecialchars($booking['booking_code']) ?>?\n\nTất cả dữ liệu liên quan sẽ bị xóa vĩnh viễn!\n\nHành động này không thể hoàn tác!');">
+                        <i class="bi bi-trash"></i> Xóa booking
                     </a>
                 </div>
             </div>

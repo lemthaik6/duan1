@@ -106,6 +106,12 @@
                                            class="btn btn-sm btn-info" title="Xem">
                                             <i class="bi bi-eye"></i>
                                         </a>
+                                        <a href="<?= BASE_URL ?>?action=bookings/delete&id=<?= $booking['id'] ?>" 
+                                           class="btn btn-sm btn-danger" 
+                                           title="Xóa"
+                                           onclick="return confirm('Bạn có chắc chắn muốn xóa booking <?= htmlspecialchars($booking['booking_code']) ?>? Hành động này không thể hoàn tác!');">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -206,5 +206,21 @@ class BookingModel extends BaseModel
         $result = $stmt->fetch();
         return $result['total'] ?? 0;
     }
+
+    /**
+     * Xóa booking và lịch sử trạng thái liên quan
+     */
+    public function delete($id)
+    {
+        // Xóa lịch sử trạng thái trước
+        $historySql = "DELETE FROM booking_status_history WHERE booking_id = :booking_id";
+        $historyStmt = $this->pdo->prepare($historySql);
+        $historyStmt->execute(['booking_id' => $id]);
+
+        // Xóa booking
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
 }
 

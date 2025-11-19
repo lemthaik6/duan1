@@ -182,6 +182,39 @@ class BookingController
         require_once PATH_VIEW . 'bookings/invoice.php';
         exit;
     }
+
+    /**
+     * Xóa booking
+     */
+    public function delete()
+    {
+        requireAdmin();
+        
+        $id = $_GET['id'] ?? 0;
+        
+        if (!$id) {
+            $_SESSION['error'] = 'Không tìm thấy booking cần xóa';
+            header('Location: ' . BASE_URL . '?action=bookings/index');
+            exit;
+        }
+
+        $booking = $this->bookingModel->getById($id);
+        
+        if (!$booking) {
+            $_SESSION['error'] = 'Không tìm thấy booking';
+            header('Location: ' . BASE_URL . '?action=bookings/index');
+            exit;
+        }
+
+        if ($this->bookingModel->delete($id)) {
+            $_SESSION['success'] = 'Xóa booking thành công!';
+        } else {
+            $_SESSION['error'] = 'Có lỗi xảy ra khi xóa booking';
+        }
+        
+        header('Location: ' . BASE_URL . '?action=bookings/index');
+        exit;
+    }
 }
 
 
