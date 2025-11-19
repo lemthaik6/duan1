@@ -138,6 +138,50 @@ class BookingController
         header('Location: ' . BASE_URL . '?action=bookings/index');
         exit;
     }
+
+    /**
+     * Xuất báo giá hợp đồng
+     */
+    public function exportQuote()
+    {
+        requireAdmin();
+        
+        $id = $_GET['id'] ?? 0;
+        $booking = $this->bookingModel->getById($id);
+        
+        if (!$booking) {
+            header('Location: ' . BASE_URL . '?action=bookings/index');
+            exit;
+        }
+
+        $tour = $this->tourModel->getById($booking['tour_id']);
+        
+        // Load trực tiếp view (không qua main layout)
+        require_once PATH_VIEW . 'bookings/quote.php';
+        exit;
+    }
+
+    /**
+     * Xuất hóa đơn
+     */
+    public function exportInvoice()
+    {
+        requireAdmin();
+        
+        $id = $_GET['id'] ?? 0;
+        $booking = $this->bookingModel->getById($id);
+        
+        if (!$booking) {
+            header('Location: ' . BASE_URL . '?action=bookings/index');
+            exit;
+        }
+
+        $tour = $this->tourModel->getById($booking['tour_id']);
+        
+        // Load trực tiếp view (không qua main layout)
+        require_once PATH_VIEW . 'bookings/invoice.php';
+        exit;
+    }
 }
 
 

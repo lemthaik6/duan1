@@ -1,9 +1,17 @@
 <div class="container-fluid px-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold"><i class="bi bi-eye"></i> Chi tiết Booking: <?= htmlspecialchars($booking['booking_code']) ?></h2>
-        <a href="<?= BASE_URL ?>?action=bookings/index" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Quay lại
-        </a>
+        <div>
+            <a href="<?= BASE_URL ?>?action=bookings/exportQuote&id=<?= $booking['id'] ?>" class="btn btn-info me-2" target="_blank">
+                <i class="bi bi-file-earmark-text"></i> Xuất báo giá
+            </a>
+            <a href="<?= BASE_URL ?>?action=bookings/exportInvoice&id=<?= $booking['id'] ?>" class="btn btn-success me-2" target="_blank">
+                <i class="bi bi-receipt"></i> Xuất hóa đơn
+            </a>
+            <a href="<?= BASE_URL ?>?action=bookings/index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Quay lại
+            </a>
+        </div>
     </div>
 
     <?php if (isset($_SESSION['error'])): ?>
@@ -154,6 +162,24 @@
 
         <!-- Cập nhật trạng thái -->
         <div class="col-md-4">
+            <!-- Xuất tài liệu -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-file-earmark-pdf"></i> Xuất tài liệu</h5>
+                </div>
+                <div class="card-body">
+                    <a href="<?= BASE_URL ?>?action=bookings/exportQuote&id=<?= $booking['id'] ?>" 
+                       class="btn btn-info w-100 mb-2" target="_blank">
+                        <i class="bi bi-file-earmark-text"></i> Báo giá hợp đồng
+                    </a>
+                    <a href="<?= BASE_URL ?>?action=bookings/exportInvoice&id=<?= $booking['id'] ?>" 
+                       class="btn btn-success w-100" target="_blank">
+                        <i class="bi bi-receipt"></i> Hóa đơn
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cập nhật trạng thái -->
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">Cập nhật trạng thái</h5>
