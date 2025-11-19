@@ -35,6 +35,7 @@ $controllers = [
     'reports' => 'ReportController',
     'profile' => 'ProfileController',
     'feedbacks' => 'FeedbackController',
+    'itineraries' => 'ItineraryController',
 ];
 if (isset($controllers[$controllerName])) {
     $controllerClass = $controllers[$controllerName];

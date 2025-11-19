@@ -2,6 +2,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold"><i class="bi bi-eye"></i> Chi tiết Tour</h2>
         <div>
+            <a href="<?= BASE_URL ?>?action=itineraries/index&tour_id=<?= $tour['id'] ?>" class="btn btn-success">
+                <i class="bi bi-calendar-event"></i> Lịch trình
+            </a>
             <a href="<?= BASE_URL ?>?action=tour-policies/index&tour_id=<?= $tour['id'] ?>" class="btn btn-primary">
                 <i class="bi bi-file-text"></i> Chính sách
             </a>
@@ -113,8 +116,11 @@
 
             <!-- Lịch trình -->
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Lịch trình chi tiết</h5>
+                    <a href="<?= BASE_URL ?>?action=itineraries/index&tour_id=<?= $tour['id'] ?>" class="btn btn-sm btn-success">
+                        <i class="bi bi-gear"></i> Quản lý
+                    </a>
                 </div>
                 <div class="card-body">
                     <?php if (!empty($itineraries)): ?>
@@ -142,7 +148,9 @@
                             <?php endforeach; ?>
                         </div>
                     <?php else: ?>
-                        <p class="text-muted">Chưa có lịch trình</p>
+                        <p class="text-muted">Chưa có lịch trình. 
+                            <a href="<?= BASE_URL ?>?action=itineraries/index&tour_id=<?= $tour['id'] ?>">Thêm lịch trình</a>
+                        </p>
                     <?php endif; ?>
                 </div>
             </div>

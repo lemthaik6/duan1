@@ -16,6 +16,17 @@ class ItineraryModel extends BaseModel
     }
 
     /**
+     * Lấy lịch trình theo ID
+     */
+    public function getById($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
+
+    /**
      * Tạo lịch trình
      */
     public function create($data)
