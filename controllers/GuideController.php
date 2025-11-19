@@ -12,17 +12,11 @@ class GuideController
         $this->assignmentModel = new TourAssignmentModel();
         $this->tourModel = new TourModel();
     }
-
-    /**
-     * Danh sách HDV
-     */
     public function index()
     {
         requireAdmin();
         
         $guides = $this->userModel->getGuides();
-        
-        // Thêm số tour đã đi cho mỗi HDV
         foreach ($guides as &$guide) {
             $guide['total_tours'] = $this->userModel->countToursByGuide($guide['id']);
         }
@@ -31,10 +25,6 @@ class GuideController
         $view = 'guides/index';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Tạo HDV mới
-     */
     public function create()
     {
         requireAdmin();
@@ -64,15 +54,10 @@ class GuideController
                 }
             }
         }
-
         $title = 'Thêm Hướng dẫn viên';
         $view = 'guides/create';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Xem chi tiết HDV
-     */
     public function view()
     {
         requireAdmin();
@@ -92,10 +77,6 @@ class GuideController
         $view = 'guides/view';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Chỉnh sửa HDV
-     */
     public function edit()
     {
         requireAdmin();
@@ -118,8 +99,6 @@ class GuideController
                 'phone' => $_POST['phone'] ?? '',
                 'status' => $_POST['status'] ?? 'active'
             ];
-
-            // Chỉ cập nhật password nếu có nhập mới
             if (!empty($_POST['password'])) {
                 $data['password'] = $_POST['password'];
             }
@@ -129,7 +108,7 @@ class GuideController
             } else {
                 if ($this->userModel->update($id, $data)) {
                     $success = 'Cập nhật HDV thành công!';
-                    $guide = $this->userModel->getById($id); // Refresh data
+                    $guide = $this->userModel->getById($id); 
                 } else {
                     $error = 'Có lỗi xảy ra khi cập nhật HDV';
                 }
@@ -140,10 +119,6 @@ class GuideController
         $view = 'guides/edit';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Phân công HDV cho tour
-     */
     public function assign()
     {
         requireAdmin();
@@ -182,10 +157,6 @@ class GuideController
         $view = 'guides/assign';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Hủy phân công HDV
-     */
     public function removeAssignment()
     {
         requireAdmin();

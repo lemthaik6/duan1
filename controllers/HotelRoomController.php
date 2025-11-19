@@ -12,10 +12,6 @@ class HotelRoomController
         $this->tourModel = new TourModel();
         $this->customerModel = new TourCustomerModel();
     }
-
-    /**
-     * Quản lý phân phòng khách sạn
-     */
     public function index()
     {
         requireAdmin();
@@ -36,10 +32,6 @@ class HotelRoomController
         $view = 'hotel-rooms/index';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Tạo/cập nhật phân phòng
-     */
     public function save()
     {
         requireAdmin();
@@ -74,10 +66,6 @@ class HotelRoomController
         header('Location: ' . BASE_URL . '?action=tours/index');
         exit;
     }
-
-    /**
-     * Xóa phân phòng
-     */
     public function delete()
     {
         requireAdmin();

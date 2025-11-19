@@ -16,10 +16,6 @@ class FeedbackController
         $this->supplierModel = new SupplierModel();
         $this->tourSupplierModel = new TourSupplierModel();
     }
-
-    /**
-     * Danh sách phản hồi của HDV
-     */
     public function index()
     {
         requireGuide();
@@ -32,15 +28,12 @@ class FeedbackController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Tạo phản hồi mới
-     */
     public function create()
     {
         requireGuide();
         
         $tourId = $_GET['tour_id'] ?? 0;
-        $feedbackType = $_GET['type'] ?? 'tour_evaluation'; // tour_evaluation, guide_evaluation, customer_feedback
+        $feedbackType = $_GET['type'] ?? 'tour_evaluation'; 
         
         $tour = $this->tourModel->getById($tourId);
         
@@ -49,7 +42,6 @@ class FeedbackController
             exit;
         }
 
-        // Kiểm tra HDV có được phân công tour này không
         $user = getCurrentUser();
         $assignments = $this->assignmentModel->getByTour($tourId);
         $isAssigned = false;
@@ -89,7 +81,6 @@ class FeedbackController
             }
         }
 
-        // Lấy danh sách nhà cung cấp của tour
         $suppliers = $this->tourSupplierModel->getByTour($tourId);
         
         $title = 'Gửi phản hồi đánh giá';
@@ -97,9 +88,6 @@ class FeedbackController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xem chi tiết phản hồi
-     */
     public function view()
     {
         requireLogin();
@@ -115,8 +103,6 @@ class FeedbackController
             }
             exit;
         }
-
-        // Kiểm tra quyền xem
         if (isGuide() && $feedback['rated_by'] != getCurrentUser()['id']) {
             header('Location: ' . BASE_URL . '?action=feedbacks/index');
             exit;
@@ -127,9 +113,6 @@ class FeedbackController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Chỉnh sửa phản hồi (chỉ HDV tạo mới được sửa)
-     */
     public function edit()
     {
         requireGuide();
@@ -157,7 +140,7 @@ class FeedbackController
             } else {
                 if ($this->feedbackModel->update($id, $data)) {
                     $success = 'Cập nhật phản hồi thành công!';
-                    $feedback = $this->feedbackModel->getById($id); // Refresh
+                    $feedback = $this->feedbackModel->getById($id);
                 } else {
                     $error = 'Có lỗi xảy ra khi cập nhật';
                 }
@@ -171,10 +154,6 @@ class FeedbackController
         $view = 'feedbacks/edit';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Xóa phản hồi (chỉ HDV tạo mới được xóa)
-     */
     public function delete()
     {
         requireGuide();
@@ -197,10 +176,6 @@ class FeedbackController
         header('Location: ' . BASE_URL . '?action=feedbacks/index');
         exit;
     }
-
-    /**
-     * Danh sách phản hồi (Admin)
-     */
     public function admin()
     {
         requireAdmin();
@@ -211,7 +186,6 @@ class FeedbackController
         if ($tourId) {
             $feedbacks = $this->feedbackModel->getByTour($tourId);
         } else {
-            // Lấy tất cả phản hồi
             $feedbacks = $this->feedbackModel->getAll();
         }
         

@@ -8,10 +8,6 @@ class VehicleController
     {
         $this->vehicleModel = new VehicleModel();
     }
-
-    /**
-     * Danh sách xe
-     */
     public function index()
     {
         requireAdmin();
@@ -23,10 +19,6 @@ class VehicleController
         $view = 'vehicles/index';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Tạo xe mới
-     */
     public function create()
     {
         requireAdmin();

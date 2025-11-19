@@ -2,7 +2,6 @@
 
 $action = $_GET['action'] ?? '/';
 
-// Xử lý route gốc
 if ($action === '/') {
     if (isLoggedIn()) {
         header('Location: ' . BASE_URL . '?action=dashboard');
@@ -12,12 +11,10 @@ if ($action === '/') {
     exit;
 }
 
-// Tách action thành controller và method
 $parts = explode('/', $action);
 $controllerName = $parts[0] ?? 'dashboard';
 $method = $parts[1] ?? 'index';
 
-// Mapping controllers
 $controllers = [
     'auth' => 'AuthController',
     'dashboard' => 'DashboardController',
@@ -39,8 +36,6 @@ $controllers = [
     'profile' => 'ProfileController',
     'feedbacks' => 'FeedbackController',
 ];
-
-// Kiểm tra và xử lý controller
 if (isset($controllers[$controllerName])) {
     $controllerClass = $controllers[$controllerName];
     
@@ -50,7 +45,6 @@ if (isset($controllers[$controllerName])) {
             if (method_exists($controller, $method)) {
                 $controller->$method();
             } else {
-                // Nếu method không tồn tại, thử gọi index
                 if (method_exists($controller, 'index')) {
                     $controller->index();
                 } else {
@@ -64,7 +58,6 @@ if (isset($controllers[$controllerName])) {
         die("Controller {$controllerClass} không tồn tại. Vui lòng kiểm tra lại.");
     }
 } else {
-    // Nếu không tìm thấy controller, redirect về login hoặc dashboard
     if (!isLoggedIn()) {
         header('Location: ' . BASE_URL . '?action=auth/login');
     } else {

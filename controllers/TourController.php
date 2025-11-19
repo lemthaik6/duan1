@@ -25,9 +25,6 @@ class TourController
         $this->userModel = new UserModel();
     }
 
-    /**
-     * Danh sách tour (Admin)
-     */
     public function index()
     {
         requireAdmin();
@@ -47,10 +44,6 @@ class TourController
         $view = 'tours/index';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Xem chi tiết tour
-     */
     public function view()
     {
         requireLogin();
@@ -94,8 +87,6 @@ class TourController
         $incidents = $this->incidentModel->getByTour($id);
         
         $title = 'Chi tiết Tour: ' . $tour['name'];
-        
-        // Chọn view theo role
         if (isAdmin()) {
             $view = 'tours/view-admin';
         } else {
@@ -104,10 +95,6 @@ class TourController
         
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Tạo tour mới (Admin)
-     */
     public function create()
     {
         requireAdmin();
@@ -126,7 +113,7 @@ class TourController
                 'internal_price' => !empty($_POST['internal_price']) ? $_POST['internal_price'] : null,
                 'priority_level' => $_POST['priority_level'] ?? 'medium',
                 'status' => $_POST['status'] ?? 'upcoming',
-                'pdf_program_path' => null, // Có thể upload sau
+                'pdf_program_path' => null,
                 'created_by' => getCurrentUser()['id']
             ];
 
@@ -135,7 +122,6 @@ class TourController
             } else {
                 if ($this->tourModel->create($data)) {
                     $success = 'Tạo tour thành công!';
-                    // Redirect sau 2 giây
                     header('refresh:2;url=' . BASE_URL . '?action=tours/index');
                 } else {
                     $error = 'Có lỗi xảy ra khi tạo tour';
@@ -149,9 +135,6 @@ class TourController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Chỉnh sửa tour (Admin)
-     */
     public function edit()
     {
         requireAdmin();
@@ -182,8 +165,7 @@ class TourController
 
             if ($this->tourModel->update($id, $data)) {
                 $success = 'Cập nhật tour thành công!';
-                $tour = $this->tourModel->getById($id); // Refresh data
-            } else {
+                $tour = $this->tourModel->getById($id);
                 $error = 'Có lỗi xảy ra khi cập nhật tour';
             }
         }
@@ -193,10 +175,6 @@ class TourController
         $view = 'tours/edit';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Xóa tour (Admin)
-     */
     public function delete()
     {
         requireAdmin();
@@ -212,10 +190,6 @@ class TourController
         header('Location: ' . BASE_URL . '?action=tours/index');
         exit;
     }
-
-    /**
-     * Tour của tôi (HDV)
-     */
     public function myTours()
     {
         requireGuide();

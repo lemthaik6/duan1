@@ -15,9 +15,6 @@ class DashboardController
         $this->tourAssignmentModel = new TourAssignmentModel();
     }
 
-    /**
-     * Dashboard chính
-     */
     public function index()
     {
         requireLogin();
@@ -26,7 +23,6 @@ class DashboardController
         $title = 'Trang chủ';
 
         if (isAdmin()) {
-            // Thống kê cho Admin
             $totalTours = count($this->tourModel->getAll());
             $upcomingTours = count($this->tourModel->getByStatus('upcoming'));
             $ongoingTours = count($this->tourModel->getByStatus('ongoing'));
@@ -37,7 +33,6 @@ class DashboardController
             
             $view = 'dashboard/admin';
         } else {
-            // Thống kê cho HDV
             $myTours = $this->tourAssignmentModel->getByGuide($user['id']);
             $upcomingTours = array_filter($myTours, fn($t) => $t['status'] === 'upcoming');
             $ongoingTours = array_filter($myTours, fn($t) => $t['status'] === 'ongoing');

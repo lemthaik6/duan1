@@ -11,9 +11,6 @@ class SupplierController
         $this->tourSupplierModel = new TourSupplierModel();
     }
 
-    /**
-     * Danh sách nhà cung cấp
-     */
     public function index()
     {
         requireAdmin();
@@ -32,10 +29,6 @@ class SupplierController
         $view = 'suppliers/index';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Tạo nhà cung cấp mới
-     */
     public function create()
     {
         requireAdmin();
@@ -73,10 +66,6 @@ class SupplierController
         $view = 'suppliers/create';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Xem chi tiết nhà cung cấp
-     */
     public function view()
     {
         requireAdmin();
@@ -95,10 +84,6 @@ class SupplierController
         $view = 'suppliers/view';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Chỉnh sửa nhà cung cấp
-     */
     public function edit()
     {
         requireAdmin();
@@ -144,10 +129,6 @@ class SupplierController
         $view = 'suppliers/edit';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Xóa nhà cung cấp
-     */
     public function delete()
     {
         requireAdmin();
@@ -163,10 +144,6 @@ class SupplierController
         header('Location: ' . BASE_URL . '?action=suppliers/index');
         exit;
     }
-
-    /**
-     * Liên kết nhà cung cấp với tour
-     */
     public function linkToTour()
     {
         requireAdmin();

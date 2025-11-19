@@ -12,10 +12,6 @@ class TourSupplierController
         $this->tourModel = new TourModel();
         $this->supplierModel = new SupplierModel();
     }
-
-    /**
-     * Danh sách nhà cung cấp của tour
-     */
     public function index()
     {
         requireAdmin();
@@ -36,9 +32,6 @@ class TourSupplierController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xóa liên kết nhà cung cấp
-     */
     public function unlink()
     {
         requireAdmin();

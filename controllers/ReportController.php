@@ -14,10 +14,6 @@ class ReportController
         $this->bookingModel = new BookingModel();
         $this->costModel = new TourCostModel();
     }
-
-    /**
-     * Báo cáo và thống kê
-     */
     public function index()
     {
         requireAdmin();
@@ -27,8 +23,6 @@ class ReportController
         
         $stats = $this->tourModel->getStatsByMonth($year);
         $tours = $this->tourModel->getAll();
-        
-        // Tính tổng doanh thu
         $revenueFilters = [];
         if ($tourId) {
             $revenueFilters['tour_id'] = $tourId;

@@ -12,11 +12,6 @@ class DailyLogController
         $this->tourModel = new TourModel();
         $this->assignmentModel = new TourAssignmentModel();
     }
-
-    
-    /**
-     * Danh sách nhật ký
-     */
     public function index()
     {
         requireGuide();
@@ -39,14 +34,9 @@ class DailyLogController
         $view = 'daily-logs/index';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Tạo nhật ký mới
-     */
     public function create()
     {
         requireGuide();
-        
         $user = getCurrentUser();
         $tourId = $_GET['tour_id'] ?? 0;
         $tour = $this->tourModel->getById($tourId);
@@ -55,10 +45,8 @@ class DailyLogController
             header('Location: ' . BASE_URL . '?action=daily-logs/index');
             exit;
         }
-
         $error = null;
         $success = null;
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
                 'tour_id' => $tourId,
@@ -70,7 +58,6 @@ class DailyLogController
                 'traffic' => $_POST['traffic'] ?? '',
                 'notes' => $_POST['notes'] ?? ''
             ];
-
             if (empty($data['activities'])) {
                 $error = 'Vui lòng điền hoạt động trong ngày';
             } else {
@@ -82,7 +69,6 @@ class DailyLogController
                 }
             }
         }
-
         $title = 'Ghi nhật ký';
         $view = 'daily-logs/create';
         require_once PATH_VIEW_MAIN;

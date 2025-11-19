@@ -10,10 +10,6 @@ class TourPolicyController
         $this->policyModel = new TourPolicyModel();
         $this->tourModel = new TourModel();
     }
-
-    /**
-     * Danh sách chính sách tour
-     */
     public function index()
     {
         requireAdmin();
@@ -33,9 +29,6 @@ class TourPolicyController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Tạo chính sách mới
-     */
     public function create()
     {
         requireAdmin();

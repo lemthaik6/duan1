@@ -13,9 +13,6 @@ class IncidentController
         $this->assignmentModel = new TourAssignmentModel();
     }
 
-    /**
-     * Danh sách sự cố
-     */
     public function index()
     {
         requireLogin();
@@ -37,10 +34,7 @@ class IncidentController
         } else {
             $myTours = [];
         }
-        
         $title = 'Báo cáo Sự cố';
-        
-        // Chọn view theo role
         if (isAdmin()) {
             $view = 'incidents/index-admin';
         } else {
@@ -49,10 +43,6 @@ class IncidentController
         
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Tạo báo cáo sự cố
-     */
     public function create()
     {
         requireGuide();
@@ -80,7 +70,6 @@ class IncidentController
                 'severity' => $_POST['severity'] ?? 'medium',
                 'status' => 'reported'
             ];
-
             if (empty($data['title']) || empty($data['description'])) {
                 $error = 'Vui lòng điền đầy đủ thông tin';
             } else {

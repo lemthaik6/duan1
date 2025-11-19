@@ -8,16 +8,12 @@ class ProfileController
     {
         $this->userModel = new UserModel();
     }
-
-    /**
-     * Thông tin cá nhân
-     */
     public function index()
     {
         requireLogin();
         
         $user = getCurrentUser();
-        $user = $this->userModel->getById($user['id']); // Refresh data
+        $user = $this->userModel->getById($user['id']);
         
         $title = 'Thông tin cá nhân';
         $view = 'profile/index';

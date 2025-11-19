@@ -12,10 +12,6 @@ class CustomerController
         $this->tourModel = new TourModel();
         $this->assignmentModel = new TourAssignmentModel();
     }
-
-    /**
-     * Danh sách khách của tour
-     */
     public function index()
     {
         requireLogin();
@@ -31,8 +27,6 @@ class CustomerController
             }
             exit;
         }
-
-        // Nếu là Guide, kiểm tra có được phân công không
         if (isGuide()) {
             $user = getCurrentUser();
             $assignments = $this->assignmentModel->getByTour($tourId);
@@ -52,8 +46,6 @@ class CustomerController
         $customers = $this->customerModel->getByTour($tourId);
         
         $title = 'Danh sách khách - ' . $tour['name'];
-        
-        // Chọn view theo role
         if (isAdmin()) {
             $view = 'customers/index-admin';
         } else {
@@ -63,9 +55,6 @@ class CustomerController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * In danh sách đoàn
-     */
     public function print()
     {
         requireLogin();
