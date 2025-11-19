@@ -26,7 +26,6 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     <?php endif; ?>
-
                     <form method="POST" action="">
                         <div class="row g-3">
                             <div class="col-md-12">
@@ -39,7 +38,6 @@
                                 <input type="text" class="form-control" name="name" 
                                        value="<?= htmlspecialchars($tour['name']) ?>" required>
                             </div>
-
                             <div class="col-md-6">
                                 <label class="form-label">Danh mục <span class="text-danger">*</span></label>
                                 <select name="category_id" class="form-select" required>
@@ -73,7 +71,6 @@
                                 <input type="date" class="form-control" name="end_date" 
                                        value="<?= $tour['end_date'] ?>" required>
                             </div>
-
                             <div class="col-md-6">
                                 <label class="form-label">Giá nội bộ (VNĐ)</label>
                                 <input type="number" class="form-control" name="internal_price" 
@@ -89,17 +86,14 @@
                                     <option value="cancelled" <?= $tour['status'] === 'cancelled' ? 'selected' : '' ?>>Đã hủy</option>
                                 </select>
                             </div>
-
                             <div class="col-md-12">
                                 <label class="form-label">Mô tả</label>
                                 <textarea class="form-control" name="description" rows="3"><?= htmlspecialchars($tour['description'] ?? '') ?></textarea>
                             </div>
-
                             <div class="col-md-12">
                                 <label class="form-label">Lịch trình tổng quan</label>
                                 <textarea class="form-control" name="schedule" rows="4"><?= htmlspecialchars($tour['schedule'] ?? '') ?></textarea>
                             </div>
-
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-check-circle"></i> Cập nhật

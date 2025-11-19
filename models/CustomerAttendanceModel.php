@@ -19,9 +19,6 @@ class CustomerAttendanceModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Lấy điểm danh theo tour
-     */
     public function getByTour($tourId)
     {
         $sql = "SELECT ca.*, tc.full_name, tc.phone
@@ -33,13 +30,8 @@ class CustomerAttendanceModel extends BaseModel
         $stmt->execute(['tour_id' => $tourId]);
         return $stmt->fetchAll();
     }
-
-    /**
-     * Tạo hoặc cập nhật điểm danh
-     */
     public function upsert($data)
     {
-        // Kiểm tra xem đã có điểm danh chưa
         $sql = "SELECT id FROM {$this->table} 
                 WHERE tour_id = :tour_id AND customer_id = :customer_id AND date = :date";
         $stmt = $this->pdo->prepare($sql);
@@ -51,7 +43,6 @@ class CustomerAttendanceModel extends BaseModel
         $existing = $stmt->fetch();
 
         if ($existing) {
-            // Cập nhật
             $sql = "UPDATE {$this->table} 
                     SET status = :status, check_in_time = :check_in_time, 
                         notes = :notes, recorded_by = :recorded_by

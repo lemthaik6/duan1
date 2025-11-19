@@ -26,7 +26,6 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     <?php endif; ?>
-
                     <form method="POST" action="">
                         <div class="row g-3">
                             <div class="col-md-12">
