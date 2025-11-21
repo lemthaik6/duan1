@@ -51,7 +51,6 @@ class CustomerAttendanceModel extends BaseModel
             $stmt = $this->pdo->prepare($sql);
             return $stmt->execute($data);
         } else {
-            // Tạo mới
             $sql = "INSERT INTO {$this->table} 
                     (tour_id, customer_id, date, status, check_in_time, notes, recorded_by) 
                     VALUES 
@@ -60,10 +59,6 @@ class CustomerAttendanceModel extends BaseModel
             return $stmt->execute($data);
         }
     }
-
-    /**
-     * Lấy thống kê điểm danh theo tour
-     */
     public function getStatsByTour($tourId, $date = null)
     {
         $sql = "SELECT 

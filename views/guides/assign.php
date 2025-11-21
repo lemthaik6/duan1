@@ -8,7 +8,6 @@
 
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <!-- Thông tin tour -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-info-circle"></i> Thông tin tour</h5>
@@ -19,8 +18,6 @@
                     <p class="mb-0"><strong>Ngày bắt đầu:</strong> <?= date('d/m/Y', strtotime($tour['start_date'])) ?></p>
                 </div>
             </div>
-
-            <!-- Form phân công -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">Phân công hướng dẫn viên</h5>

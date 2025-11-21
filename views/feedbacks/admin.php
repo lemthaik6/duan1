@@ -2,8 +2,6 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold"><i class="bi bi-chat-left-text"></i> Quản lý Phản hồi đánh giá</h2>
     </div>
-
-    <!-- Bộ lọc -->
     <div class="card mb-4">
         <div class="card-body">
             <form method="GET" action="" class="row g-3">

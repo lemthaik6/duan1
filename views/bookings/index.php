@@ -6,12 +6,92 @@
         </a>
     </div>
 
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="bi bi-exclamation-triangle"></i> <?= $_SESSION['error'] ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle"></i> <?= $_SESSION['success'] ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+
+    <!-- Thống kê nhanh -->
+    <?php if (isset($quickStats)): ?>
+        <div class="row g-3 mb-4">
+            <div class="col-md-2">
+                <div class="card border-primary">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted mb-1">Tổng số</h6>
+                        <h4 class="text-primary mb-0"><?= $quickStats['total'] ?></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card border-warning">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted mb-1">Chờ xác nhận</h6>
+                        <h4 class="text-warning mb-0"><?= $quickStats['pending'] ?></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card border-info">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted mb-1">Đã cọc</h6>
+                        <h4 class="text-info mb-0"><?= $quickStats['deposited'] ?></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card border-primary">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted mb-1">Đã xác nhận</h6>
+                        <h4 class="text-primary mb-0"><?= $quickStats['confirmed'] ?></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card border-success">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted mb-1">Hoàn tất</h6>
+                        <h4 class="text-success mb-0"><?= $quickStats['completed'] ?></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card border-danger">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted mb-1">Đã hủy</h6>
+                        <h4 class="text-danger mb-0"><?= $quickStats['cancelled'] ?></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php if ($quickStats['total_revenue'] > 0): ?>
+            <div class="alert alert-info mb-4">
+                <i class="bi bi-cash-stack"></i> 
+                <strong>Tổng doanh thu (đã lọc):</strong> 
+                <?= number_format($quickStats['total_revenue'], 0, ',', '.') ?> đ
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+
     <!-- Bộ lọc -->
     <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-funnel"></i> Bộ lọc tìm kiếm</h5>
+        </div>
         <div class="card-body">
             <form method="GET" action="" class="row g-3">
                 <input type="hidden" name="action" value="bookings/index">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Trạng thái</label>
                     <select name="status" class="form-select">
                         <option value="">Tất cả</option>
@@ -22,7 +102,7 @@
                         <option value="cancelled" <?= ($_GET['status'] ?? '') === 'cancelled' ? 'selected' : '' ?>>Đã hủy</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Tour</label>
                     <select name="tour_id" class="form-select">
                         <option value="">Tất cả</option>
@@ -33,12 +113,28 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-md-4 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary me-2">
-                        <i class="bi bi-funnel"></i> Lọc
+                <div class="col-md-2">
+                    <label class="form-label">Từ ngày</label>
+                    <input type="date" name="booking_date_from" class="form-control" 
+                           value="<?= $_GET['booking_date_from'] ?? '' ?>">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Đến ngày</label>
+                    <input type="date" name="booking_date_to" class="form-control" 
+                           value="<?= $_GET['booking_date_to'] ?? '' ?>">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Tìm kiếm</label>
+                    <input type="text" name="search" class="form-control" 
+                           placeholder="Mã, tên khách, SĐT..." 
+                           value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100 me-2">
+                        <i class="bi bi-search"></i> Tìm
                     </button>
-                    <a href="<?= BASE_URL ?>?action=bookings/index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-clockwise"></i> Reset
+                    <a href="<?= BASE_URL ?>?action=bookings/index" class="btn btn-outline-secondary" title="Reset">
+                        <i class="bi bi-arrow-clockwise"></i>
                     </a>
                 </div>
             </form>
@@ -100,18 +196,29 @@
                                             <?= $statusText[$booking['status']] ?? $booking['status'] ?>
                                         </span>
                                     </td>
-                                    <td><?= date('d/m/Y', strtotime($booking['booking_date'])) ?></td>
                                     <td>
-                                        <a href="<?= BASE_URL ?>?action=bookings/view&id=<?= $booking['id'] ?>" 
-                                           class="btn btn-sm btn-info" title="Xem">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="<?= BASE_URL ?>?action=bookings/delete&id=<?= $booking['id'] ?>" 
-                                           class="btn btn-sm btn-danger" 
-                                           title="Xóa"
-                                           onclick="return confirm('Bạn có chắc chắn muốn xóa booking <?= htmlspecialchars($booking['booking_code']) ?>? Hành động này không thể hoàn tác!');">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
+                                        <?php 
+                                        $bookingDate = strtotime($booking['booking_date']);
+                                        echo $bookingDate ? date('d/m/Y', $bookingDate) : 'N/A';
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="<?= BASE_URL ?>?action=bookings/view&id=<?= $booking['id'] ?>" 
+                                               class="btn btn-sm btn-info" title="Xem chi tiết">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="<?= BASE_URL ?>?action=tours/view&id=<?= $booking['tour_id'] ?>" 
+                                               class="btn btn-sm btn-outline-primary" title="Xem tour">
+                                                <i class="bi bi-map"></i>
+                                            </a>
+                                            <a href="<?= BASE_URL ?>?action=bookings/delete&id=<?= $booking['id'] ?>" 
+                                               class="btn btn-sm btn-danger" 
+                                               title="Xóa"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa booking <?= htmlspecialchars($booking['booking_code'], ENT_QUOTES) ?>? Hành động này không thể hoàn tác!');">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

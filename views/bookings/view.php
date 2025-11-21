@@ -224,5 +224,136 @@
             </div>
         </div>
     </div>
+
+    <!-- Thông tin từ HDV -->
+    <?php if (!empty($guideInfo) && !empty($guideInfo['guide'])): ?>
+        <div class="row g-4 mt-2">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-person-badge"></i> Thông tin từ Hướng dẫn viên</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <!-- Thông tin HDV -->
+                            <div class="col-md-3">
+                                <div class="card border-primary">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-person-circle fs-1 text-primary"></i>
+                                        <h6 class="mt-2 mb-1"><?= htmlspecialchars($guideInfo['guide']['guide_name'] ?? 'N/A') ?></h6>
+                                        <small class="text-muted">Hướng dẫn viên</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nhật ký hành trình -->
+                            <div class="col-md-3">
+                                <div class="card border-success">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-journal-text fs-1 text-success"></i>
+                                        <h4 class="mt-2 mb-1"><?= count($guideInfo['daily_logs'] ?? []) ?></h4>
+                                        <small class="text-muted">Nhật ký hành trình</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sự cố -->
+                            <div class="col-md-3">
+                                <div class="card border-warning">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
+                                        <h4 class="mt-2 mb-1"><?= count($guideInfo['incidents'] ?? []) ?></h4>
+                                        <small class="text-muted">Sự cố đã báo</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phản hồi -->
+                            <div class="col-md-3">
+                                <div class="card border-info">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-chat-left-text fs-1 text-info"></i>
+                                        <h4 class="mt-2 mb-1"><?= count($guideInfo['feedbacks'] ?? []) ?></h4>
+                                        <small class="text-muted">Phản hồi đánh giá</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chi tiết nhật ký -->
+                        <?php if (!empty($guideInfo['daily_logs'])): ?>
+                            <div class="mt-4">
+                                <h6><i class="bi bi-journal-text"></i> Nhật ký hành trình gần đây</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Ngày</th>
+                                                <th>Hoạt động</th>
+                                                <th>Thời tiết</th>
+                                                <th>Giao thông</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach (array_slice($guideInfo['daily_logs'], 0, 3) as $log): ?>
+                                                <tr>
+                                                    <td><?= date('d/m/Y', strtotime($log['date'])) ?></td>
+                                                    <td>
+                                                        <small><?= htmlspecialchars(substr($log['activities'] ?? '', 0, 50)) ?>...</small>
+                                                    </td>
+                                                    <td><?= htmlspecialchars($log['weather'] ?? 'N/A') ?></td>
+                                                    <td><?= htmlspecialchars($log['traffic'] ?? 'N/A') ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Sự cố -->
+                        <?php if (!empty($guideInfo['incidents'])): ?>
+                            <div class="mt-4">
+                                <h6><i class="bi bi-exclamation-triangle"></i> Sự cố đã báo cáo</h6>
+                                <div class="list-group">
+                                    <?php foreach (array_slice($guideInfo['incidents'], 0, 3) as $incident): ?>
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <strong><?= htmlspecialchars($incident['title']) ?></strong>
+                                                    <br>
+                                                    <small class="text-muted"><?= htmlspecialchars(substr($incident['description'] ?? '', 0, 100)) ?>...</small>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="badge bg-<?= $incident['severity'] === 'high' ? 'danger' : ($incident['severity'] === 'medium' ? 'warning' : 'info') ?>">
+                                                        <?= $incident['severity'] === 'high' ? 'Nghiêm trọng' : ($incident['severity'] === 'medium' ? 'Trung bình' : 'Thấp') ?>
+                                                    </span>
+                                                    <br>
+                                                    <small class="text-muted"><?= date('d/m/Y', strtotime($incident['incident_date'])) ?></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Chi phí -->
+                        <?php if (!empty($guideInfo['costs'])): ?>
+                            <div class="mt-4">
+                                <h6><i class="bi bi-cash-stack"></i> Chi phí đã cập nhật</h6>
+                                <div class="alert alert-light">
+                                    <strong>Tổng chi phí:</strong> 
+                                    <?= number_format(array_sum(array_column($guideInfo['costs'], 'amount')), 0, ',', '.') ?> đ
+                                    <br>
+                                    <small class="text-muted"><?= count($guideInfo['costs']) ?> mục chi phí</small>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
 

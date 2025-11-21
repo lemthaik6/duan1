@@ -3,10 +3,6 @@
 class BookingModel extends BaseModel
 {
     protected $table = 'bookings';
-
-    /**
-     * Tạo mã booking tự động
-     */
     private function generateBookingCode()
     {
         $prefix = 'BK';
@@ -14,13 +10,10 @@ class BookingModel extends BaseModel
         $random = strtoupper(substr(uniqid(), -6));
         return $prefix . $date . $random;
     }
-
-    /**
-     * Lấy tất cả booking
-     */
     public function getAll($filters = [])
     {
         $sql = "SELECT b.*, t.name as tour_name, t.code as tour_code, 
+                t.start_date, t.end_date,
                 u.full_name as created_by_name
                 FROM {$this->table} b
                 INNER JOIN tours t ON b.tour_id = t.id
@@ -49,16 +42,22 @@ class BookingModel extends BaseModel
             $params['booking_date_to'] = $filters['booking_date_to'];
         }
 
+        // Tìm kiếm theo mã booking, tên khách, số điện thoại
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $sql .= " AND (b.booking_code LIKE :search 
+                     OR b.customer_name LIKE :search 
+                     OR b.customer_phone LIKE :search
+                     OR t.name LIKE :search)";
+            $params['search'] = $search;
+        }
+
         $sql .= " ORDER BY b.created_at DESC";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll();
     }
-
-    /**
-     * Lấy booking theo ID
-     */
     public function getById($id)
     {
         $sql = "SELECT b.*, t.name as tour_name, t.code as tour_code, 
@@ -72,10 +71,6 @@ class BookingModel extends BaseModel
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }
-
-    /**
-     * Tạo booking mới
-     */
     public function create($data)
     {
         if (empty($data['booking_code'])) {
@@ -96,10 +91,6 @@ class BookingModel extends BaseModel
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($data);
     }
-
-    /**
-     * Cập nhật booking
-     */
     public function update($id, $data)
     {
         $fields = [];
@@ -112,23 +103,15 @@ class BookingModel extends BaseModel
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($data);
     }
-
-    /**
-     * Cập nhật trạng thái booking và lưu lịch sử
-     */
     public function updateStatus($id, $newStatus, $changedBy, $notes = null)
     {
-        // Lấy trạng thái cũ
         $booking = $this->getById($id);
         $oldStatus = $booking['status'] ?? null;
-
-        // Cập nhật trạng thái
         $sql = "UPDATE {$this->table} SET status = :status WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $result = $stmt->execute(['id' => $id, 'status' => $newStatus]);
 
         if ($result && $oldStatus != $newStatus) {
-            // Lưu lịch sử thay đổi
             $historySql = "INSERT INTO booking_status_history 
                           (booking_id, old_status, new_status, changed_by, notes) 
                           VALUES 
@@ -145,10 +128,6 @@ class BookingModel extends BaseModel
 
         return $result;
     }
-
-    /**
-     * Lấy lịch sử thay đổi trạng thái
-     */
     public function getStatusHistory($bookingId)
     {
         $sql = "SELECT h.*, u.full_name as changed_by_name

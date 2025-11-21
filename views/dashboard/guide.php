@@ -5,8 +5,6 @@
         </h2>
         <span class="text-muted">Xin chào, <?= htmlspecialchars(getCurrentUser()['full_name']) ?></span>
     </div>
-
-    <!-- Thống kê tour của tôi -->
     <div class="row g-4 mb-4">
         <div class="col-md-4">
             <div class="card text-white bg-info">
@@ -52,7 +50,6 @@
     </div>
 
     <div class="row g-4">
-        <!-- Tour của tôi -->
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">

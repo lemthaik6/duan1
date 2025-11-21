@@ -22,15 +22,42 @@ class BookingController
         requireAdmin();
         
         $filters = [];
-        if (isset($_GET['status'])) {
+        if (!empty($_GET['status'])) {
             $filters['status'] = $_GET['status'];
         }
-        if (isset($_GET['tour_id'])) {
-            $filters['tour_id'] = $_GET['tour_id'];
+        if (!empty($_GET['tour_id'])) {
+            $filters['tour_id'] = intval($_GET['tour_id']);
+        }
+        if (!empty($_GET['booking_date_from'])) {
+            $filters['booking_date_from'] = $_GET['booking_date_from'];
+        }
+        if (!empty($_GET['booking_date_to'])) {
+            $filters['booking_date_to'] = $_GET['booking_date_to'];
+        }
+        if (!empty($_GET['search'])) {
+            $filters['search'] = trim($_GET['search']);
         }
 
         $bookings = $this->bookingModel->getAll($filters);
         $tours = $this->tourModel->getAll();
+        
+        // Thống kê nhanh
+        $quickStats = [
+            'total' => count($bookings),
+            'pending' => 0,
+            'deposited' => 0,
+            'confirmed' => 0,
+            'completed' => 0,
+            'cancelled' => 0,
+            'total_revenue' => 0
+        ];
+        
+        foreach ($bookings as $booking) {
+            $quickStats[$booking['status']] = ($quickStats[$booking['status']] ?? 0) + 1;
+            if (in_array($booking['status'], ['confirmed', 'completed'])) {
+                $quickStats['total_revenue'] += $booking['total_amount'];
+            }
+        }
         
         $title = 'Quản lý Booking';
         $view = 'bookings/index';
@@ -97,7 +124,12 @@ class BookingController
     {
         requireAdmin();
         
-        $id = $_GET['id'] ?? 0;
+        $id = intval($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            header('Location: ' . BASE_URL . '?action=bookings/index');
+            exit;
+        }
+        
         $booking = $this->bookingModel->getById($id);
         
         if (!$booking) {
@@ -107,6 +139,33 @@ class BookingController
 
         $statusHistory = $this->bookingModel->getStatusHistory($id);
         $customers = $this->customerModel->getByTour($booking['tour_id']);
+        
+        // Lấy thông tin từ HDV (nếu tour đã có HDV)
+        $guideInfo = [];
+        $dailyLogModel = new TourDailyLogModel();
+        $incidentModel = new TourIncidentModel();
+        $feedbackModel = new TourFeedbackModel();
+        $costModel = new TourCostModel();
+        
+        // Lấy HDV được phân công
+        $assignmentModel = new TourAssignmentModel();
+        $assignments = $assignmentModel->getByTour($booking['tour_id']);
+        if (!empty($assignments)) {
+            $guide = $assignments[0];
+            $guideInfo['guide'] = $guide;
+            
+            // Lấy nhật ký hành trình
+            $guideInfo['daily_logs'] = $dailyLogModel->getByTour($booking['tour_id']);
+            
+            // Lấy sự cố
+            $guideInfo['incidents'] = $incidentModel->getByTour($booking['tour_id']);
+            
+            // Lấy phản hồi
+            $guideInfo['feedbacks'] = $feedbackModel->getByTour($booking['tour_id']);
+            
+            // Lấy chi phí
+            $guideInfo['costs'] = $costModel->getByTour($booking['tour_id']);
+        }
         
         $title = 'Chi tiết Booking: ' . $booking['booking_code'];
         $view = 'bookings/view';

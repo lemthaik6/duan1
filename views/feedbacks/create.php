@@ -21,7 +21,6 @@
     <?php endif; ?>
 
     <div class="row g-4">
-        <!-- Form phản hồi -->
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
@@ -90,8 +89,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Nhà cung cấp của tour -->
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
