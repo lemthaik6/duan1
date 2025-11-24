@@ -37,10 +37,6 @@ class UserModel extends BaseModel
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }
-
-    /**
-     * Tạo người dùng mới
-     */
     public function create($data)
     {
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
@@ -48,8 +44,6 @@ class UserModel extends BaseModel
         $sql = "INSERT INTO {$this->table} (username, password, full_name, email, phone, role, status) 
                 VALUES (:username, :password, :full_name, :email, :phone, :role, :status)";
         $stmt = $this->pdo->prepare($sql);
-        
-        // Đảm bảo tất cả tham số đều có giá trị
         $params = [
             'username' => $data['username'],
             'password' => $data['password'],
