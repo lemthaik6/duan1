@@ -56,10 +56,6 @@ class UserModel extends BaseModel
         
         return $stmt->execute($params);
     }
-
-    /**
-     * Cập nhật người dùng
-     */
     public function update($id, $data)
     {
         if (isset($data['password'])) {
