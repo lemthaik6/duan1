@@ -15,6 +15,16 @@ $parts = explode('/', $action);
 $controllerName = $parts[0] ?? 'dashboard';
 $method = $parts[1] ?? 'index';
 
+// Convert method name from kebab-case to camelCase
+// Example: create-group -> createGroup, my-tours -> myTours
+if (strpos($method, '-') !== false) {
+    $methodParts = explode('-', $method);
+    $method = $methodParts[0];
+    for ($i = 1; $i < count($methodParts); $i++) {
+        $method .= ucfirst($methodParts[$i]);
+    }
+}
+
 $controllers = [
     'auth' => 'AuthController',
     'dashboard' => 'DashboardController',
@@ -36,6 +46,7 @@ $controllers = [
     'profile' => 'ProfileController',
     'feedbacks' => 'FeedbackController',
     'itineraries' => 'ItineraryController',
+    'chat' => 'ChatController',
 ];
 if (isset($controllers[$controllerName])) {
     $controllerClass = $controllers[$controllerName];

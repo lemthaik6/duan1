@@ -54,6 +54,12 @@
                             <i class="bi bi-graph-up"></i> Báo cáo & Thống kê
                         </a>
                     </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>?action=chat/index">
+                            <i class="bi bi-chat-dots"></i> Chat nội bộ
+                        </a>
+                    </li>
                 <?php endif; ?>
                 
                 <?php if (isGuide()): ?>
@@ -84,6 +90,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=feedbacks/index">
                             <i class="bi bi-chat-left-text"></i> Phản hồi đánh giá
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>?action=chat/index">
+                            <i class="bi bi-chat-dots"></i> Chat nội bộ
                         </a>
                     </li>
                 <?php endif; ?>
