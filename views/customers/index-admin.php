@@ -22,7 +22,6 @@
         </div>
     </div>
 
-    <!-- Danh sách khách -->
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0">Khách trong tour (<?= count($customers) ?>)</h5>
@@ -89,8 +88,6 @@
                                         </button>
                                     </td>
                                 </tr>
-
-                                <!-- Modal xác nhận xóa -->
                                 <div class="modal fade" id="deleteModal<?= $customer['id'] ?>" tabindex="-1">
                                     <div class="modal-dialog">
                                         <div class="modal-content">

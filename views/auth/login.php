@@ -59,9 +59,12 @@
 </div>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    
     .login-container {
         min-height: 100vh;
         overflow: hidden;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
     .login-container .row {
@@ -70,32 +73,34 @@
 
     /* Sidebar trái */
     .login-sidebar {
-        background: #ffffff;
+        background: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px;
+        padding: 50px 40px;
         position: relative;
+        box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
     }
 
     .login-content {
         width: 100%;
-        max-width: 400px;
+        max-width: 420px;
     }
 
     .login-title-vertical {
-        margin-bottom: 60px;
+        margin-bottom: 50px;
         text-align: center;
     }
 
     .login-title-vertical h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
         color: #667eea;
         margin: 0;
         text-align: center;
-        line-height: 1.4;
-        letter-spacing: 1px;
+        line-height: 1.5;
+        letter-spacing: -0.5px;
         font-weight: 700;
+        font-family: 'Poppins', sans-serif;
     }
 
     .login-form-wrapper {
@@ -103,49 +108,76 @@
     }
 
     .login-form .form-label {
-        font-weight: 500;
+        font-weight: 600;
         color: #333;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
+        font-size: 0.95rem;
+        letter-spacing: 0.3px;
+    }
+
+    .login-form .input-group {
+        margin-bottom: 24px;
     }
 
     .login-form .input-group-text {
-        background: #f8f9fa;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border: 2px solid #e0e0e0;
         border-right: none;
         color: #667eea;
+        font-weight: 600;
+        padding: 12px 14px;
     }
 
     .login-form .form-control {
+        border: 2px solid #e0e0e0;
         border-left: none;
-        padding: 12px 15px;
+        padding: 12px 16px;
+        font-weight: 500;
+        border-radius: 0 8px 8px 0;
+        transition: all 0.3s ease;
+        font-family: 'Poppins', sans-serif;
     }
 
     .login-form .form-control:focus {
         border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-left: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .login-form .input-group-text {
+        border-radius: 8px 0 0 8px;
     }
 
     .btn-login {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border: none;
         color: white;
-        padding: 16px 24px;
-        font-weight: 600;
-        font-size: 1.1rem;
-        border-radius: 8px;
-        transition: all 0.3s;
+        padding: 14px 28px;
+        font-weight: 700;
+        font-size: 1.05rem;
+        border-radius: 10px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
-        margin: 30px auto;
+        margin-top: 10px;
+        margin-bottom: 30px;
         gap: 10px;
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
     }
 
     .btn-login:hover {
         background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
         color: white;
+    }
+
+    .btn-login:active {
+        transform: translateY(-2px);
     }
 
     .btn-login i {
@@ -154,8 +186,19 @@
 
     .login-credentials {
         text-align: center;
-        padding-top: 20px;
-        border-top: 1px solid #e9ecef;
+        padding: 24px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+    }
+
+    .login-credentials small {
+        font-weight: 500;
+        line-height: 1.8;
+    }
+
+    .login-credentials strong {
+        color: #667eea;
     }
 
     /* Main area phải - Gradient */
@@ -165,27 +208,93 @@
         display: flex;
         align-items: flex-end;
         padding: 0;
+        overflow: hidden;
     }
 
+    .login-main-area::before {
+        content: '';
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        bottom: -100px;
+        right: -100px;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .login-main-area::after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        top: -150px;
+        left: -50px;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(20px);
+        }
+    }
 
     /* Responsive */
     @media (max-width: 768px) {
         .login-sidebar {
-            padding: 20px;
+            padding: 40px 20px;
+            box-shadow: none;
+        }
+
+        .login-content {
+            max-width: 100%;
         }
 
         .login-title-vertical h1 {
             font-size: 1.8rem;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         .btn-login {
-            height: 80px;
+            padding: 12px 24px;
             font-size: 1rem;
         }
 
         .login-main-area {
-            min-height: 300px;
+            min-height: 200px;
+        }
+
+        .login-credentials {
+            font-size: 0.85rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .login-sidebar {
+            padding: 30px 15px;
+        }
+
+        .login-title-vertical h1 {
+            font-size: 1.5rem;
+        }
+
+        .login-form .form-label {
+            font-size: 0.9rem;
+        }
+
+        .btn-login {
+            padding: 11px 20px;
+            font-size: 0.95rem;
+            gap: 8px;
+        }
+
+        .btn-login i {
+            font-size: 1.1rem;
         }
     }
 </style>

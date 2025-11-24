@@ -3,10 +3,6 @@
 class UserModel extends BaseModel
 {
     protected $table = 'users';
-
-    /**
-     * Đăng nhập
-     */
     public function login($username, $password)
     {
         $sql = "SELECT * FROM {$this->table} WHERE username = :username AND status = 'active'";
@@ -20,10 +16,6 @@ class UserModel extends BaseModel
 
         return false;
     }
-
-    /**
-     * Lấy tất cả người dùng
-     */
     public function getAll($role = null)
     {
         $sql = "SELECT * FROM {$this->table}";
@@ -38,10 +30,6 @@ class UserModel extends BaseModel
 
         return $stmt->fetchAll();
     }
-
-    /**
-     * Lấy người dùng theo ID
-     */
     public function getById($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = :id";

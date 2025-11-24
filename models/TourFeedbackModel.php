@@ -19,10 +19,6 @@ class TourFeedbackModel extends BaseModel
         $stmt->execute(['tour_id' => $tourId]);
         return $stmt->fetchAll();
     }
-
-    /**
-     * Lấy phản hồi theo HDV
-     */
     public function getByGuide($guideId)
     {
         $sql = "SELECT tf.*, t.name as tour_name, t.code as tour_code
@@ -34,10 +30,6 @@ class TourFeedbackModel extends BaseModel
         $stmt->execute(['guide_id' => $guideId]);
         return $stmt->fetchAll();
     }
-
-    /**
-     * Lấy phản hồi theo loại
-     */
     public function getByType($tourId, $feedbackType)
     {
         $sql = "SELECT tf.*, u.full_name as rated_by_name

@@ -118,21 +118,39 @@ class TourCostModel extends BaseModel
      */
     public function create($data)
     {
-        // Đảm bảo tất cả các field đều có giá trị (kể cả null)
-        $params = [
-            'tour_id' => $data['tour_id'],
-            'cost_category_id' => $data['cost_category_id'],
-            'description' => !empty($data['description']) ? $data['description'] : null,
-            'amount' => $data['amount'],
-            'date' => $data['date'] ?? date('Y-m-d'),
-            'invoice_image' => $data['invoice_image'] ?? null,
-            'created_by' => $data['created_by']
-        ];
+        // Xây dựng SQL động để phù hợp với dữ liệu thực tế
+        $fields = [];
+        $params = [];
 
-        $sql = "INSERT INTO {$this->table} 
-                (tour_id, cost_category_id, description, amount, date, invoice_image, created_by) 
-                VALUES 
-                (:tour_id, :cost_category_id, :description, :amount, :date, :invoice_image, :created_by)";
+        $fields[] = 'tour_id';
+        $params['tour_id'] = $data['tour_id'];
+
+        $fields[] = 'cost_category_id';
+        $params['cost_category_id'] = $data['cost_category_id'];
+
+        if (!empty($data['description'])) {
+            $fields[] = 'description';
+            $params['description'] = $data['description'];
+        }
+
+        $fields[] = 'amount';
+        $params['amount'] = $data['amount'];
+
+        $fields[] = 'date';
+        $params['date'] = $data['date'] ?? date('Y-m-d');
+
+        if (!empty($data['invoice_image'])) {
+            $fields[] = 'invoice_image';
+            $params['invoice_image'] = $data['invoice_image'];
+        }
+
+        $fields[] = 'created_by';
+        $params['created_by'] = $data['created_by'];
+
+        $placeholders = implode(', ', array_map(fn($f) => ":$f", $fields));
+        $sql = "INSERT INTO {$this->table} (" . implode(', ', $fields) . ") 
+                VALUES (" . $placeholders . ")";
+        
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($params);
     }

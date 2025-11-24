@@ -5,12 +5,14 @@ class CostController
     private $costModel;
     private $costCategoryModel;
     private $tourModel;
+    private $assignmentModel;
 
     public function __construct()
     {
         $this->costModel = new TourCostModel();
         $this->costCategoryModel = new CostCategoryModel();
         $this->tourModel = new TourModel();
+        $this->assignmentModel = new TourAssignmentModel();
     }
 
     /**
@@ -30,9 +32,8 @@ class CostController
             $tour = $this->tourModel->getById($tourId);
             if ($tour) {
                 $costs = $this->costModel->getByTour($tourId);
-                $totalCost = $this->costModel->getTotalCost($tourId, true); // Bao gồm giá gốc nội bộ
-                $costsOnly = $this->costModel->getCostsOnly($tourId); // Chỉ chi phí phát sinh
-                $costByCategory = $this->costModel->getCostByCategory($tourId);
+                $totalCost = $this->costModel->getTotalCost($tourId, true); 
+                $costsOnly = $this->costModel->getCostsOnly($tourId);
             }
         }
 
@@ -41,10 +42,6 @@ class CostController
         $view = 'costs/index';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Chi phí của tôi (HDV)
-     */
     public function myCosts()
     {
         requireGuide();
@@ -59,7 +56,6 @@ class CostController
             $tour = $this->tourModel->getById($tourId);
             if ($tour) {
                 $costs = $this->costModel->getByTour($tourId);
-                // HDV chỉ xem chi phí phát sinh, không bao gồm giá gốc nội bộ
                 $totalCost = $this->costModel->getTotalCost($tourId, false);
             }
         }
@@ -69,10 +65,6 @@ class CostController
         $view = 'costs/my-costs';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Thêm chi phí
-     */
     public function create()
     {
         requireLogin();
@@ -88,8 +80,6 @@ class CostController
             }
             exit;
         }
-
-        // Nếu là Guide, chỉ được thêm chi phí cho tour được phân công
         if (isGuide()) {
             $user = getCurrentUser();
             $assignments = $this->assignmentModel->getByTour($tourId);

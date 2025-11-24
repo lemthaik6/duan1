@@ -4,8 +4,6 @@ class BaseModel
 {
     protected $table;
     protected $pdo;
-
-    // Kết nối CSDL
     public function __construct()
     {
         $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8', DB_HOST, DB_PORT, DB_NAME);

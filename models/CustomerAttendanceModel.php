@@ -4,9 +4,6 @@ class CustomerAttendanceModel extends BaseModel
 {
     protected $table = 'customer_attendance';
 
-    /**
-     * Lấy điểm danh theo tour và ngày
-     */
     public function getByTourAndDate($tourId, $date)
     {
         $sql = "SELECT ca.*, tc.full_name, tc.phone, tc.email
