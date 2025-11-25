@@ -16,9 +16,7 @@ class HotelRoomAssignmentModel extends BaseModel
         $stmt->execute(['tour_id' => $tourId]);
         return $stmt->fetchAll();
     }
-    /**
-     * Lấy phân phòng theo ID
-     */
+   
     public function getById($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = :id";
