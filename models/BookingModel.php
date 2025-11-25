@@ -42,7 +42,6 @@ class BookingModel extends BaseModel
             $params['booking_date_to'] = $filters['booking_date_to'];
         }
 
-        // Tìm kiếm theo mã booking, tên khách, số điện thoại
         if (!empty($filters['search'])) {
             $search = '%' . $filters['search'] . '%';
             $sql .= " AND (b.booking_code LIKE :search 
@@ -140,9 +139,6 @@ class BookingModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Đếm booking theo trạng thái
-     */
     public function countByStatus($status = null)
     {
         $sql = "SELECT COUNT(*) as total FROM {$this->table}";
@@ -157,9 +153,6 @@ class BookingModel extends BaseModel
         return $result['total'] ?? 0;
     }
 
-    /**
-     * Tính tổng doanh thu
-     */
     public function getTotalRevenue($filters = [])
     {
         $sql = "SELECT SUM(total_amount) as total FROM {$this->table} WHERE status IN ('confirmed', 'completed')";
@@ -186,17 +179,12 @@ class BookingModel extends BaseModel
         return $result['total'] ?? 0;
     }
 
-    /**
-     * Xóa booking và lịch sử trạng thái liên quan
-     */
     public function delete($id)
     {
-        // Xóa lịch sử trạng thái trước
         $historySql = "DELETE FROM booking_status_history WHERE booking_id = :booking_id";
         $historyStmt = $this->pdo->prepare($historySql);
         $historyStmt->execute(['booking_id' => $id]);
 
-        // Xóa booking
         $sql = "DELETE FROM {$this->table} WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute(['id' => $id]);

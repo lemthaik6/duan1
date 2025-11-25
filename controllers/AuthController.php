@@ -8,13 +8,8 @@ class AuthController
     {
         $this->userModel = new UserModel();
     }
-
-    /**
-     * Hiển thị form đăng nhập
-     */
     public function login()
     {
-        // Nếu đã đăng nhập, chuyển về dashboard
         if (isLoggedIn()) {
             header('Location: ' . BASE_URL . '?action=dashboard');
             exit;
@@ -40,15 +35,10 @@ class AuthController
                 }
             }
         }
-
         $title = 'Đăng nhập';
         $view = 'auth/login';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Đăng xuất
-     */
     public function logout()
     {
         session_destroy();

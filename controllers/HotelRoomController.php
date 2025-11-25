@@ -83,12 +83,10 @@ class HotelRoomController
             } elseif ($tourId <= 0) {
                 $_SESSION['error'] = 'Tour không hợp lệ';
             } else {
-                // Kiểm tra tour tồn tại
                 $tour = $this->tourModel->getById($tourId);
                 if (!$tour) {
                     $_SESSION['error'] = 'Tour không tồn tại';
                 } else {
-                    // Kiểm tra khách hàng có thuộc tour không
                     $tourCustomers = $this->customerModel->getByTour($tourId);
                     $validCustomerIds = array_column($tourCustomers, 'id');
                     $invalidCustomers = array_diff($customerIds, $validCustomerIds);
@@ -98,8 +96,6 @@ class HotelRoomController
                     } else {
                         $successCount = 0;
                         $errorCount = 0;
-                        
-                        // Lưu phân phòng cho từng khách hàng
                         foreach ($customerIds as $customerId) {
                             $data = [
                                 'tour_id' => $tourId,
@@ -131,8 +127,7 @@ class HotelRoomController
                         }
                     }
                 }
-            }
-            
+            }         
             header('Location: ' . BASE_URL . '?action=hotel-rooms/index&tour_id=' . $tourId);
             exit;
         }
@@ -142,8 +137,7 @@ class HotelRoomController
     }
     public function delete()
     {
-        requireAdmin();
-        
+        requireAdmin();  
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = intval($_POST['id'] ?? 0);
             $tourId = intval($_POST['tour_id'] ?? 0);
@@ -153,7 +147,6 @@ class HotelRoomController
             } elseif ($tourId <= 0) {
                 $_SESSION['error'] = 'Tour ID không hợp lệ';
             } else {
-                // Kiểm tra phân phòng có thuộc tour không
                 $room = $this->roomModel->getById($id);
                 if (!$room) {
                     $_SESSION['error'] = 'Phân phòng không tồn tại';

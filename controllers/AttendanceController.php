@@ -14,14 +14,9 @@ class AttendanceController
         $this->tourModel = new TourModel();
         $this->assignmentModel = new TourAssignmentModel();
     }
-
-    /**
-     * Điểm danh khách (HDV)
-     */
     public function index()
     {
         requireGuide();
-        
         $tourId = $_GET['tour_id'] ?? 0;
         $date = $_GET['date'] ?? date('Y-m-d');
         
@@ -31,8 +26,6 @@ class AttendanceController
             header('Location: ' . BASE_URL . '?action=tours/my-tours');
             exit;
         }
-
-        // Kiểm tra HDV có được phân công tour này không
         $user = getCurrentUser();
         $assignments = $this->assignmentModel->getByTour($tourId);
         $isAssigned = false;
@@ -42,12 +35,10 @@ class AttendanceController
                 break;
             }
         }
-        
         if (!$isAssigned) {
             header('Location: ' . BASE_URL . '?action=tours/my-tours');
             exit;
         }
-
         $error = null;
         $success = null;
 
@@ -56,7 +47,6 @@ class AttendanceController
             $status = $_POST['status'] ?? 'present';
             $notes = $_POST['notes'] ?? '';
             $checkInTime = $_POST['check_in_time'] ?? date('Y-m-d H:i:s');
-
             if (empty($customerId)) {
                 $error = 'Vui lòng chọn khách';
             } else {
@@ -80,8 +70,6 @@ class AttendanceController
 
         $customers = $this->customerModel->getByTour($tourId);
         $attendance = $this->attendanceModel->getByTourAndDate($tourId, $date);
-        
-        // Tạo map để dễ tra cứu
         $attendanceMap = [];
         foreach ($attendance as $att) {
             $attendanceMap[$att['customer_id']] = $att;

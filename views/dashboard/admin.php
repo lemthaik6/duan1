@@ -150,10 +150,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Sidebar phải -->
         <div class="col-lg-4">
-            <!-- Card HDV -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
@@ -170,8 +167,6 @@
                     </a>
                 </div>
             </div>
-
-            <!-- Thao tác nhanh -->
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">

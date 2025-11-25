@@ -10,8 +10,6 @@
             <i class="bi bi-calendar-event"></i> <?= date('d/m/Y H:i') ?>
         </span>
     </div>
-
-    <!-- Thống kê nhanh -->
     <div class="row g-4 mb-4">
         <div class="col-md-4">
             <div class="card stat-card bg-info">
@@ -55,8 +53,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Nội dung chính -->
     <div class="row g-4">
         <div class="col-lg-8">
             <div class="card">
@@ -130,10 +126,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Sidebar phải -->
         <div class="col-lg-4">
-            <!-- Thao tác nhanh -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
@@ -157,8 +150,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Thông tin cá nhân -->
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">

@@ -20,5 +20,4 @@ require_once './configs/env.php';
 require_once './configs/helper.php';
 require_once './configs/auth.php';
 
-// Điều hướng
 require_once './routes/index.php';

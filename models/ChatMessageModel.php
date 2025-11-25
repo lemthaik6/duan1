@@ -4,9 +4,6 @@ class ChatMessageModel extends BaseModel
 {
     protected $table = 'chat_messages';
 
-    /**
-     * Lấy tin nhắn trong nhóm
-     */
     public function getByGroup($groupId, $limit = 50, $offset = 0)
     {
         $sql = "SELECT cm.*, u.full_name as user_name, u.role as user_role
@@ -24,9 +21,6 @@ class ChatMessageModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Lấy tin nhắn mới sau một thời điểm
-     */
     public function getNewMessages($groupId, $afterTime)
     {
         $sql = "SELECT cm.*, u.full_name as user_name, u.role as user_role
