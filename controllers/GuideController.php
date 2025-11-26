@@ -17,8 +17,10 @@ class GuideController
         requireAdmin();
         
         $guides = $this->userModel->getGuides();
-        foreach ($guides as &$guide) {
-            $guide['total_tours'] = $this->userModel->countToursByGuide($guide['id']);
+        if (!empty($guides) && is_array($guides)) {
+            foreach ($guides as $k => $guide) {
+                $guides[$k]['total_tours'] = $this->userModel->countToursByGuide($guide['id']);
+            }
         }
         
         $title = 'Quản lý Hướng dẫn viên';
@@ -176,6 +178,41 @@ class GuideController
         }
         
         header('Location: ' . BASE_URL . '?action=tours/index');
+        exit;
+    }
+
+    public function delete()
+    {
+        requireAdmin();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? 0;
+
+            if (empty($id)) {
+                $_SESSION['error'] = 'ID không hợp lệ';
+                header('Location: ' . BASE_URL . '?action=guides/index');
+                exit;
+            }
+
+            // Kiểm tra xem người dùng có thực sự là HDV
+            $guide = $this->userModel->getById($id);
+            if (!$guide || $guide['role'] !== 'guide') {
+                $_SESSION['error'] = 'Không tìm thấy hướng dẫn viên';
+                header('Location: ' . BASE_URL . '?action=guides/index');
+                exit;
+            }
+
+            if ($this->userModel->delete($id)) {
+                $_SESSION['success'] = 'Xóa HDV thành công!';
+            } else {
+                $_SESSION['error'] = 'Có lỗi xảy ra khi xóa HDV';
+            }
+
+            header('Location: ' . BASE_URL . '?action=guides/index');
+            exit;
+        }
+
+        header('Location: ' . BASE_URL . '?action=guides/index');
         exit;
     }
 }

@@ -210,5 +210,27 @@ class ChatGroupModel extends BaseModel
         $result = $stmt->fetch();
         return $result['count'] ?? 0;
     }
+
+    /**
+     * Lấy thông tin thành viên trong nhóm
+     */
+    public function getMember($groupId, $userId)
+    {
+        $sql = "SELECT * FROM chat_group_members WHERE group_id = :group_id AND user_id = :user_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['group_id' => $groupId, 'user_id' => $userId]);
+        return $stmt->fetch();
+    }
+
+    /**
+     * Đặt trạng thái nhóm là deleted (soft delete)
+     */
+    public function deleteGroup($groupId)
+    {
+        // Schema allows status = 'active' or 'archived' -> use 'archived' for soft-delete
+        $sql = "UPDATE {$this->table} SET status = 'archived' WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $groupId]);
+    }
 }
 

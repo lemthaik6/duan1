@@ -14,9 +14,10 @@ class DailyLogController
     }
     public function index()
     {
-        requireGuide();
-        
-        $user = getCurrentUser();
+        // Cho phép cả admin và guide xem: guide xem nhật ký của mình, admin xem toàn bộ hoặc theo tour
+        requireLogin();
+
+        $user = isLoggedIn() ? getCurrentUser() : null;
         $tourId = $_GET['tour_id'] ?? 0;
         $logs = [];
         $tour = null;
@@ -26,9 +27,28 @@ class DailyLogController
             if ($tour) {
                 $logs = $this->dailyLogModel->getByTour($tourId);
             }
+        } else {
+            // Nếu là admin và không có tour_id, lấy tất cả nhật ký từ tất cả tour
+            if (isAdmin()) {
+                $allTours = $this->tourModel->getAll();
+                foreach ($allTours as $t) {
+                    $tlogs = $this->dailyLogModel->getByTour($t['id']);
+                    if (!empty($tlogs)) {
+                        $logs = array_merge($logs, $tlogs);
+                    }
+                }
+                // Sắp xếp theo ngày giảm dần nếu cần
+                usort($logs, function($a, $b) {
+                    return strcmp($b['date'], $a['date']);
+                });
+            }
         }
 
-        $myTours = $this->assignmentModel->getByGuide($user['id']);
+        if (isGuide()) {
+            $myTours = $this->assignmentModel->getByGuide($user['id']);
+        } else {
+            $myTours = $this->tourModel->getAll();
+        }
         
         $title = 'Nhật ký Tour';
         $view = 'daily-logs/index';

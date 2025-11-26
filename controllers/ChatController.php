@@ -67,9 +67,103 @@ class ChatController
         $messages = $this->chatMessageModel->getByGroup($groupId, 100);
         $members = $this->chatGroupModel->getMembers($groupId);
 
+        // Danh sách tất cả user để thêm thành viên (chỉ dùng khi người xem có quyền)
+        $allUsers = $this->userModel->getAll();
+
         $title = 'Chat: ' . htmlspecialchars($group['name']);
         $view = 'chat/view';
         require_once PATH_VIEW_MAIN;
+    }
+
+    /**
+     * Thêm thành viên vào nhóm (POST)
+     */
+    public function addMember()
+    {
+        requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '?action=chat/index');
+            exit;
+        }
+
+        $user = getCurrentUser();
+        $groupId = $_POST['group_id'] ?? 0;
+        $newUserId = $_POST['user_id'] ?? 0;
+
+        $group = $this->chatGroupModel->getById($groupId);
+        if (!$group) {
+            $_SESSION['error'] = 'Nhóm không tồn tại';
+            header('Location: ' . BASE_URL . '?action=chat/index');
+            exit;
+        }
+
+        // Chỉ creator nhóm hoặc admin (site) hoặc member có role admin mới được thêm
+        $memberRow = $this->chatGroupModel->getMember($groupId, $user['id']);
+        $isGroupAdmin = $memberRow && $memberRow['role'] === 'admin';
+
+        if (!isAdmin() && !$isGroupAdmin && $group['created_by'] != $user['id']) {
+            $_SESSION['error'] = 'Bạn không có quyền thêm thành viên';
+            header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
+            exit;
+        }
+
+        if (empty($newUserId)) {
+            $_SESSION['error'] = 'Vui lòng chọn thành viên để thêm';
+            header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
+            exit;
+        }
+
+        if ($this->chatGroupModel->addMember($groupId, $newUserId)) {
+            $_SESSION['success'] = 'Thêm thành viên thành công';
+        } else {
+            $_SESSION['error'] = 'Có lỗi xảy ra khi thêm thành viên';
+        }
+
+        header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
+        exit;
+    }
+
+    /**
+     * Xóa (soft-delete) nhóm chat (POST)
+     */
+    public function deleteGroup()
+    {
+        requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '?action=chat/index');
+            exit;
+        }
+
+        $user = getCurrentUser();
+        $groupId = $_POST['group_id'] ?? 0;
+
+        $group = $this->chatGroupModel->getById($groupId);
+        if (!$group) {
+            $_SESSION['error'] = 'Nhóm không tồn tại';
+            header('Location: ' . BASE_URL . '?action=chat/index');
+            exit;
+        }
+
+        // Chỉ có admin site hoặc người tạo nhóm mới được xóa
+        $memberRow = $this->chatGroupModel->getMember($groupId, $user['id']);
+        $isGroupAdmin = $memberRow && $memberRow['role'] === 'admin';
+
+        if (!isAdmin() && !$isGroupAdmin && $group['created_by'] != $user['id']) {
+            $_SESSION['error'] = 'Bạn không có quyền xóa nhóm';
+            header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
+            exit;
+        }
+
+        if ($this->chatGroupModel->deleteGroup($groupId)) {
+            $_SESSION['success'] = 'Xóa nhóm chat thành công';
+        } else {
+            $_SESSION['error'] = 'Có lỗi xảy ra khi xóa nhóm';
+        }
+
+        header('Location: ' . BASE_URL . '?action=chat/index');
+        exit;
     }
 
     /**
