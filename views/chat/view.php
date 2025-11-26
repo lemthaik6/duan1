@@ -48,9 +48,51 @@
                     </div>
 
                     <div class="mt-3">
-                        <a href="<?= BASE_URL ?>?action=chat/index" class="btn btn-sm btn-outline-secondary w-100">
+                        <a href="<?= BASE_URL ?>?action=chat/index" class="btn btn-sm btn-outline-secondary w-100 mb-2">
                             <i class="bi bi-arrow-left"></i> Quay lại danh sách
                         </a>
+
+                        <?php
+                        $currentUser = getCurrentUser();
+                        $memberRow = $this->chatGroupModel ?? null; // placeholder to avoid undefined
+                        // determine if current user can manage group: creator, site admin, or group admin
+                        $canManage = false;
+                        if (isAdmin() || (isset($group['created_by']) && $group['created_by'] == $currentUser['id'])) {
+                            $canManage = true;
+                        } else {
+                            // find role in members
+                            foreach ($members as $m) {
+                                if ($m['user_id'] == $currentUser['id'] && $m['role'] === 'admin') {
+                                    $canManage = true;
+                                    break;
+                                }
+                            }
+                        }
+                        ?>
+
+                        <?php if ($canManage): ?>
+                            <!-- Form thêm thành viên -->
+                            <form method="post" action="<?= BASE_URL ?>?action=chat/add-member" class="d-flex gap-2 mb-2">
+                                <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
+                                <select name="user_id" class="form-select form-select-sm">
+                                    <option value="">Thêm thành viên...</option>
+                                    <?php foreach ($allUsers as $u):
+                                        $already = false;
+                                        foreach ($members as $m) { if ($m['user_id'] == $u['id']) { $already = true; break; } }
+                                        if ($already) continue;
+                                    ?>
+                                        <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['full_name']) ?> (<?= htmlspecialchars($u['username']) ?>)</option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary">Thêm</button>
+                            </form>
+
+                            <!-- Xóa nhóm -->
+                            <form method="post" action="<?= BASE_URL ?>?action=chat/delete-group" onsubmit="return confirm('Bạn có chắc muốn xóa nhóm chat này?');">
+                                <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
+                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">Xóa nhóm</button>
+                            </form>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
