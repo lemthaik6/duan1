@@ -1,9 +1,4 @@
 <?php
-/**
- * File kiểm tra URL và đường dẫn
- * Truy cập: http://localhost/duan1/check_url.php
- */
-
 echo "<h2>Thông tin hệ thống</h2>";
 echo "<p><strong>Document Root:</strong> " . $_SERVER['DOCUMENT_ROOT'] . "</p>";
 echo "<p><strong>Script Name:</strong> " . $_SERVER['SCRIPT_NAME'] . "</p>";

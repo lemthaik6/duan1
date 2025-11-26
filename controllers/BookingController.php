@@ -146,24 +146,14 @@ class BookingController
         $incidentModel = new TourIncidentModel();
         $feedbackModel = new TourFeedbackModel();
         $costModel = new TourCostModel();
-        
-        // Lấy HDV được phân công
         $assignmentModel = new TourAssignmentModel();
         $assignments = $assignmentModel->getByTour($booking['tour_id']);
         if (!empty($assignments)) {
             $guide = $assignments[0];
             $guideInfo['guide'] = $guide;
-            
-            // Lấy nhật ký hành trình
             $guideInfo['daily_logs'] = $dailyLogModel->getByTour($booking['tour_id']);
-            
-            // Lấy sự cố
             $guideInfo['incidents'] = $incidentModel->getByTour($booking['tour_id']);
-            
-            // Lấy phản hồi
             $guideInfo['feedbacks'] = $feedbackModel->getByTour($booking['tour_id']);
-            
-            // Lấy chi phí
             $guideInfo['costs'] = $costModel->getByTour($booking['tour_id']);
         }
         
@@ -171,10 +161,6 @@ class BookingController
         $view = 'bookings/view';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Cập nhật trạng thái booking
-     */
     public function updateStatus()
     {
         requireAdmin();

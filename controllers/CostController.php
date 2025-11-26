@@ -15,9 +15,6 @@ class CostController
         $this->assignmentModel = new TourAssignmentModel();
     }
 
-    /**
-     * Danh sách chi phí (Admin)
-     */
     public function index()
     {
         requireAdmin();

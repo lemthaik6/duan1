@@ -14,9 +14,6 @@ if ($action === '/') {
 $parts = explode('/', $action);
 $controllerName = $parts[0] ?? 'dashboard';
 $method = $parts[1] ?? 'index';
-
-// Convert method name from kebab-case to camelCase
-// Example: create-group -> createGroup, my-tours -> myTours
 if (strpos($method, '-') !== false) {
     $methodParts = explode('-', $method);
     $method = $methodParts[0];

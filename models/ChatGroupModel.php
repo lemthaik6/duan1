@@ -4,9 +4,6 @@ class ChatGroupModel extends BaseModel
 {
     protected $table = 'chat_groups';
 
-    /**
-     * Lấy tất cả nhóm chat của user
-     */
     public function getGroupsByUser($userId, $type = null)
     {
         $sql = "SELECT DISTINCT cg.*, 
@@ -38,9 +35,6 @@ class ChatGroupModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Lấy nhóm chat theo ID với thông tin đầy đủ
-     */
     public function getById($id, $userId = null)
     {
         $sql = "SELECT cg.*, t.name as tour_name, t.code as tour_code,
@@ -52,7 +46,6 @@ class ChatGroupModel extends BaseModel
 
         $params = ['id' => $id];
 
-        // Kiểm tra user có trong nhóm không
         if ($userId) {
             $sql .= " AND EXISTS (
                 SELECT 1 FROM chat_group_members cgm 
@@ -66,9 +59,6 @@ class ChatGroupModel extends BaseModel
         return $stmt->fetch();
     }
 
-    /**
-     * Tạo nhóm chat mới
-     */
     public function create($data)
     {
         $sql = "INSERT INTO {$this->table} 
@@ -93,9 +83,6 @@ class ChatGroupModel extends BaseModel
         return false;
     }
 
-    /**
-     * Thêm thành viên vào nhóm
-     */
     public function addMember($groupId, $userId, $role = 'member')
     {
         $sql = "INSERT INTO chat_group_members (group_id, user_id, role) 
@@ -110,9 +97,6 @@ class ChatGroupModel extends BaseModel
         ]);
     }
 
-    /**
-     * Lấy danh sách thành viên trong nhóm
-     */
     public function getMembers($groupId)
     {
         $sql = "SELECT cgm.*, u.full_name, u.email, u.phone, u.role as user_role
@@ -126,9 +110,6 @@ class ChatGroupModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Xóa thành viên khỏi nhóm
-     */
     public function removeMember($groupId, $userId)
     {
         $sql = "DELETE FROM chat_group_members 
@@ -141,9 +122,6 @@ class ChatGroupModel extends BaseModel
         ]);
     }
 
-    /**
-     * Kiểm tra user có trong nhóm không
-     */
     public function isMember($groupId, $userId)
     {
         $sql = "SELECT COUNT(*) as count FROM chat_group_members 
@@ -159,9 +137,6 @@ class ChatGroupModel extends BaseModel
         return $result['count'] > 0;
     }
 
-    /**
-     * Lấy nhóm chat theo tour
-     */
     public function getByTour($tourId)
     {
         $sql = "SELECT * FROM {$this->table} 
@@ -173,9 +148,6 @@ class ChatGroupModel extends BaseModel
         return $stmt->fetch();
     }
 
-    /**
-     * Cập nhật thời gian đọc tin nhắn cuối
-     */
     public function updateLastRead($groupId, $userId)
     {
         $sql = "UPDATE chat_group_members 
@@ -189,9 +161,6 @@ class ChatGroupModel extends BaseModel
         ]);
     }
 
-    /**
-     * Đếm số tin nhắn chưa đọc
-     */
     public function countUnreadMessages($groupId, $userId)
     {
         $sql = "SELECT COUNT(*) as count FROM chat_messages cm

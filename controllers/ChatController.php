@@ -16,18 +16,12 @@ class ChatController
         $this->userModel = new UserModel();
         $this->assignmentModel = new TourAssignmentModel();
     }
-
-    /**
-     * Danh sách các nhóm chat
-     */
     public function index()
     {
         requireLogin();
 
         $user = getCurrentUser();
         $groups = $this->chatGroupModel->getGroupsByUser($user['id']);
-
-        // Đếm số tin nhắn chưa đọc cho mỗi nhóm
         foreach ($groups as &$group) {
             $group['unread_count'] = $this->chatGroupModel->countUnreadMessages($group['id'], $user['id']);
         }

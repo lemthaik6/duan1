@@ -113,8 +113,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Lịch trình -->
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Lịch trình chi tiết</h5>

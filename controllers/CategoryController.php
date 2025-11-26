@@ -8,10 +8,6 @@ class CategoryController
     {
         $this->categoryModel = new TourCategoryModel();
     }
-
-    /**
-     * Danh sách danh mục tour
-     */
     public function index()
     {
         requireAdmin();
@@ -22,10 +18,6 @@ class CategoryController
         $view = 'categories/index';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Tạo danh mục mới
-     */
     public function create()
     {
         requireAdmin();
@@ -56,10 +48,6 @@ class CategoryController
         $view = 'categories/create';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Chỉnh sửa danh mục
-     */
     public function edit()
     {
         requireAdmin();
@@ -98,10 +86,6 @@ class CategoryController
         $view = 'categories/edit';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Xóa danh mục
-     */
     public function delete()
     {
         requireAdmin();
