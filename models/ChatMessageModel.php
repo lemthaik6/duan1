@@ -38,10 +38,6 @@ class ChatMessageModel extends BaseModel
         ]);
         return $stmt->fetchAll();
     }
-
-    /**
-     * Tạo tin nhắn mới
-     */
     public function create($data)
     {
         $sql = "INSERT INTO {$this->table} 
