@@ -5,6 +5,21 @@ class TourCostModel extends BaseModel
     protected $table = 'tour_costs';
 
     /**
+     * Lấy chi phí theo ID
+     */
+    public function getById($id)
+    {
+        $sql = "SELECT tc.*, cc.name as category_name, u.full_name as created_by_name
+                FROM {$this->table} tc
+                LEFT JOIN cost_categories cc ON tc.cost_category_id = cc.id
+                LEFT JOIN users u ON tc.created_by = u.id
+                WHERE tc.id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
+
+    /**
      * Lấy tất cả chi phí của tour
      */
     public function getByTour($tourId)
