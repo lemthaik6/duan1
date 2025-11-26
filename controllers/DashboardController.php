@@ -38,6 +38,30 @@ class DashboardController
             $ongoingTours = array_filter($myTours, fn($t) => $t['status'] === 'ongoing');
             $completedTours = array_filter($myTours, fn($t) => $t['status'] === 'completed');
             
+            // Thống kê từ HDV (cá nhân)
+            $dailyLogModel = new TourDailyLogModel();
+            $incidentModel = new TourIncidentModel();
+            $feedbackModel = new TourFeedbackModel();
+
+            $userId = $user['id'];
+            $totalDailyLogs = count($dailyLogModel->getByGuide($userId));
+            $totalIncidents = count($incidentModel->getByReporter($userId));
+
+            $guideFeedbacks = $feedbackModel->getByGuide($userId);
+            $totalFeedbacks = count($guideFeedbacks);
+            $avgRating = 0;
+            if (!empty($guideFeedbacks)) {
+                $sum = 0;
+                $cnt = 0;
+                foreach ($guideFeedbacks as $fb) {
+                    if (!empty($fb['rating'])) {
+                        $sum += $fb['rating'];
+                        $cnt++;
+                    }
+                }
+                $avgRating = $cnt > 0 ? round($sum / $cnt, 1) : 0;
+            }
+
             $view = 'dashboard/guide';
         }
 

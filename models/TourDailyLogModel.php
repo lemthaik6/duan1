@@ -36,6 +36,22 @@ class TourDailyLogModel extends BaseModel
     }
 
     /**
+     * Lấy tất cả nhật ký của 1 hướng dẫn viên
+     */
+    public function getByGuide($guideId)
+    {
+        $sql = "SELECT tdl.*, u.full_name as guide_name, t.name as tour_name
+                FROM {$this->table} tdl
+                LEFT JOIN users u ON tdl.guide_id = u.id
+                LEFT JOIN tours t ON tdl.tour_id = t.id
+                WHERE tdl.guide_id = :guide_id
+                ORDER BY tdl.date DESC, tdl.created_at DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['guide_id' => $guideId]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Tạo hoặc cập nhật nhật ký
      */
     public function createOrUpdate($data)

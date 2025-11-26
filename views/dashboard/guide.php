@@ -53,6 +53,72 @@
             </div>
         </div>
     </div>
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card bg-secondary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="stat-label">Nhật ký hành trình</p>
+                            <h3 class="stat-value"><?= isset($totalDailyLogs) ? $totalDailyLogs : 0 ?></h3>
+                        </div>
+                        <i class="bi bi-journal-text stat-icon"></i>
+                    </div>
+                    <div class="mt-3">
+                        <a href="<?= BASE_URL ?>?action=daily-logs/index" class="small">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card bg-danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="stat-label">Sự cố báo cáo</p>
+                            <h3 class="stat-value"><?= isset($totalIncidents) ? $totalIncidents : 0 ?></h3>
+                        </div>
+                        <i class="bi bi-exclamation-triangle stat-icon"></i>
+                    </div>
+                    <div class="mt-3">
+                        <a href="<?= BASE_URL ?>?action=incidents/index" class="small">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="stat-label">Phản hồi</p>
+                            <h3 class="stat-value"><?= isset($totalFeedbacks) ? $totalFeedbacks : 0 ?></h3>
+                        </div>
+                        <i class="bi bi-chat-left-text stat-icon"></i>
+                    </div>
+                    <div class="mt-3">
+                        <a href="<?= BASE_URL ?>?action=feedbacks/index" class="small">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card bg-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="stat-label">Điểm trung bình</p>
+                            <h3 class="stat-value"><?= isset($avgRating) ? number_format($avgRating, 1) : '0.0' ?> /5</h3>
+                        </div>
+                        <i class="bi bi-star-fill stat-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row g-4">
         <div class="col-lg-8">
             <div class="card">

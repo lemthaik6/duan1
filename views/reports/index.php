@@ -140,7 +140,7 @@
                     </h5>
                 </div>
                 <div class="guide-stats-grid">
-                    <div class="guide-stat-item">
+                    <a href="<?= BASE_URL ?>?action=guides/index" class="guide-stat-item" title="Danh sách hướng dẫn viên">
                         <div class="guide-stat-icon guide-stat-icon-primary">
                             <i class="bi bi-people-fill"></i>
                         </div>
@@ -148,8 +148,8 @@
                             <h3 class="guide-stat-value"><?= $guideStats['total_guides'] ?></h3>
                             <small class="guide-stat-label">Tổng số HDV</small>
                         </div>
-                    </div>
-                    <div class="guide-stat-item">
+                    </a>
+                    <a href="<?= BASE_URL ?>?action=daily-logs/index" class="guide-stat-item" title="Nhật ký hành trình">
                         <div class="guide-stat-icon guide-stat-icon-success">
                             <i class="bi bi-journal-text"></i>
                         </div>
@@ -157,8 +157,8 @@
                             <h3 class="guide-stat-value"><?= $guideStats['total_daily_logs'] ?></h3>
                             <small class="guide-stat-label">Nhật ký hành trình</small>
                         </div>
-                    </div>
-                    <div class="guide-stat-item">
+                    </a>
+                    <a href="<?= BASE_URL ?>?action=incidents/index" class="guide-stat-item" title="Sự cố đã báo">
                         <div class="guide-stat-icon guide-stat-icon-warning">
                             <i class="bi bi-exclamation-triangle-fill"></i>
                         </div>
@@ -166,8 +166,8 @@
                             <h3 class="guide-stat-value"><?= $guideStats['total_incidents'] ?></h3>
                             <small class="guide-stat-label">Sự cố đã báo</small>
                         </div>
-                    </div>
-                    <div class="guide-stat-item">
+                    </a>
+                    <a href="<?= BASE_URL ?>?action=feedbacks/admin" class="guide-stat-item" title="Phản hồi đánh giá">
                         <div class="guide-stat-icon guide-stat-icon-star">
                             <i class="bi bi-star-fill"></i>
                         </div>
@@ -175,7 +175,7 @@
                             <h3 class="guide-stat-value"><?= $guideStats['avg_rating'] ?></h3>
                             <small class="guide-stat-label">Điểm đánh giá TB</small>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -831,6 +831,8 @@ document.addEventListener('DOMContentLoaded', function() {
     display: flex;
     align-items: center;
     gap: 1rem;
+    text-decoration: none;
+    color: inherit;
     transition: all 0.3s ease;
 }
 

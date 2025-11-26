@@ -181,9 +181,12 @@ class FeedbackController
         requireAdmin();
         
         $tourId = $_GET['tour_id'] ?? 0;
+        $guideId = $_GET['guide_id'] ?? 0;
         $feedbacks = [];
-        
-        if ($tourId) {
+
+        if ($guideId) {
+            $feedbacks = $this->feedbackModel->getByGuide($guideId);
+        } elseif ($tourId) {
             $feedbacks = $this->feedbackModel->getByTour($tourId);
         } else {
             $feedbacks = $this->feedbackModel->getAll();

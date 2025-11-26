@@ -19,10 +19,14 @@ class DailyLogController
 
         $user = isLoggedIn() ? getCurrentUser() : null;
         $tourId = $_GET['tour_id'] ?? 0;
+        $guideId = $_GET['guide_id'] ?? 0;
         $logs = [];
         $tour = null;
 
-        if ($tourId) {
+        if ($guideId) {
+            // Lọc theo hướng dẫn viên
+            $logs = $this->dailyLogModel->getByGuide($guideId);
+        } elseif ($tourId) {
             $tour = $this->tourModel->getById($tourId);
             if ($tour) {
                 $logs = $this->dailyLogModel->getByTour($tourId);

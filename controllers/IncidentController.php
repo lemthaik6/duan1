@@ -18,10 +18,13 @@ class IncidentController
         requireLogin();
         
         $tourId = isset($_GET['tour_id']) ? $_GET['tour_id'] : 0;
+        $reporterId = isset($_GET['reporter_id']) ? $_GET['reporter_id'] : 0;
         $incidents = [];
         $tour = null;
 
-        if ($tourId) {
+        if ($reporterId) {
+            $incidents = $this->incidentModel->getByReporter($reporterId);
+        } elseif ($tourId) {
             $tour = $this->tourModel->getById($tourId);
             if ($tour) {
                 $incidents = $this->incidentModel->getByTour($tourId);

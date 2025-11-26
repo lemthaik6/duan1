@@ -23,6 +23,26 @@ class TourIncidentModel extends BaseModel
     }
 
     /**
+     * Lấy tất cả sự cố do 1 hướng dẫn viên báo cáo (hoặc liên quan đến họ)
+     */
+    public function getByReporter($reporterId)
+    {
+        $sql = "SELECT ti.*, 
+                reporter.full_name as reported_by_name,
+                resolver.full_name as resolved_by_name,
+                t.name as tour_name
+                FROM {$this->table} ti
+                LEFT JOIN users reporter ON ti.reported_by = reporter.id
+                LEFT JOIN users resolver ON ti.resolved_by = resolver.id
+                LEFT JOIN tours t ON ti.tour_id = t.id
+                WHERE ti.reported_by = :reported_by
+                ORDER BY ti.incident_date DESC, ti.created_at DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['reported_by' => $reporterId]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Tạo sự cố mới
      */
     public function create($data)
