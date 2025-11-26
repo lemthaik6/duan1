@@ -37,15 +37,37 @@
                                     <th>Loại chi phí</th>
                                     <th>Mô tả</th>
                                     <th>Số tiền</th>
+                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($costs as $cost): ?>
+                                <?php 
+                                $currentUser = getCurrentUser();
+                                foreach ($costs as $cost): 
+                                    // HDV chỉ có thể sửa/xóa chi phí do chính mình tạo
+                                    $canEdit = ($cost['created_by'] == $currentUser['id']);
+                                ?>
                                     <tr>
                                         <td><?= date('d/m/Y', strtotime($cost['date'])) ?></td>
                                         <td><?= htmlspecialchars($cost['category_name'] ?? 'N/A') ?></td>
                                         <td><?= htmlspecialchars($cost['description'] ?? '') ?></td>
                                         <td><strong><?= number_format($cost['amount'], 0, ',', '.') ?> VNĐ</strong></td>
+                                        <td>
+                                            <?php if ($canEdit): ?>
+                                                <a href="<?= BASE_URL ?>?action=costs/edit&id=<?= $cost['id'] ?>" 
+                                                   class="btn btn-sm btn-warning" title="Chỉnh sửa">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a href="<?= BASE_URL ?>?action=costs/delete&id=<?= $cost['id'] ?>" 
+                                                   class="btn btn-sm btn-danger" 
+                                                   title="Xóa"
+                                                   onclick="return confirm('Bạn có chắc chắn muốn xóa chi phí này?')">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-muted small">Chỉ xem</span>
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
