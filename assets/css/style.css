@@ -626,6 +626,107 @@ footer {
 }
 
 /* ===========================
+   GUIDE STATS SECTION
+   =========================== */
+.guide-stats-section {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.guide-stats-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    border-left: 5px solid var(--primary-color);
+}
+
+.guide-stats-header {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.guide-stats-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.guide-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.guide-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.guide-stat-item:hover {
+    background: #f0f1f3;
+    transform: translateY(-2px);
+}
+
+.guide-stat-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.guide-stat-icon-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.guide-stat-icon-success {
+    background: linear-gradient(135deg, var(--success-color), #7ec850);
+}
+
+.guide-stat-icon-warning {
+    background: linear-gradient(135deg, var(--warning-color), #ff8b94);
+}
+
+.guide-stat-icon-star {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #ff9800;
+}
+
+.guide-stat-content {
+    flex-grow: 1;
+}
+
+.guide-stat-value {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark-color);
+}
+
+.guide-stat-label {
+    display: block;
+    margin-top: 0.25rem;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* ===========================
    LIST GROUP ENHANCEMENTS
    =========================== */
 .list-group-item {
