@@ -52,14 +52,28 @@ class CostController
         $tour = null;
         $totalCost = 0;
 
+        // Lấy danh sách các tour được phân công cho HDV này
+        $assignments = $this->assignmentModel->getByGuide($user['id']);
+        $assignedTours = [];
+        foreach ($assignments as $assignment) {
+            $assignedTour = $this->tourModel->getById($assignment['tour_id']);
+            if ($assignedTour) {
+                // Tính tổng chi phí và số lượng chi phí cho mỗi tour
+                $assignedCosts = $this->costModel->getByTour($assignedTour['id']);
+                $assignedTotalCost = $this->costModel->getTotalCost($assignedTour['id'], false);
+                $assignedTour['costs_count'] = count($assignedCosts);
+                $assignedTour['total_cost'] = $assignedTotalCost;
+                $assignedTours[] = $assignedTour;
+            }
+        }
+
         if ($tourId) {
             $tour = $this->tourModel->getById($tourId);
             if ($tour) {
                 // Kiểm tra HDV có được phân công tour này không
-                $assignments = $this->assignmentModel->getByTour($tourId);
                 $isAssigned = false;
                 foreach ($assignments as $assignment) {
-                    if ($assignment['guide_id'] == $user['id']) {
+                    if ($assignment['tour_id'] == $tourId && $assignment['guide_id'] == $user['id']) {
                         $isAssigned = true;
                         break;
                     }
@@ -67,7 +81,7 @@ class CostController
                 
                 if (!$isAssigned) {
                     $_SESSION['error'] = 'Bạn không có quyền xem chi phí của tour này';
-                    header('Location: ' . BASE_URL . '?action=tours/my-tours');
+                    header('Location: ' . BASE_URL . '?action=costs/my-costs');
                     exit;
                 }
 
