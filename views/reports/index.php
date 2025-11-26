@@ -157,8 +157,10 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h3 class="mb-0 fw-bold"><?= $guideStats['total_guides'] ?></h3>
-                                        <small class="text-muted">Tổng số HDV</small>
+                                        <a href="<?= BASE_URL ?>?action=guides/index" class="text-decoration-none text-dark">
+                                            <h3 class="mb-0 fw-bold"><?= $guideStats['total_guides'] ?></h3>
+                                            <small class="text-muted">Tổng số HDV</small>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -170,8 +172,16 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h3 class="mb-0 fw-bold"><?= $guideStats['total_daily_logs'] ?></h3>
-                                        <small class="text-muted">Nhật ký hành trình</small>
+                                        <?php
+                                            $dlUrl = BASE_URL . '?action=daily-logs/index';
+                                            if (!empty($_GET['tour_id'])) {
+                                                $dlUrl .= '&tour_id=' . intval($_GET['tour_id']);
+                                            }
+                                        ?>
+                                        <a href="<?= $dlUrl ?>" class="text-decoration-none text-dark">
+                                            <h3 class="mb-0 fw-bold"><?= $guideStats['total_daily_logs'] ?></h3>
+                                            <small class="text-muted">Nhật ký hành trình</small>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -183,8 +193,16 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h3 class="mb-0 fw-bold"><?= $guideStats['total_incidents'] ?></h3>
-                                        <small class="text-muted">Sự cố đã báo</small>
+                                        <?php
+                                            $incUrl = BASE_URL . '?action=incidents/index';
+                                            if (!empty($_GET['tour_id'])) {
+                                                $incUrl .= '&tour_id=' . intval($_GET['tour_id']);
+                                            }
+                                        ?>
+                                        <a href="<?= $incUrl ?>" class="text-decoration-none text-dark">
+                                            <h3 class="mb-0 fw-bold"><?= $guideStats['total_incidents'] ?></h3>
+                                            <small class="text-muted">Sự cố đã báo</small>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -196,8 +214,16 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h3 class="mb-0 fw-bold"><?= $guideStats['avg_rating'] ?></h3>
-                                        <small class="text-muted">Điểm đánh giá TB</small>
+                                        <?php
+                                            $fbUrl = BASE_URL . '?action=feedbacks/admin';
+                                            if (!empty($_GET['tour_id'])) {
+                                                $fbUrl .= '&tour_id=' . intval($_GET['tour_id']);
+                                            }
+                                        ?>
+                                        <a href="<?= $fbUrl ?>" class="text-decoration-none text-dark">
+                                            <h3 class="mb-0 fw-bold"><?= $guideStats['avg_rating'] ?></h3>
+                                            <small class="text-muted">Điểm đánh giá TB</small>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
