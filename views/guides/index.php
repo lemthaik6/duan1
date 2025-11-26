@@ -47,6 +47,12 @@
                                         <a href="<?= BASE_URL ?>?action=guides/edit&id=<?= $guide['id'] ?>" class="btn btn-sm btn-warning" title="Sửa">
                                             <i class="bi bi-pencil"></i>
                                         </a>
+                                        <form method="post" action="<?= BASE_URL ?>?action=guides/delete" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa hướng dẫn viên này?');">
+                                            <input type="hidden" name="id" value="<?= $guide['id'] ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
