@@ -17,8 +17,10 @@ class GuideController
         requireAdmin();
         
         $guides = $this->userModel->getGuides();
-        foreach ($guides as &$guide) {
-            $guide['total_tours'] = $this->userModel->countToursByGuide($guide['id']);
+        if (!empty($guides) && is_array($guides)) {
+            foreach ($guides as $k => $guide) {
+                $guides[$k]['total_tours'] = $this->userModel->countToursByGuide($guide['id']);
+            }
         }
         
         $title = 'Quản lý Hướng dẫn viên';
