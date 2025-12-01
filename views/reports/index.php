@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <!-- Thống kê từ HDV -->
+   
     <?php if (isset($guideStats)): ?>
         <div class="guide-stats-section">
             <div class="guide-stats-card">
