@@ -1,5 +1,5 @@
 <div class="reports-container">
-    <!-- Header -->
+  
     <div class="reports-header">
         <div>
             <h2 class="reports-title">
@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <!-- Bộ lọc -->
+    
     <div class="filter-card">
         <div class="filter-card-body">
             <form method="GET" action="" class="filter-form">
@@ -50,7 +50,7 @@
         </div>
     </div>
 
-    <!-- Tổng quan tài chính -->
+    
     <div class="stats-grid">
         <div class="stat-card stat-card-revenue">
             <div class="stat-card-content">
