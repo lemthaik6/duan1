@@ -77,40 +77,6 @@
                                         </td>
                                     <?php endif; ?>
                                 </tr>
-
-                                <!-- Modal cập nhật yêu cầu đặc biệt -->
-                                <?php if (isGuide()): ?>
-                                    <div class="modal fade" id="specialRequestModal<?= $customer['id'] ?>" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <form method="POST" action="<?= BASE_URL ?>?action=customers/updateSpecialRequests">
-                                                    <input type="hidden" name="id" value="<?= $customer['id'] ?>">
-                                                    <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Cập nhật yêu cầu đặc biệt</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Khách hàng</label>
-                                                            <input type="text" class="form-control" value="<?= htmlspecialchars($customer['full_name']) ?>" disabled>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Yêu cầu đặc biệt</label>
-                                                            <textarea name="special_requests" class="form-control" rows="4" 
-                                                                      placeholder="Ví dụ: Ăn chay, dị ứng hải sản, bệnh tim mạch, cần xe lăn..."><?= htmlspecialchars($customer['special_requests'] ?? '') ?></textarea>
-                                                            <small class="text-muted">Nhập các yêu cầu đặc biệt của khách (ăn chay, bệnh lý, dị ứng, v.v.)</small>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                                        <button type="submit" class="btn btn-primary">Lưu</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -121,4 +87,40 @@
         </div>
     </div>
 </div>
+
+<!-- Special Request Modals Container - Must be completely outside card and container for proper z-index stacking -->
+<?php if (!empty($customers) && isGuide()): ?>
+    <?php foreach ($customers as $customer): ?>
+    <div class="modal fade" id="specialRequestModal<?= $customer['id'] ?>" tabindex="-1" aria-labelledby="specialRequestModalLabel<?= $customer['id'] ?>" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="<?= BASE_URL ?>?action=customers/updateSpecialRequests">
+                    <input type="hidden" name="id" value="<?= $customer['id'] ?>">
+                    <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="specialRequestModalLabel<?= $customer['id'] ?>">Cập nhật yêu cầu đặc biệt</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Khách hàng</label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($customer['full_name']) ?>" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Yêu cầu đặc biệt</label>
+                            <textarea name="special_requests" class="form-control" rows="4" 
+                                      placeholder="Ví dụ: Ăn chay, dị ứng hải sản, bệnh tim mạch, cần xe lăn..."><?= htmlspecialchars($customer['special_requests'] ?? '') ?></textarea>
+                            <small class="text-muted">Nhập các yêu cầu đặc biệt của khách (ăn chay, bệnh lý, dị ứng, v.v.)</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 

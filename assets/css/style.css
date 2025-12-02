@@ -332,6 +332,47 @@ a:hover {
 }
 
 /* ===========================
+   TABLE RESPONSIVE FIXES
+   =========================== */
+.table-responsive-no-scroll {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure modals are not affected by table-responsive container */
+.modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 9998 !important;
+}
+
+.modal-dialog {
+    position: relative !important;
+    z-index: 9999 !important;
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+    overflow: hidden !important;
+}
+
+/* ===========================
    BADGES
    =========================== */
 .badge {

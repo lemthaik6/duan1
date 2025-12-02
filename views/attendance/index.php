@@ -87,7 +87,7 @@
         </div>
         <div class="card-body">
             <?php if (!empty($customers)): ?>
-                <div class="table-responsive">
+                <div class="table-responsive table-responsive-no-scroll">
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -151,44 +151,6 @@
                                         </button>
                                     </td>
                                 </tr>
-
-                                <!-- Modal điểm danh -->
-                                <div class="modal fade" id="attendanceModal<?= $customer['id'] ?>" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <form method="POST" action="">
-                                                <input type="hidden" name="customer_id" value="<?= $customer['id'] ?>">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Điểm danh: <?= htmlspecialchars($customer['full_name']) ?></h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Trạng thái <span class="text-danger">*</span></label>
-                                                        <select name="status" class="form-select" required>
-                                                            <option value="present" <?= $status === 'present' ? 'selected' : '' ?>>Có mặt</option>
-                                                            <option value="absent" <?= $status === 'absent' ? 'selected' : '' ?>>Vắng mặt</option>
-                                                            <option value="late" <?= $status === 'late' ? 'selected' : '' ?>>Đi muộn</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Giờ check-in</label>
-                                                        <input type="datetime-local" name="check_in_time" class="form-control" 
-                                                               value="<?= $att && $att['check_in_time'] ? date('Y-m-d\TH:i', strtotime($att['check_in_time'])) : date('Y-m-d\TH:i') ?>">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Ghi chú</label>
-                                                        <textarea name="notes" class="form-control" rows="2"><?= $att ? htmlspecialchars($att['notes'] ?? '') : '' ?></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                                    <button type="submit" class="btn btn-primary">Lưu</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -199,4 +161,50 @@
         </div>
     </div>
 </div>
+
+<!-- Attendance Modals Container - Must be completely outside card and container for proper z-index stacking -->
+<?php if (!empty($customers)): ?>
+    <?php foreach ($customers as $customer): ?>
+        <?php 
+        $att = $attendanceMap[$customer['id']] ?? null;
+        $status = $att['status'] ?? 'not_checked';
+        ?>
+        <div class="modal fade" id="attendanceModal<?= $customer['id'] ?>" tabindex="-1" aria-labelledby="attendanceModalLabel<?= $customer['id'] ?>" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method="POST" action="">
+                        <input type="hidden" name="customer_id" value="<?= $customer['id'] ?>">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="attendanceModalLabel<?= $customer['id'] ?>">Điểm danh: <?= htmlspecialchars($customer['full_name']) ?></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Trạng thái <span class="text-danger">*</span></label>
+                                <select name="status" class="form-select" required>
+                                    <option value="present" <?= $status === 'present' ? 'selected' : '' ?>>Có mặt</option>
+                                    <option value="absent" <?= $status === 'absent' ? 'selected' : '' ?>>Vắng mặt</option>
+                                    <option value="late" <?= $status === 'late' ? 'selected' : '' ?>>Đi muộn</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Giờ check-in</label>
+                                <input type="datetime-local" name="check_in_time" class="form-control" 
+                                       value="<?= $att && $att['check_in_time'] ? date('Y-m-d\TH:i', strtotime($att['check_in_time'])) : date('Y-m-d\TH:i') ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ghi chú</label>
+                                <textarea name="notes" class="form-control" rows="2"><?= $att ? htmlspecialchars($att['notes'] ?? '') : '' ?></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 
