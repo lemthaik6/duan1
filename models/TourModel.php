@@ -118,7 +118,9 @@ class TourModel extends BaseModel
     {
         $fields = [];
         foreach ($data as $key => $value) {
-            $fields[] = "$key = :$key";
+            if ($key !== 'id') {
+                $fields[] = "$key = :$key";
+            }
         }
 
         $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id = :id";

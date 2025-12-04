@@ -36,17 +36,17 @@
             <h5 class="mb-0">Thông tin khách hàng</h5>
         </div>
         <div class="card-body">
-            <form method="POST" action="<?= BASE_URL ?>?action=customers/create&tour_id=<?= $tour['id'] ?>">
+            <form method="POST" action="<?= BASE_URL ?>?action=customers/create&tour_id=<?= $tour['id'] ?>" novalidate>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
-                        <input type="text" name="full_name" class="form-control" required 
+                        <label class="form-label" for="full_name">Họ và tên <span class="text-danger">*</span></label>
+                        <input type="text" id="full_name" name="full_name" class="form-control" required 
                                placeholder="Nhập họ và tên đầy đủ" 
                                value="<?= htmlspecialchars($_POST['full_name'] ?? '') ?>">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Số điện thoại</label>
-                        <input type="tel" name="phone" class="form-control" 
+                        <label class="form-label" for="phone">Số điện thoại</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" 
                                placeholder="Nhập số điện thoại" 
                                value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
                     </div>
@@ -54,29 +54,29 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" 
+                        <label class="form-label" for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" 
                                placeholder="Nhập email" 
                                value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">CMND/CCCD</label>
-                        <input type="text" name="id_card" class="form-control" 
+                        <label class="form-label" for="id_card">CMND/CCCD</label>
+                        <input type="text" id="id_card" name="id_card" class="form-control" 
                                placeholder="Nhập số CMND/CCCD" 
                                value="<?= htmlspecialchars($_POST['id_card'] ?? '') ?>">
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Yêu cầu đặc biệt</label>
-                    <textarea name="special_requests" class="form-control" rows="3" 
+                    <label class="form-label" for="special_requests">Yêu cầu đặc biệt</label>
+                    <textarea id="special_requests" name="special_requests" class="form-control" rows="3" 
                               placeholder="Ví dụ: Ăn chay, dị ứng hải sản, bệnh tim mạch, cần xe lăn..."><?= htmlspecialchars($_POST['special_requests'] ?? '') ?></textarea>
                     <small class="text-muted">Nhập các yêu cầu đặc biệt của khách (ăn chay, bệnh lý, dị ứng, v.v.)</small>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Ghi chú</label>
-                    <textarea name="notes" class="form-control" rows="2" 
+                    <label class="form-label" for="notes">Ghi chú</label>
+                    <textarea id="notes" name="notes" class="form-control" rows="2" 
                               placeholder="Nhập ghi chú về khách hàng (nếu có)"><?= htmlspecialchars($_POST['notes'] ?? '') ?></textarea>
                 </div>
 

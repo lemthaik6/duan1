@@ -91,6 +91,9 @@ class TourFeedbackModel extends BaseModel
         $fields = [];
         
         foreach ($data as $key => $value) {
+            if ($key === 'id') {
+                continue;
+            }
             if ($key === 'rating' && !empty($value)) {
                 $value = (int)$value;
             }

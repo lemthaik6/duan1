@@ -79,6 +79,10 @@ class SupplierModel extends BaseModel
         $fields = [];
         
         foreach ($data as $key => $value) {
+            // Skip 'id' key
+            if ($key === 'id') {
+                continue;
+            }
             // Chuyển empty string thành null cho các field có thể null
             if (in_array($key, ['contact_person', 'phone', 'email', 'address', 'description', 'capacity'])) {
                 $value = ($value === '' || $value === null) ? null : $value;

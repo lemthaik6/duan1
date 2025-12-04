@@ -35,11 +35,17 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', function(e) {
             const inputs = this.querySelectorAll('input[required], textarea[required], select[required]');
             let isValid = true;
+            let errorMessages = [];
+            const currentForm = this;
 
             inputs.forEach(input => {
                 if (!input.value.trim()) {
                     input.classList.add('is-invalid');
                     isValid = false;
+                    // Get label text for error message
+                    const label = currentForm.querySelector(`label[for="${input.id}"]`);
+                    const labelText = label ? label.textContent.replace('*', '').trim() : input.name;
+                    errorMessages.push(labelText);
                 } else {
                     input.classList.remove('is-invalid');
                 }
@@ -47,13 +53,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!isValid) {
                 e.preventDefault();
+                // Show error message to user
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+                alertDiv.innerHTML = `
+                    <i class="bi bi-exclamation-triangle"></i> 
+                    Vui lòng điền đầy đủ các trường bắt buộc: ${errorMessages.join(', ')}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                currentForm.parentNode.insertBefore(alertDiv, currentForm);
             }
         });
     });
 
     // Add ripple effect to buttons
     document.querySelectorAll('button, a.btn').forEach(button => {
+        // Skip modal close buttons to avoid performance issues
+        if (button.classList.contains('btn-close') || button.closest('.modal')) {
+            return;
+        }
+        
         button.addEventListener('click', function(e) {
+            // Skip if click didn't have coordinates (keyboard event)
+            if (e.clientX === 0 && e.clientY === 0) {
+                return;
+            }
+            
             const ripple = document.createElement('span');
             const rect = this.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);

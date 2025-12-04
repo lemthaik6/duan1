@@ -97,33 +97,33 @@
             <?php endif; ?>
         </div>
     </div>
-</div>
 
-<!-- Delete Modals Container - Must be outside container-fluid for proper z-index stacking -->
-<?php if (!empty($customers)): ?>
-    <?php foreach ($customers as $customer): ?>
-    <div class="modal fade" id="deleteModal<?= $customer['id'] ?>" tabindex="-1" aria-labelledby="deleteModalLabel<?= $customer['id'] ?>" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form method="POST" action="<?= BASE_URL ?>?action=customers/delete">
-                    <input type="hidden" name="id" value="<?= $customer['id'] ?>">
-                    <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel<?= $customer['id'] ?>">Xác nhận xóa</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Bạn có chắc chắn muốn xóa khách hàng <strong><?= htmlspecialchars($customer['full_name']) ?></strong>?</p>
-                        <p class="text-danger"><small>Hành động này không thể hoàn tác!</small></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-danger">Xóa</button>
-                    </div>
-                </form>
+    <!-- Delete Modals - Positioned inside card but outside table for proper display -->
+    <?php if (!empty($customers)): ?>
+        <?php foreach ($customers as $customer): ?>
+        <div class="modal fade" id="deleteModal<?= $customer['id'] ?>" tabindex="-1" aria-labelledby="deleteModalLabel<?= $customer['id'] ?>" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method="POST" action="<?= BASE_URL ?>?action=customers/delete">
+                        <input type="hidden" name="id" value="<?= $customer['id'] ?>">
+                        <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel<?= $customer['id'] ?>">Xác nhận xóa</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Bạn có chắc chắn muốn xóa khách hàng <strong><?= htmlspecialchars($customer['full_name']) ?></strong>?</p>
+                            <p class="text-danger"><small>Hành động này không thể hoàn tác!</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-danger">Xóa</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <?php endforeach; ?>
-<?php endif; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
 

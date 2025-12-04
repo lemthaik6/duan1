@@ -35,7 +35,10 @@ class TourCustomerModel extends BaseModel
     {
         $fields = [];
         foreach ($data as $key => $value) {
-            $fields[] = "$key = :$key";
+            // Skip 'id' key if it exists in data
+            if ($key !== 'id') {
+                $fields[] = "$key = :$key";
+            }
         }
 
         $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id = :id";
