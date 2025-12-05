@@ -11,6 +11,7 @@ class TourController
     private $dailyLogModel;
     private $incidentModel;
     private $userModel;
+    private $vehicleAssignmentModel;
 
     public function __construct()
     {
@@ -23,6 +24,7 @@ class TourController
         $this->dailyLogModel = new TourDailyLogModel();
         $this->incidentModel = new TourIncidentModel();
         $this->userModel = new UserModel();
+        $this->vehicleAssignmentModel = new TourVehicleAssignmentModel();
     }
 
     public function index()
@@ -85,6 +87,7 @@ class TourController
         $costsOnly = $this->costModel->getCostsOnly($id); // Chỉ chi phí phát sinh
         $dailyLogs = $this->dailyLogModel->getByTour($id);
         $incidents = $this->incidentModel->getByTour($id);
+        $vehicleAssignments = $this->vehicleAssignmentModel->getByTour($id);
         
         $title = 'Chi tiết Tour: ' . $tour['name'];
         if (isAdmin()) {

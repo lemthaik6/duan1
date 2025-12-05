@@ -28,6 +28,7 @@ $controllers = [
     'tours' => 'TourController',
     'guides' => 'GuideController',
     'vehicles' => 'VehicleController',
+    'tour-vehicles' => 'TourVehicleAssignmentController',
     'costs' => 'CostController',
     'daily-logs' => 'DailyLogController',
     'incidents' => 'IncidentController',

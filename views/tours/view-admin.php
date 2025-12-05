@@ -14,6 +14,9 @@
             <a href="<?= BASE_URL ?>?action=hotel-rooms/index&tour_id=<?= $tour['id'] ?>" class="btn btn-info">
                 <i class="bi bi-building"></i> Phân phòng
             </a>
+            <a href="<?= BASE_URL ?>?action=tour-vehicles/index&tour_id=<?= $tour['id'] ?>" class="btn btn-danger">
+                <i class="bi bi-truck"></i> Quản lý xe
+            </a>
             <a href="<?= BASE_URL ?>?action=tours/edit&id=<?= $tour['id'] ?>" class="btn btn-warning">
                 <i class="bi bi-pencil"></i> Chỉnh sửa
             </a>
@@ -193,6 +196,38 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <p class="text-muted">Chưa phân công HDV</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Xe vận chuyển -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-truck"></i> Xe vận chuyển</h5>
+                    <a href="<?= BASE_URL ?>?action=tour-vehicles/index&tour_id=<?= $tour['id'] ?>" class="btn btn-sm btn-danger">
+                        <i class="bi bi-gear"></i> Quản lý
+                    </a>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($vehicleAssignments)): ?>
+                        <?php foreach ($vehicleAssignments as $vehicle): ?>
+                            <div class="mb-2 pb-2 border-bottom">
+                                <strong><?= htmlspecialchars($vehicle['license_plate']) ?></strong>
+                                <br>
+                                <small class="text-muted">
+                                    <?= htmlspecialchars($vehicle['vehicle_type']) ?> - 
+                                    <?= $vehicle['capacity'] ?> chỗ
+                                </small>
+                                <?php if ($vehicle['driver_name']): ?>
+                                    <br><small class="text-info"><i class="bi bi-person"></i> <?= htmlspecialchars($vehicle['driver_name']) ?></small>
+                                <?php endif; ?>
+                                <?php if ($vehicle['usage_purpose']): ?>
+                                    <br><small class="text-secondary"><i class="bi bi-tag"></i> <?= htmlspecialchars($vehicle['usage_purpose']) ?></small>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-muted">Chưa phân công xe</p>
                     <?php endif; ?>
                 </div>
             </div>
