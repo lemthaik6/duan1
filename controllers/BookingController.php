@@ -111,6 +111,16 @@ class BookingController
         }
 
         $tours = $this->tourModel->getAll(['status' => 'upcoming']);
+        $costModel = new TourCostModel();
+        
+        // Tính toán chi phí cho từng tour
+        $tourCosts = [];
+        foreach ($tours as $tour) {
+            $tourCosts[$tour['id']] = [
+                'internal_price' => $tour['internal_price'] ?? 0,
+                'total_cost' => $costModel->getCostsOnly($tour['id']) ?? 0
+            ];
+        }
         
         $title = 'Tạo Booking mới';
         $view = 'bookings/create';
@@ -258,6 +268,51 @@ class BookingController
         }
         
         header('Location: ' . BASE_URL . '?action=bookings/index');
+        exit;
+    }
+
+    /**
+     * API: Tính giá per guest cho tour (bao gồm chi phí phát sinh chia đều)
+     */
+    public function calculatePricePerGuest()
+    {
+        header('Content-Type: application/json');
+        
+        $tourId = $_GET['tour_id'] ?? 0;
+        if (!$tourId) {
+            echo json_encode(['error' => 'Tour ID required']);
+            exit;
+        }
+
+        $tour = $this->tourModel->getById($tourId);
+        if (!$tour) {
+            echo json_encode(['error' => 'Tour not found']);
+            exit;
+        }
+
+        // Lấy chi phí phát sinh
+        $costModel = new TourCostModel();
+        $totalCost = $costModel->getCostsOnly($tourId);
+
+        // Lấy tổng số khách đã booking tour này
+        $existingGuests = $this->bookingModel->getTotalGuestsByTour($tourId);
+
+        // Nếu chưa có khách nào, giả định 1 khách để tính
+        $tourGuestCount = max($existingGuests, 1);
+
+        // Giá per khách = Giá tour nội bộ + (Chi phí phát sinh ÷ Số khách tour)
+        $internalPrice = $tour['internal_price'] ?? 0;
+        $additionalCostPerGuest = $totalCost / $tourGuestCount;
+        $pricePerGuest = $internalPrice + $additionalCostPerGuest;
+
+        echo json_encode([
+            'success' => true,
+            'price_per_guest' => $pricePerGuest,
+            'internal_price' => $internalPrice,
+            'total_cost' => $totalCost,
+            'tour_guest_count' => $tourGuestCount,
+            'additional_cost_per_guest' => $additionalCostPerGuest
+        ]);
         exit;
     }
 }

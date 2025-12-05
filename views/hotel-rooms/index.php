@@ -77,11 +77,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Số phòng</label>
-                            <input type="text" name="room_number" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
                             <label class="form-label">Loại phòng</label>
                             <select name="room_type" class="form-select">
                                 <option value="single">Phòng đơn</option>
@@ -148,18 +143,16 @@
                 </div>
                 <div class="card-body">
                     <?php if (!empty($rooms)): 
-                        // Nhóm phòng theo hotel_name, room_number, check_in_date, check_out_date
+                        // Nhóm phòng theo hotel_name, check_in_date, check_out_date
                         $groupedRooms = [];
                         foreach ($rooms as $room) {
-                            // Tạo key để nhóm phòng (xử lý null/empty room_number)
-                            $roomNumber = !empty($room['room_number']) ? trim($room['room_number']) : '';
-                            $key = trim($room['hotel_name']) . '|' . $roomNumber . '|' . 
+                            // Tạo key để nhóm phòng
+                            $key = trim($room['hotel_name']) . '|' . 
                                    $room['check_in_date'] . '|' . $room['check_out_date'];
                             
                             if (!isset($groupedRooms[$key])) {
                                 $groupedRooms[$key] = [
                                     'hotel_name' => $room['hotel_name'],
-                                    'room_number' => !empty($roomNumber) ? $roomNumber : 'N/A',
                                     'room_type' => $room['room_type'] ?? 'double',
                                     'check_in_date' => $room['check_in_date'],
                                     'check_out_date' => $room['check_out_date'],
@@ -180,7 +173,6 @@
                                     <tr>
                                         <th>Khách hàng</th>
                                         <th>Khách sạn</th>
-                                        <th>Số phòng</th>
                                         <th>Loại phòng</th>
                                         <th>Check-in</th>
                                         <th>Check-out</th>
@@ -219,7 +211,6 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td><?= htmlspecialchars($group['hotel_name']) ?></td>
-                                            <td><?= htmlspecialchars($group['room_number']) ?></td>
                                             <td><?= $roomTypes[$group['room_type']] ?? $group['room_type'] ?></td>
                                             <td>
                                                 <?php 

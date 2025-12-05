@@ -18,6 +18,9 @@
                     <?php endif; ?>
 
                     <form method="POST" action="" class="login-form">
+                        <!-- CSRF Token -->
+                        <?= csrfTokenField() ?>
+                        
                         <div class="mb-4">
                             <label for="username" class="form-label">Tên đăng nhập</label>
                             <div class="input-group">
@@ -40,14 +43,6 @@
                             <i class="bi bi-arrow-right"></i> Đăng nhập
                         </button>
                     </form>
-
-                    <!-- Thông tin đăng nhập mẫu -->
-                    <div class="login-credentials mt-4">
-                        <small class="text-muted">
-                            <strong>Admin:</strong> admin / admin123<br>
-                            <strong>HDV:</strong> guide1 / guide123
-                        </small>
-                    </div>
                 </div>
             </div>
         </div>

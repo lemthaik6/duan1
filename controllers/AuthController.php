@@ -18,20 +18,25 @@ class AuthController
         $error = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'] ?? '';
-            $password = $_POST['password'] ?? '';
-
-            if (empty($username) || empty($password)) {
-                $error = 'Vui lòng nhập đầy đủ thông tin';
+            // ==================== CSRF VALIDATION ====================
+            if (!validateCSRFToken($_POST['csrf_token'] ?? '')) {
+                $error = 'CSRF token không hợp lệ. Vui lòng thử lại.';
             } else {
-                $user = $this->userModel->login($username, $password);
-                
-                if ($user) {
-                    $_SESSION['user'] = $user;
-                    header('Location: ' . BASE_URL . '?action=dashboard');
-                    exit;
+                $username = $_POST['username'] ?? '';
+                $password = $_POST['password'] ?? '';
+
+                if (empty($username) || empty($password)) {
+                    $error = 'Vui lòng nhập đầy đủ thông tin';
                 } else {
-                    $error = 'Tên đăng nhập hoặc mật khẩu không đúng';
+                    $user = $this->userModel->login($username, $password);
+                    
+                    if ($user) {
+                        $_SESSION['user'] = $user;
+                        header('Location: ' . BASE_URL . '?action=dashboard');
+                        exit;
+                    } else {
+                        $error = 'Tên đăng nhập hoặc mật khẩu không đúng';
+                    }
                 }
             }
         }

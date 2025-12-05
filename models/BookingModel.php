@@ -191,5 +191,20 @@ class BookingModel extends BaseModel
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute(['id' => $id]);
     }
+
+    /**
+     * Lấy tổng số khách đã booking cho tour (không bao gồm pending/cancelled)
+     */
+    public function getTotalGuestsByTour($tourId)
+    {
+        $sql = "SELECT SUM(number_of_guests) as total 
+                FROM {$this->table} 
+                WHERE tour_id = :tour_id 
+                AND status IN ('deposited', 'confirmed', 'completed')";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['tour_id' => $tourId]);
+        $result = $stmt->fetch();
+        return $result['total'] ?? 0;
+    }
 }
 

@@ -55,7 +55,6 @@ class HotelRoomController
             
             $tourId = intval($_POST['tour_id'] ?? 0);
             $hotelName = trim($_POST['hotel_name'] ?? '');
-            $roomNumber = trim($_POST['room_number'] ?? '');
             $roomType = $_POST['room_type'] ?? 'double';
             $checkInDate = $_POST['check_in_date'] ?? '';
             $checkOutDate = $_POST['check_out_date'] ?? '';
@@ -101,7 +100,6 @@ class HotelRoomController
                                 'tour_id' => $tourId,
                                 'customer_id' => $customerId,
                                 'hotel_name' => $hotelName,
-                                'room_number' => $roomNumber,
                                 'room_type' => $roomType,
                                 'check_in_date' => $checkInDate,
                                 'check_out_date' => $checkOutDate,

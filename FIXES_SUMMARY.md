@@ -35,7 +35,7 @@
 
 ### 3. ✅ 100+ Modal trong DOM
 **File:** `views/customers/index-admin.php` & `views/customers/index-guide.php`
-- **Trước:** Modal được đặt **TRONG** foreach loop bên trong card-body
+- **Trước:** Modal được đặt **TRONG** foreach loop bên trong card-body0
 - **Sau:** Modal được đặt **NGOÀI** container-fluid, sau vòng foreach
 
 **HTML trước:**

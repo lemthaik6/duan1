@@ -64,7 +64,7 @@ class HotelRoomAssignmentModel extends BaseModel
         if ($existing) {
             // Cập nhật phân phòng hiện có
             $sql = "UPDATE {$this->table} 
-                    SET hotel_name = :hotel_name, room_number = :room_number, 
+                    SET hotel_name = :hotel_name, 
                         room_type = :room_type, check_out_date = :check_out_date,
                         notes = :notes, assigned_by = :assigned_by
                     WHERE id = :id";
@@ -74,10 +74,10 @@ class HotelRoomAssignmentModel extends BaseModel
         } else {
             // Tạo mới phân phòng
             $sql = "INSERT INTO {$this->table} 
-                    (tour_id, customer_id, hotel_name, room_number, room_type, 
+                    (tour_id, customer_id, hotel_name, room_type, 
                      check_in_date, check_out_date, notes, assigned_by) 
                     VALUES 
-                    (:tour_id, :customer_id, :hotel_name, :room_number, :room_type, 
+                    (:tour_id, :customer_id, :hotel_name, :room_type, 
                      :check_in_date, :check_out_date, :notes, :assigned_by)";
             $stmt = $this->pdo->prepare($sql);
             return $stmt->execute($data);
@@ -111,10 +111,9 @@ class HotelRoomAssignmentModel extends BaseModel
         $stmt->execute(['tour_id' => $tourId]);
         $stats = $stmt->fetch();
         
-        // Đếm số phòng unique (nhóm theo hotel_name, room_number, check_in_date, check_out_date)
+        // Đếm số phòng unique (nhóm theo hotel_name, check_in_date, check_out_date)
         $sqlUnique = "SELECT COUNT(DISTINCT CONCAT(
                     COALESCE(hotel_name, ''), '|',
-                    COALESCE(room_number, ''), '|',
                     check_in_date, '|',
                     check_out_date
                 )) as total_rooms

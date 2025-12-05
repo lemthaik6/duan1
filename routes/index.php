@@ -52,20 +52,31 @@ if (isset($controllers[$controllerName])) {
     if (class_exists($controllerClass)) {
         try {
             $controller = new $controllerClass();
+            
+            // Validate method name - only alphanumeric and underscore
+            if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $method)) {
+                die('❌ Yêu cầu không hợp lệ');
+            }
+            
             if (method_exists($controller, $method)) {
                 $controller->$method();
             } else {
                 if (method_exists($controller, 'index')) {
                     $controller->index();
                 } else {
-                    die("Method {$method} không tồn tại trong {$controllerClass}");
+                    // Log error without exposing details
+                    error_log("Method {$method} not found in {$controllerClass}");
+                    die('❌ Có lỗi hệ thống');
                 }
             }
         } catch (Exception $e) {
-            die("Lỗi: " . $e->getMessage());
+            // Log error without exposing details
+            error_log("Exception in route: " . $e->getMessage());
+            die('❌ Có lỗi hệ thống. Vui lòng thử lại sau.');
         }
     } else {
-        die("Controller {$controllerClass} không tồn tại. Vui lòng kiểm tra lại.");
+        error_log("Controller {$controllerClass} not found");
+        die('❌ Yêu cầu không hợp lệ');
     }
 } else {
     if (!isLoggedIn()) {
