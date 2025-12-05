@@ -40,14 +40,22 @@ class CustomerAttendanceModel extends BaseModel
         $existing = $stmt->fetch();
 
         if ($existing) {
+            // UPDATE: Chỉ sử dụng các tham số cần thiết
             $sql = "UPDATE {$this->table} 
                     SET status = :status, check_in_time = :check_in_time, 
                         notes = :notes, recorded_by = :recorded_by
                     WHERE id = :id";
-            $data['id'] = $existing['id'];
+            $updateParams = [
+                'status' => $data['status'],
+                'check_in_time' => $data['check_in_time'],
+                'notes' => $data['notes'],
+                'recorded_by' => $data['recorded_by'],
+                'id' => $existing['id']
+            ];
             $stmt = $this->pdo->prepare($sql);
-            return $stmt->execute($data);
+            return $stmt->execute($updateParams);
         } else {
+            // INSERT: Sử dụng tất cả các tham số
             $sql = "INSERT INTO {$this->table} 
                     (tour_id, customer_id, date, status, check_in_time, notes, recorded_by) 
                     VALUES 

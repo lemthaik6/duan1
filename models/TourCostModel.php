@@ -137,30 +137,32 @@ class TourCostModel extends BaseModel
         $fields = [];
         $params = [];
 
+        // Các trường bắt buộc
         $fields[] = 'tour_id';
-        $params['tour_id'] = $data['tour_id'];
+        $params['tour_id'] = $data['tour_id'] ?? null;
 
         $fields[] = 'cost_category_id';
-        $params['cost_category_id'] = $data['cost_category_id'];
+        $params['cost_category_id'] = $data['cost_category_id'] ?? null;
 
+        $fields[] = 'amount';
+        $params['amount'] = $data['amount'] ?? 0;
+
+        $fields[] = 'date';
+        $params['date'] = $data['date'] ?? date('Y-m-d');
+
+        $fields[] = 'created_by';
+        $params['created_by'] = $data['created_by'] ?? null;
+
+        // Các trường không bắt buộc
         if (!empty($data['description'])) {
             $fields[] = 'description';
             $params['description'] = $data['description'];
         }
 
-        $fields[] = 'amount';
-        $params['amount'] = $data['amount'];
-
-        $fields[] = 'date';
-        $params['date'] = $data['date'] ?? date('Y-m-d');
-
         if (!empty($data['invoice_image'])) {
             $fields[] = 'invoice_image';
             $params['invoice_image'] = $data['invoice_image'];
         }
-
-        $fields[] = 'created_by';
-        $params['created_by'] = $data['created_by'];
 
         $placeholders = implode(', ', array_map(fn($f) => ":$f", $fields));
         $sql = "INSERT INTO {$this->table} (" . implode(', ', $fields) . ") 
