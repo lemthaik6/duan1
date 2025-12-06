@@ -79,5 +79,25 @@ class TourDailyLogModel extends BaseModel
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($data);
     }
-}
 
+    /**
+     * Xóa nhật ký
+     */
+    public function delete($id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
+
+    /**
+     * Lấy nhật ký theo ID
+     */
+    public function getById($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
+}

@@ -12,6 +12,8 @@ class TourController
     private $incidentModel;
     private $userModel;
     private $vehicleAssignmentModel;
+    private $policyModel;
+    private $hotelRoomAssignmentModel;
 
     public function __construct()
     {
@@ -25,6 +27,8 @@ class TourController
         $this->incidentModel = new TourIncidentModel();
         $this->userModel = new UserModel();
         $this->vehicleAssignmentModel = new TourVehicleAssignmentModel();
+        $this->policyModel = new TourPolicyModel();
+        $this->hotelRoomAssignmentModel = new HotelRoomAssignmentModel();
     }
 
     public function index()
@@ -88,6 +92,8 @@ class TourController
         $dailyLogs = $this->dailyLogModel->getByTour($id);
         $incidents = $this->incidentModel->getByTour($id);
         $vehicleAssignments = $this->vehicleAssignmentModel->getByTour($id);
+        $policies = $this->policyModel->getByTour($id);
+        $hotelRoomAssignments = $this->hotelRoomAssignmentModel->getByTour($id);
         
         $title = 'Chi tiết Tour: ' . $tour['name'];
         if (isAdmin()) {

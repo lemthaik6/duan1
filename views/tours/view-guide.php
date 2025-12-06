@@ -123,9 +123,26 @@
                 <div class="card-body">
                     <?php if (!empty($dailyLogs)): ?>
                         <?php foreach (array_slice($dailyLogs, 0, 3) as $log): ?>
-                            <div class="mb-3 pb-3 border-bottom">
-                                <strong><?= date('d/m/Y', strtotime($log['date'])) ?></strong>
-                                <p class="mb-1 mt-2"><?= nl2br(htmlspecialchars(substr($log['activities'], 0, 150))) ?><?= strlen($log['activities']) > 150 ? '...' : '' ?></p>
+                            <div class="mb-3 pb-3 border-bottom d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <strong><?= date('d/m/Y', strtotime($log['date'])) ?></strong>
+                                    <p class="mb-0 mt-2"><small><?= nl2br(htmlspecialchars(substr($log['activities'], 0, 150))) ?><?= strlen($log['activities']) > 150 ? '...' : '' ?></small></p>
+                                </div>
+                                <div class="ms-2">
+                                    <a href="<?= BASE_URL ?>?action=daily-logs/edit&id=<?= $log['id'] ?>&tour_id=<?= $tour['id'] ?>" 
+                                       class="btn btn-xs btn-warning" title="Sửa">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="POST" action="<?= BASE_URL ?>?action=daily-logs/delete" 
+                                          style="display: inline;" 
+                                          onsubmit="return confirm('Bạn có chắc muốn xóa nhật ký này?');">
+                                        <input type="hidden" name="id" value="<?= $log['id'] ?>">
+                                        <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+                                        <button type="submit" class="btn btn-xs btn-danger" title="Xóa">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                         <a href="<?= BASE_URL ?>?action=daily-logs/index&tour_id=<?= $tour['id'] ?>" class="btn btn-sm btn-outline-primary">
@@ -148,20 +165,37 @@
                 <div class="card-body">
                     <?php if (!empty($incidents)): ?>
                         <?php foreach (array_slice($incidents, 0, 3) as $incident): ?>
-                            <div class="mb-2 pb-2 border-bottom">
-                                <strong><?= htmlspecialchars($incident['title']) ?></strong>
-                                <br><small class="text-muted">
-                                    <?php 
-                                    $dateToShow = !empty($incident['incident_date']) ? $incident['incident_date'] : ($incident['created_at'] ?? '');
-                                    if ($dateToShow): ?>
-                                        <i class="bi bi-calendar"></i> <?= date('d/m/Y', strtotime($dateToShow)) ?>
-                                        <?php if (!empty($incident['created_at'])): ?>
-                                            | <i class="bi bi-clock"></i> <?= date('H:i', strtotime($incident['created_at'])) ?>
+                            <div class="mb-2 pb-2 border-bottom d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <strong><?= htmlspecialchars($incident['title']) ?></strong>
+                                    <br><small class="text-muted">
+                                        <?php 
+                                        $dateToShow = !empty($incident['incident_date']) ? $incident['incident_date'] : ($incident['created_at'] ?? '');
+                                        if ($dateToShow): ?>
+                                            <i class="bi bi-calendar"></i> <?= date('d/m/Y', strtotime($dateToShow)) ?>
+                                            <?php if (!empty($incident['created_at'])): ?>
+                                                | <i class="bi bi-clock"></i> <?= date('H:i', strtotime($incident['created_at'])) ?>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <i class="bi bi-calendar"></i> Chưa có ngày
                                         <?php endif; ?>
-                                    <?php else: ?>
-                                        <i class="bi bi-calendar"></i> Chưa có ngày
-                                    <?php endif; ?>
-                                </small>
+                                    </small>
+                                </div>
+                                <div class="ms-2">
+                                    <a href="<?= BASE_URL ?>?action=incidents/edit&id=<?= $incident['id'] ?>&tour_id=<?= $tour['id'] ?>" 
+                                       class="btn btn-xs btn-warning" title="Sửa">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="POST" action="<?= BASE_URL ?>?action=incidents/delete" 
+                                          style="display: inline;" 
+                                          onsubmit="return confirm('Bạn có chắc muốn xóa sự cố này?');">
+                                        <input type="hidden" name="id" value="<?= $incident['id'] ?>">
+                                        <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+                                        <button type="submit" class="btn btn-xs btn-danger" title="Xóa">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                         <a href="<?= BASE_URL ?>?action=incidents/index&tour_id=<?= $tour['id'] ?>" class="btn btn-sm btn-outline-danger">
@@ -189,6 +223,91 @@
                        class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-box-arrow-up-right"></i> Mở liên kết
                     </a>
+                </div>
+            </div>
+
+            <!-- Xe vận chuyển -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-truck"></i> Xe vận chuyển</h5>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($vehicleAssignments)): ?>
+                        <?php foreach ($vehicleAssignments as $vehicle): ?>
+                            <div class="mb-2 pb-2 border-bottom">
+                                <strong><?= htmlspecialchars($vehicle['license_plate']) ?></strong>
+                                <br>
+                                <small class="text-muted">
+                                    <?= htmlspecialchars($vehicle['vehicle_type']) ?> - 
+                                    <?= $vehicle['capacity'] ?> chỗ
+                                </small>
+                                <?php if ($vehicle['driver_name']): ?>
+                                    <br><small class="text-info"><i class="bi bi-person"></i> <?= htmlspecialchars($vehicle['driver_name']) ?></small>
+                                <?php endif; ?>
+                                <?php if ($vehicle['usage_purpose']): ?>
+                                    <br><small class="text-secondary"><i class="bi bi-tag"></i> <?= htmlspecialchars($vehicle['usage_purpose']) ?></small>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-muted">Chưa có xe được phân công</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Chính sách tour -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-file-text"></i> Chính sách tour</h5>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($policies)): ?>
+                        <?php foreach (array_slice($policies, 0, 4) as $policy): ?>
+                            <div class="mb-2 pb-2 border-bottom">
+                                <strong><?= htmlspecialchars($policy['title']) ?></strong>
+                                <br>
+                                <small class="text-muted">
+                                    <?= substr(htmlspecialchars($policy['content'] ?? ''), 0, 80) ?>
+                                    <?= strlen($policy['content'] ?? '') > 80 ? '...' : '' ?>
+                                </small>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php if (count($policies) > 4): ?>
+                            <small class="text-muted">... và <?= count($policies) - 4 ?> chính sách khác</small>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p class="text-muted">Chưa có chính sách</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Phân phòng khách sạn -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-building"></i> Phân phòng</h5>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($hotelRoomAssignments)): ?>
+                        <?php foreach (array_slice($hotelRoomAssignments, 0, 4) as $room): ?>
+                            <div class="mb-2 pb-2 border-bottom">
+                                <strong><?= htmlspecialchars($room['customer_name']) ?></strong>
+                                <br>
+                                <small class="text-muted">
+                                    <i class="bi bi-building"></i> <?= htmlspecialchars($room['hotel_name']) ?>
+                                </small>
+                                <br>
+                                <small class="text-secondary">
+                                    <?= date('d/m/Y', strtotime($room['check_in_date'])) ?> - 
+                                    <?= date('d/m/Y', strtotime($room['check_out_date'])) ?>
+                                </small>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php if (count($hotelRoomAssignments) > 4): ?>
+                            <small class="text-muted">... và <?= count($hotelRoomAssignments) - 4 ?> phòng khác</small>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p class="text-muted">Chưa có phân phòng</p>
+                    <?php endif; ?>
                 </div>
             </div>
 

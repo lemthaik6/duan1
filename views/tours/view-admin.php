@@ -232,6 +232,75 @@
                 </div>
             </div>
 
+            <!-- Chính sách tour -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-file-text"></i> Chính sách tour (<?= count($policies ?? []) ?>)</h5>
+                    <a href="<?= BASE_URL ?>?action=tour-policies/index&tour_id=<?= $tour['id'] ?>" class="btn btn-sm btn-primary">
+                        <i class="bi bi-gear"></i> Quản lý
+                    </a>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($policies)): ?>
+                        <?php foreach (array_slice($policies, 0, 5) as $policy): ?>
+                            <div class="mb-2 pb-2 border-bottom">
+                                <strong><?= htmlspecialchars($policy['title']) ?></strong>
+                                <br>
+                                <small class="text-muted">
+                                    <?= substr(htmlspecialchars($policy['content'] ?? ''), 0, 100) ?>
+                                    <?= strlen($policy['content'] ?? '') > 100 ? '...' : '' ?>
+                                </small>
+                                <?php if (isset($policy['priority']) && $policy['priority']): ?>
+                                    <br><small class="badge bg-info"><?= htmlspecialchars($policy['priority']) ?></small>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php if (count($policies) > 5): ?>
+                            <small class="text-muted">... và <?= count($policies) - 5 ?> chính sách khác</small>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p class="text-muted">Chưa có chính sách</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Phân phòng khách sạn -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-building"></i> Phân phòng (<?= count($hotelRoomAssignments ?? []) ?>)</h5>
+                    <a href="<?= BASE_URL ?>?action=hotel-rooms/index&tour_id=<?= $tour['id'] ?>" class="btn btn-sm btn-info">
+                        <i class="bi bi-gear"></i> Quản lý
+                    </a>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($hotelRoomAssignments)): ?>
+                        <?php foreach (array_slice($hotelRoomAssignments, 0, 5) as $room): ?>
+                            <div class="mb-2 pb-2 border-bottom">
+                                <strong><?= htmlspecialchars($room['customer_name']) ?></strong>
+                                <br>
+                                <small class="text-muted">
+                                    <i class="bi bi-building"></i> <?= htmlspecialchars($room['hotel_name']) ?>
+                                </small>
+                                <br>
+                                <small class="text-muted">
+                                    <i class="bi bi-door-closed"></i> Phòng <?= htmlspecialchars($room['room_number'] ?? 'N/A') ?>
+                                </small>
+                                <br>
+                                <small class="text-secondary">
+                                    <?= date('d/m/Y', strtotime($room['check_in_date'])) ?> - 
+                                    <?= date('d/m/Y', strtotime($room['check_out_date'])) ?>
+                                </small>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php if (count($hotelRoomAssignments) > 5): ?>
+                            <small class="text-muted">... và <?= count($hotelRoomAssignments) - 5 ?> phòng khác</small>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p class="text-muted">Chưa có phân phòng</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
             <!-- Khách -->
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">

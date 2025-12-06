@@ -78,6 +78,19 @@
                                         <span class="badge bg-<?= $incident['status'] === 'resolved' ? 'success' : 'warning' ?>">
                                             <?= $incident['status'] === 'resolved' ? 'Đã xử lý' : 'Đang xử lý' ?>
                                         </span>
+                                        <a href="<?= BASE_URL ?>?action=incidents/edit&id=<?= $incident['id'] ?>&tour_id=<?= $tour['id'] ?>" 
+                                           class="btn btn-sm btn-warning" title="Sửa">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form method="POST" action="<?= BASE_URL ?>?action=incidents/delete" 
+                                              style="display: inline;" 
+                                              onsubmit="return confirm('Bạn có chắc muốn xóa sự cố này?');">
+                                            <input type="hidden" name="id" value="<?= $incident['id'] ?>">
+                                            <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                                 

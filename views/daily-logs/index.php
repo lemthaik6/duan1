@@ -47,10 +47,27 @@
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h6 class="mb-0">
-                                        <i class="bi bi-calendar"></i> 
-                                        <?= date('d/m/Y', strtotime($log['date'])) ?>
-                                    </h6>
+                                    <div>
+                                        <h6 class="mb-0">
+                                            <i class="bi bi-calendar"></i> 
+                                            <?= date('d/m/Y', strtotime($log['date'])) ?>
+                                        </h6>
+                                    </div>
+                                    <div>
+                                        <a href="<?= BASE_URL ?>?action=daily-logs/edit&id=<?= $log['id'] ?>&tour_id=<?= $tour['id'] ?>" 
+                                           class="btn btn-sm btn-warning" title="Sửa">
+                                            <i class="bi bi-pencil"></i> Sửa
+                                        </a>
+                                        <form method="POST" action="<?= BASE_URL ?>?action=daily-logs/delete" 
+                                              style="display: inline;" 
+                                              onsubmit="return confirm('Bạn có chắc muốn xóa nhật ký này?');">
+                                            <input type="hidden" name="id" value="<?= $log['id'] ?>">
+                                            <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-2">

@@ -93,5 +93,67 @@ class DailyLogController
         $view = 'daily-logs/create';
         require_once PATH_VIEW_MAIN;
     }
-}
 
+    public function edit()
+    {
+        requireGuide();
+        $user = getCurrentUser();
+        $logId = $_GET['id'] ?? 0;
+        $tourId = $_GET['tour_id'] ?? 0;
+        
+        $log = $this->dailyLogModel->getById($logId);
+        $tour = $this->tourModel->getById($tourId);
+        
+        if (!$log || !$tour || $log['tour_id'] != $tourId) {
+            header('Location: ' . BASE_URL . '?action=daily-logs/index');
+            exit;
+        }
+
+        $error = null;
+        $success = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'id' => $logId,
+                'activities' => $_POST['activities'] ?? '',
+                'customer_status' => $_POST['customer_status'] ?? '',
+                'weather' => $_POST['weather'] ?? '',
+                'traffic' => $_POST['traffic'] ?? '',
+                'notes' => $_POST['notes'] ?? ''
+            ];
+
+            if (empty($data['activities'])) {
+                $error = 'Vui lòng điền hoạt động trong ngày';
+            } else {
+                if ($this->dailyLogModel->update($logId, $data)) {
+                    $success = 'Cập nhật nhật ký thành công!';
+                    header('refresh:2;url=' . BASE_URL . '?action=daily-logs/index&tour_id=' . $tourId);
+                } else {
+                    $error = 'Có lỗi xảy ra khi cập nhật nhật ký';
+                }
+            }
+        }
+
+        $title = 'Sửa nhật ký';
+        $view = 'daily-logs/edit';
+        require_once PATH_VIEW_MAIN;
+    }
+
+    public function delete()
+    {
+        requireGuide();
+        $logId = $_POST['id'] ?? 0;
+        $tourId = $_POST['tour_id'] ?? 0;
+
+        $log = $this->dailyLogModel->getById($logId);
+        
+        if ($log && $log['tour_id'] == $tourId) {
+            $this->dailyLogModel->delete($logId);
+            header('Location: ' . BASE_URL . '?action=daily-logs/index&tour_id=' . $tourId);
+            exit;
+        }
+
+        header('Location: ' . BASE_URL . '?action=daily-logs/index');
+        exit;
+    }
+}

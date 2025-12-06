@@ -94,9 +94,9 @@ class ChatController
 
         // Chỉ creator nhóm hoặc admin (site) hoặc member có role admin mới được thêm
         $memberRow = $this->chatGroupModel->getMember($groupId, $user['id']);
-        $isGroupAdmin = $memberRow && $memberRow['role'] === 'admin';
+        $isGroupAdmin = $memberRow !== null && $memberRow['role'] === 'admin';
 
-        if (!isAdmin() && !$isGroupAdmin && $group['created_by'] != $user['id']) {
+        if (!isAdmin() && !$isGroupAdmin && (!isset($group['created_by']) || $group['created_by'] != $user['id'])) {
             $_SESSION['error'] = 'Bạn không có quyền thêm thành viên';
             header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
             exit;
@@ -142,9 +142,9 @@ class ChatController
 
         // Chỉ có admin site hoặc người tạo nhóm mới được xóa
         $memberRow = $this->chatGroupModel->getMember($groupId, $user['id']);
-        $isGroupAdmin = $memberRow && $memberRow['role'] === 'admin';
+        $isGroupAdmin = $memberRow !== null && $memberRow['role'] === 'admin';
 
-        if (!isAdmin() && !$isGroupAdmin && $group['created_by'] != $user['id']) {
+        if (!isAdmin() && !$isGroupAdmin && (!isset($group['created_by']) || $group['created_by'] != $user['id'])) {
             $_SESSION['error'] = 'Bạn không có quyền xóa nhóm';
             header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
             exit;
@@ -411,12 +411,23 @@ class ChatController
 
         $user = getCurrentUser();
         $groupId = $_GET['group_id'] ?? 0;
-        $afterTime = $_GET['after_time'] ?? date('Y-m-d H:i:s', strtotime('-1 hour'));
+        $afterTime = $_GET['after_time'] ?? null;
 
         // Kiểm tra quyền truy cập
         if (!$this->chatGroupModel->isMember($groupId, $user['id'])) {
             echo json_encode(['success' => false, 'message' => 'Không có quyền truy cập']);
             exit;
+        }
+
+        // Nếu không có afterTime, lấy từ last_read_at của user
+        if (!$afterTime) {
+            $memberInfo = $this->chatGroupModel->getMember($groupId, $user['id']);
+            if ($memberInfo && $memberInfo['last_read_at']) {
+                $afterTime = $memberInfo['last_read_at'];
+            } else {
+                // Nếu chưa có, lấy từ 1 giờ trước
+                $afterTime = date('Y-m-d H:i:s', strtotime('-1 hour'));
+            }
         }
 
         $messages = $this->chatMessageModel->getNewMessages($groupId, $afterTime);
@@ -430,5 +441,88 @@ class ChatController
         ]);
         exit;
     }
+
+    /**
+     * Xóa thành viên khỏi nhóm (POST)
+     */
+    public function removeMember()
+    {
+        requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '?action=chat/index');
+            exit;
+        }
+
+        $user = getCurrentUser();
+        $groupId = $_POST['group_id'] ?? 0;
+        $memberToRemove = $_POST['member_id'] ?? 0;
+
+        $group = $this->chatGroupModel->getById($groupId);
+        if (!$group) {
+            $_SESSION['error'] = 'Nhóm không tồn tại';
+            header('Location: ' . BASE_URL . '?action=chat/index');
+            exit;
+        }
+
+        // Chỉ creator nhóm hoặc admin (site) hoặc member có role admin mới được xóa
+        $memberRow = $this->chatGroupModel->getMember($groupId, $user['id']);
+        $isGroupAdmin = $memberRow !== null && $memberRow['role'] === 'admin';
+
+        if (!isAdmin() && !$isGroupAdmin && (!isset($group['created_by']) || $group['created_by'] != $user['id'])) {
+            $_SESSION['error'] = 'Bạn không có quyền xóa thành viên';
+            header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
+            exit;
+        }
+
+        // Không cho phép xóa chính mình khỏi nhóm
+        if ($memberToRemove == $user['id'] && !isAdmin()) {
+            $_SESSION['error'] = 'Không thể xóa chính bạn. Hãy yêu cầu admin xóa!';
+            header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
+            exit;
+        }
+
+        if ($this->chatGroupModel->removeMember($groupId, $memberToRemove)) {
+            $_SESSION['success'] = 'Xóa thành viên thành công';
+        } else {
+            $_SESSION['error'] = 'Có lỗi xảy ra khi xóa thành viên';
+        }
+
+        header('Location: ' . BASE_URL . '?action=chat/view&group_id=' . $groupId);
+        exit;
+    }
+
+    /**
+     * Xóa tin nhắn (POST - AJAX)
+     */
+    public function deleteMessage()
+    {
+        requireLogin();
+
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            exit;
+        }
+
+        $user = getCurrentUser();
+        $messageId = $_POST['message_id'] ?? 0;
+        $groupId = $_POST['group_id'] ?? 0;
+
+        // Kiểm tra quyền truy cập nhóm
+        if (!$this->chatGroupModel->isMember($groupId, $user['id'])) {
+            echo json_encode(['success' => false, 'message' => 'Bạn không có quyền']);
+            exit;
+        }
+
+        if ($this->chatMessageModel->delete($messageId, $user['id'])) {
+            echo json_encode(['success' => true, 'message' => 'Xóa tin nhắn thành công']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Có lỗi xảy ra khi xóa tin nhắn']);
+        }
+        exit;
+    }
 }
+
 

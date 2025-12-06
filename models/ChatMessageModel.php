@@ -89,10 +89,13 @@ class ChatMessageModel extends BaseModel
             return false;
         }
 
-        // Kiểm tra quyền
-        $user = getCurrentUser();
-        if ($message['user_id'] != $userId && $user['role'] != 'admin') {
-            return false;
+        // Kiểm tra quyền - chỉ người gửi hoặc admin mới được xóa
+        if ($message['user_id'] != $userId) {
+            // Kiểm tra xem user có phải admin không
+            $currentUser = getCurrentUser();
+            if (!$currentUser || $currentUser['role'] != 'admin') {
+                return false;
+            }
         }
 
         $sql = "UPDATE {$this->table} SET deleted_at = NOW() WHERE id = :id";

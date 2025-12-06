@@ -86,5 +86,68 @@ class IncidentController
         $view = 'incidents/create';
         require_once PATH_VIEW_MAIN;
     }
-}
 
+    public function edit()
+    {
+        requireGuide();
+        
+        $incidentId = $_GET['id'] ?? 0;
+        $tourId = $_GET['tour_id'] ?? 0;
+        $incident = $this->incidentModel->getById($incidentId);
+        $tour = $this->tourModel->getById($tourId);
+        
+        if (!$incident || !$tour || $incident['tour_id'] != $tourId) {
+            header('Location: ' . BASE_URL . '?action=incidents/index');
+            exit;
+        }
+
+        $error = null;
+        $success = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'id' => $incidentId,
+                'incident_type' => $_POST['incident_type'] ?? 'other',
+                'title' => $_POST['title'] ?? '',
+                'description' => $_POST['description'] ?? '',
+                'severity' => $_POST['severity'] ?? $incident['severity'],
+                'resolution' => $_POST['resolution'] ?? '',
+                'status' => $_POST['status'] ?? $incident['status']
+            ];
+
+            if (empty($data['title']) || empty($data['description'])) {
+                $error = 'Vui lòng điền đầy đủ thông tin';
+            } else {
+                if ($this->incidentModel->update($incidentId, $data)) {
+                    $success = 'Cập nhật sự cố thành công!';
+                    header('refresh:2;url=' . BASE_URL . '?action=incidents/index&tour_id=' . $tourId);
+                } else {
+                    $error = 'Có lỗi xảy ra khi cập nhật sự cố';
+                }
+            }
+        }
+
+        $title = 'Sửa Báo cáo Sự cố';
+        $view = 'incidents/edit';
+        require_once PATH_VIEW_MAIN;
+    }
+
+    public function delete()
+    {
+        requireGuide();
+        
+        $incidentId = $_POST['id'] ?? 0;
+        $tourId = $_POST['tour_id'] ?? 0;
+
+        $incident = $this->incidentModel->getById($incidentId);
+        
+        if ($incident && $incident['tour_id'] == $tourId) {
+            $this->incidentModel->delete($incidentId);
+            header('Location: ' . BASE_URL . '?action=incidents/index&tour_id=' . $tourId);
+            exit;
+        }
+
+        header('Location: ' . BASE_URL . '?action=incidents/index');
+        exit;
+    }
+}

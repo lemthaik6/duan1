@@ -24,6 +24,8 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=tours/index">Danh sách tour</a></li>
                             <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=tours/create">Tạo tour mới</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=categories/index">Danh mục Tour</a></li>
                         </ul>
                     </li>
                     

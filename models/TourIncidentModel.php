@@ -54,6 +54,27 @@ class TourIncidentModel extends BaseModel
     }
 
     /**
+     * Xóa sự cố
+     */
+    public function delete($id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
+
+    /**
+     * Lấy sự cố theo ID
+     */
+    public function getById($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
+
+    /**
      * Giải quyết sự cố
      */
     public function resolve($id, $resolvedBy, $resolution)

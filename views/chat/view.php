@@ -2,6 +2,22 @@
     <div class="row">
         <!-- Sidebar - Thông tin nhóm -->
         <div class="col-md-3 mb-4">
+            <?php
+            $currentUser = getCurrentUser();
+            // determine if current user can manage group: creator, site admin, or group admin
+            $canManage = false;
+            if (isAdmin() || (isset($group['created_by']) && $group['created_by'] == $currentUser['id'])) {
+                $canManage = true;
+            } else {
+                // find role in members
+                foreach ($members as $m) {
+                    if ($m['user_id'] == $currentUser['id'] && $m['role'] === 'admin') {
+                        $canManage = true;
+                        break;
+                    }
+                }
+            }
+            ?>
             <div class="card sticky-top" style="top: 20px;">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">
@@ -42,6 +58,15 @@
                                             <?= $member['role'] === 'admin' ? '<i class="bi bi-shield-check text-primary"></i> Admin' : 'Thành viên' ?>
                                         </small>
                                     </div>
+                                    <?php if ($canManage && $member['user_id'] != $currentUser['id']): ?>
+                                        <form method="post" action="<?= BASE_URL ?>?action=chat/remove-member" style="display: inline;" onsubmit="return confirm('Bạn có chắc muốn xóa thành viên này?');">
+                                            <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
+                                            <input type="hidden" name="member_id" value="<?= $member['user_id'] ?>">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa thành viên">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -51,24 +76,6 @@
                         <a href="<?= BASE_URL ?>?action=chat/index" class="btn btn-sm btn-outline-secondary w-100 mb-2">
                             <i class="bi bi-arrow-left"></i> Quay lại danh sách
                         </a>
-
-                        <?php
-                        $currentUser = getCurrentUser();
-                        $memberRow = $this->chatGroupModel ?? null; // placeholder to avoid undefined
-                        // determine if current user can manage group: creator, site admin, or group admin
-                        $canManage = false;
-                        if (isAdmin() || (isset($group['created_by']) && $group['created_by'] == $currentUser['id'])) {
-                            $canManage = true;
-                        } else {
-                            // find role in members
-                            foreach ($members as $m) {
-                                if ($m['user_id'] == $currentUser['id'] && $m['role'] === 'admin') {
-                                    $canManage = true;
-                                    break;
-                                }
-                            }
-                        }
-                        ?>
 
                         <?php if ($canManage): ?>
                             <!-- Form thêm thành viên -->
@@ -121,7 +128,7 @@
                             foreach ($messages as $msg): 
                                 $isOwn = $msg['user_id'] == $currentUser['id'];
                             ?>
-                                <div class="d-flex mb-3 <?= $isOwn ? 'justify-content-end' : 'justify-content-start' ?>">
+                                <div class="d-flex mb-3 <?= $isOwn ? 'justify-content-end' : 'justify-content-start' ?>" data-message-id="<?= $msg['id'] ?>">
                                     <div class="message-wrapper" style="max-width: 70%;">
                                         <?php if (!$isOwn): ?>
                                             <div class="d-flex align-items-center mb-1">
@@ -133,7 +140,7 @@
                                             </div>
                                         <?php endif; ?>
                                         
-                                        <div class="message-bubble <?= $isOwn ? 'bg-primary text-white' : 'bg-light' ?> rounded p-2">
+                                        <div class="message-bubble <?= $isOwn ? 'bg-primary text-white' : 'bg-light' ?> rounded p-2 position-relative">
                                             <?php if ($msg['message_type'] === 'image'): ?>
                                                 <img src="<?= BASE_ASSETS_UPLOADS . $msg['file_path'] ?>" 
                                                      class="img-fluid rounded mb-2" 
@@ -155,6 +162,14 @@
                                                 </div>
                                             <?php else: ?>
                                                 <div class="message-text"><?= nl2br(htmlspecialchars($msg['message'])) ?></div>
+                                            <?php endif; ?>
+                                            <?php if ($isOwn || isAdmin()): ?>
+                                                <button type="button" class="btn btn-sm btn-link p-0 position-absolute" 
+                                                        style="top: 5px; right: 5px; font-size: 0.75rem;"
+                                                        onclick="deleteMessage(<?= $msg['id'] ?>, <?= $group['id'] ?>)"
+                                                        title="Xóa">
+                                                    <i class="bi bi-trash text-danger"></i>
+                                                </button>
                                             <?php endif; ?>
                                         </div>
                                         <small class="text-muted d-block mt-1 <?= $isOwn ? 'text-end' : '' ?>">
@@ -266,7 +281,7 @@ function createMessageHtml(msg, isOwn) {
     const time = new Date(msg.created_at).toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'});
     
     return `
-        <div class="d-flex mb-3 ${isOwn ? 'justify-content-end' : 'justify-content-start'}">
+        <div class="d-flex mb-3 ${isOwn ? 'justify-content-end' : 'justify-content-start'}" data-message-id="${msg.id}">
             <div class="message-wrapper" style="max-width: 70%;">
                 ${!isOwn ? `
                     <div class="d-flex align-items-center mb-1">
@@ -277,8 +292,9 @@ function createMessageHtml(msg, isOwn) {
                         <small class="text-muted fw-bold">${escapeHtml(msg.user_name)}</small>
                     </div>
                 ` : ''}
-                <div class="message-bubble ${isOwn ? 'bg-primary text-white' : 'bg-light'} rounded p-2">
+                <div class="message-bubble ${isOwn ? 'bg-primary text-white' : 'bg-light'} rounded p-2 position-relative">
                     ${content}
+                    ${isOwn ? `<button type="button" class="btn btn-sm btn-link p-0 position-absolute" style="top: 5px; right: 5px; font-size: 0.75rem;" onclick="deleteMessage(${msg.id}, ${groupId})" title="Xóa"><i class="bi bi-trash text-danger"></i></button>` : ''}
                 </div>
                 <small class="text-muted d-block mt-1 ${isOwn ? 'text-end' : ''}">${time}</small>
             </div>
@@ -290,6 +306,41 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// Delete message
+function deleteMessage(messageId, groupId) {
+    if (!confirm('Bạn có chắc muốn xóa tin nhắn này?')) {
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('message_id', messageId);
+    formData.append('group_id', groupId);
+
+    fetch(`<?= BASE_URL ?>?action=chat/delete-message`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Tìm và xóa tin nhắn khỏi DOM
+            const messageElements = document.querySelectorAll('[data-message-id]');
+            messageElements.forEach(el => {
+                if (el.dataset.messageId == messageId) {
+                    el.remove();
+                }
+            });
+            alert('Xóa tin nhắn thành công');
+        } else {
+            alert('Lỗi: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting message:', error);
+        alert('Có lỗi xảy ra');
+    });
 }
 
 // Send message
