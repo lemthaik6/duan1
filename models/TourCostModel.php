@@ -19,9 +19,6 @@ class TourCostModel extends BaseModel
         return $stmt->fetch();
     }
 
-    /**
-     * Lấy tất cả chi phí của tour
-     */
     public function getByTour($tourId)
     {
         $sql = "SELECT tc.*, cc.name as category_name, u.full_name as created_by_name
@@ -66,7 +63,6 @@ class TourCostModel extends BaseModel
      */
     public function getTotalCostByTour($tourId = null, $includeInternalPrice = true)
     {
-        // Tính tổng chi phí phát sinh
         $sql = "SELECT SUM(amount) as total FROM {$this->table}";
         $params = [];
         

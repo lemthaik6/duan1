@@ -4,9 +4,6 @@ class TourAssignmentModel extends BaseModel
 {
     protected $table = 'tour_assignments';
 
-    /**
-     * Phân công HDV cho tour
-     */
     public function assign($tourId, $guideId, $assignedBy, $notes = null)
     {
         $sql = "INSERT INTO {$this->table} (tour_id, guide_id, assigned_by, notes) 
@@ -20,9 +17,6 @@ class TourAssignmentModel extends BaseModel
         ]);
     }
 
-    /**
-     * Lấy phân công theo tour
-     */
     public function getByTour($tourId)
     {
         $sql = "SELECT ta.*, u.full_name as guide_name, u.email as guide_email, u.phone as guide_phone,
