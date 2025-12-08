@@ -65,8 +65,6 @@ class TourController
             }
             exit;
         }
-
-        // Nếu là Guide, chỉ được xem tour được phân công
         if (isGuide()) {
             $user = getCurrentUser();
             $assignments = $this->assignmentModel->getByTour($id);

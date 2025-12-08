@@ -21,9 +21,6 @@ class TourCategoryModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Lấy danh mục theo ID
-     */
     public function getById($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = :id";
@@ -32,9 +29,6 @@ class TourCategoryModel extends BaseModel
         return $stmt->fetch();
     }
 
-    /**
-     * Tạo danh mục mới
-     */
     public function create($data)
     {
         $sql = "INSERT INTO {$this->table} (name, description, status) 

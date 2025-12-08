@@ -157,10 +157,6 @@ class CostController
         $view = 'costs/create';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Chỉnh sửa chi phí
-     */
     public function edit()
     {
         requireLogin();
@@ -186,12 +182,8 @@ class CostController
             }
             exit;
         }
-
-        // Kiểm tra quyền: HDV chỉ có thể sửa chi phí do chính mình tạo
         if (isGuide()) {
             $user = getCurrentUser();
-            
-            // Kiểm tra HDV có được phân công tour này không
             $assignments = $this->assignmentModel->getByTour($cost['tour_id']);
             $isAssigned = false;
             foreach ($assignments as $assignment) {
@@ -206,8 +198,6 @@ class CostController
                 header('Location: ' . BASE_URL . '?action=costs/my-costs');
                 exit;
             }
-
-            // Kiểm tra chi phí có phải do HDV này tạo không
             if ($cost['created_by'] != $user['id']) {
                 $_SESSION['error'] = 'Bạn chỉ có thể chỉnh sửa chi phí do chính mình tạo';
                 header('Location: ' . BASE_URL . '?action=costs/my-costs&tour_id=' . $cost['tour_id']);
@@ -247,10 +237,6 @@ class CostController
         $view = 'costs/edit';
         require_once PATH_VIEW_MAIN;
     }
-
-    /**
-     * Xóa chi phí
-     */
     public function delete()
     {
         requireLogin();
@@ -266,12 +252,8 @@ class CostController
             }
             exit;
         }
-
-        // Kiểm tra quyền: HDV chỉ có thể xóa chi phí do chính mình tạo
         if (isGuide()) {
             $user = getCurrentUser();
-            
-            // Kiểm tra HDV có được phân công tour này không
             $assignments = $this->assignmentModel->getByTour($cost['tour_id']);
             $isAssigned = false;
             foreach ($assignments as $assignment) {
@@ -286,8 +268,6 @@ class CostController
                 header('Location: ' . BASE_URL . '?action=costs/my-costs');
                 exit;
             }
-
-            // Kiểm tra chi phí có phải do HDV này tạo không
             if ($cost['created_by'] != $user['id']) {
                 $_SESSION['error'] = 'Bạn chỉ có thể xóa chi phí do chính mình tạo';
                 header('Location: ' . BASE_URL . '?action=costs/my-costs&tour_id=' . $cost['tour_id']);
