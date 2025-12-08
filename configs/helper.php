@@ -100,8 +100,6 @@ if (!function_exists('csrfTokenField')) {
         return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
     }
 }
-
-// ==================== OUTPUT ESCAPING ====================
 if (!function_exists('e')) {
     /**
      * Escape output để ngăn XSS
