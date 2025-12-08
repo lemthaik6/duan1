@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="<?= BASE_URL ?>?action=dashboard">
-            <i class="bi bi-airplane-fill"></i> Quản lý Tour
+            <i class="bi bi-airplane-fill"></i> TOUR MANAGER
         </a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -22,10 +22,10 @@
                             <i class="bi bi-map"></i> Quản lý Tour
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=tours/index">Danh sách tour</a></li>
-                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=tours/create">Tạo tour mới</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=tours/index"><i class="bi bi-list-ul"></i> Danh sách tour</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=tours/create"><i class="bi bi-plus-circle"></i> Tạo tour mới</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=categories/index">Danh mục Tour</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=categories/index"><i class="bi bi-folder"></i> Danh mục Tour</a></li>
                         </ul>
                     </li>
                     
@@ -34,8 +34,8 @@
                             <i class="bi bi-people"></i> Quản lý HDV
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=guides/index">Danh sách HDV</a></li>
-                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=guides/create">Thêm HDV mới</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=guides/index"><i class="bi bi-list-ul"></i> Danh sách HDV</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>?action=guides/create"><i class="bi bi-person-plus"></i> Thêm HDV mới</a></li>
                         </ul>
                     </li>
                     
@@ -47,19 +47,19 @@
                     
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=bookings/index">
-                            <i class="bi bi-calendar-check"></i> Quản lý Booking
+                            <i class="bi bi-calendar-check"></i> Booking
                         </a>
                     </li>
                     
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=reports/index">
-                            <i class="bi bi-graph-up"></i> Báo cáo & Thống kê
+                            <i class="bi bi-graph-up"></i> Báo cáo
                         </a>
                     </li>
                     
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=chat/index">
-                            <i class="bi bi-chat-dots"></i> Chat nội bộ
+                            <i class="bi bi-chat-dots"></i> Chat
                         </a>
                     </li>
                 <?php endif; ?>
@@ -73,31 +73,31 @@
                     
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=daily-logs/index">
-                            <i class="bi bi-journal-text"></i> Nhật ký hành trình
+                            <i class="bi bi-journal-text"></i> Nhật ký
                         </a>
                     </li>
                     
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=costs/my-costs">
-                            <i class="bi bi-cash-stack"></i> Cập nhật chi phí
+                            <i class="bi bi-cash-stack"></i> Chi phí
                         </a>
                     </li>
                     
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=incidents/index">
-                            <i class="bi bi-exclamation-triangle"></i> Báo cáo sự cố
+                            <i class="bi bi-exclamation-triangle"></i> Sự cố
                         </a>
                     </li>
                     
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=feedbacks/index">
-                            <i class="bi bi-chat-left-text"></i> Phản hồi đánh giá
+                            <i class="bi bi-chat-left-text"></i> Phản hồi
                         </a>
                     </li>
                     
                     <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>?action=chat/index">
-                            <i class="bi bi-chat-dots"></i> Chat nội bộ
+                            <i class="bi bi-chat-dots"></i> Chat
                         </a>
                     </li>
                 <?php endif; ?>
@@ -125,4 +125,3 @@
 </nav>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-

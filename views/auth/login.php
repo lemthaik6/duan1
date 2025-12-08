@@ -59,7 +59,7 @@
     .login-container {
         min-height: 100vh;
         overflow: hidden;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #ffffff;
     }
 
     .login-container .row {
@@ -74,7 +74,7 @@
         justify-content: center;
         padding: 50px 40px;
         position: relative;
-        box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+        box-shadow: 0 20px 50px rgba(59, 130, 246, 0.15);
     }
 
     .login-content {
@@ -89,7 +89,10 @@
 
     .login-title-vertical h1 {
         font-size: 2.2rem;
-        color: #667eea;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         margin: 0;
         text-align: center;
         line-height: 1.5;
@@ -104,7 +107,7 @@
 
     .login-form .form-label {
         font-weight: 600;
-        color: #333;
+        color: #0f172a;
         margin-bottom: 10px;
         font-size: 0.95rem;
         letter-spacing: 0.3px;
@@ -115,28 +118,34 @@
     }
 
     .login-form .input-group-text {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        border: 2px solid #e0e0e0;
+        background: white;
+        border: 2px solid #e5e7eb;
         border-right: none;
-        color: #667eea;
+        color: #1e90ff;
         font-weight: 600;
         padding: 12px 14px;
     }
 
     .login-form .form-control {
-        border: 2px solid #e0e0e0;
+        border: 2px solid #e5e7eb;
         border-left: none;
         padding: 12px 16px;
         font-weight: 500;
         border-radius: 0 8px 8px 0;
         transition: all 0.3s ease;
         font-family: 'Poppins', sans-serif;
+        color: #0f172a;
+    }
+
+    .login-form .form-control::placeholder {
+        color: #9ca3af;
     }
 
     .login-form .form-control:focus {
-        border-color: #667eea;
+        border-color: #1e90ff;
         border-left: none;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1);
+        background-color: white;
     }
 
     .login-form .input-group-text {
@@ -144,7 +153,7 @@
     }
 
     .btn-login {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
         border: none;
         color: white;
         padding: 14px 28px;
@@ -161,13 +170,13 @@
         gap: 10px;
         font-family: 'Poppins', sans-serif;
         letter-spacing: 0.5px;
-        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
     }
 
     .btn-login:hover {
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
         transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 12px 28px rgba(59, 130, 246, 0.4);
         color: white;
     }
 
@@ -182,23 +191,25 @@
     .login-credentials {
         text-align: center;
         padding: 24px;
-        background: #f8f9fa;
+        background: #f0f8ff;
         border-radius: 10px;
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #1e90ff;
     }
 
     .login-credentials small {
         font-weight: 500;
         line-height: 1.8;
+        color: #334155;
     }
 
     .login-credentials strong {
-        color: #667eea;
+        color: #1e90ff;
+        font-weight: 700;
     }
 
     /* Main area phải - Gradient */
     .login-main-area {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
         position: relative;
         display: flex;
         align-items: flex-end;
