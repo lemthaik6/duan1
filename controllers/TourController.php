@@ -209,15 +209,10 @@ class TourController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xem tour công khai qua QR code (không cần đăng nhập)
-     */
     public function publicView()
     {
         $code = $_GET['code'] ?? '';
         $id = $_GET['id'] ?? 0;
-        
-        // Tìm tour theo code hoặc id
         if ($code) {
             $tour = $this->tourModel->getByCode($code);
         } elseif ($id) {
@@ -233,7 +228,6 @@ class TourController
             return;
         }
 
-        // Lấy thông tin bổ sung
         $itineraries = $this->itineraryModel->getByTour($tour['id']);
         $assignments = $this->assignmentModel->getByTour($tour['id']);
         
