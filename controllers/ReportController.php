@@ -25,7 +25,6 @@ class ReportController
         $stats = $this->tourModel->getStatsByMonth($year);
         $tours = $this->tourModel->getAll();
         
-        // Xây dựng filter cho tính lợi nhuận
         $profitFilters = [];
         if ($tourId) {
             $profitFilters['tour_id'] = $tourId;
@@ -35,15 +34,14 @@ class ReportController
             $profitFilters['date_to'] = "$year-$month-" . date('t', strtotime("$year-$month-01"));
         }
         
-        // Tính lợi nhuận theo công thức: profit = (number_of_guests * price_per_guest) - (fixed_cost + (variable_cost_per_guest * number_of_guests))
+
         $profitData = $this->costModel->calculateProfitByFormulaWithFilters($profitFilters);
         
         $totalRevenue = $profitData['total_revenue'];
         $totalCost = $profitData['fixed_cost'] + $profitData['total_variable_cost'];
         $profit = $profitData['profit'];
         $profitMargin = $profitData['profit_margin'];
-        
-        // Thống kê booking
+
         $bookingStats = [
             'total' => $this->bookingModel->countByStatus(null),
             'pending' => $this->bookingModel->countByStatus('pending'),
@@ -52,8 +50,7 @@ class ReportController
             'completed' => $this->bookingModel->countByStatus('completed'),
             'cancelled' => $this->bookingModel->countByStatus('cancelled'),
         ];
-        
-        // Thống kê từ HDV
+
         $dailyLogModel = new TourDailyLogModel();
         $incidentModel = new TourIncidentModel();
         $feedbackModel = new TourFeedbackModel();
@@ -68,13 +65,13 @@ class ReportController
             'avg_rating' => 0
         ];
         
-        // Tính tổng số nhật ký, sự cố, phản hồi
+
         if ($tourId) {
             $guideStats['total_daily_logs'] = count($dailyLogModel->getByTour($tourId));
             $guideStats['total_incidents'] = count($incidentModel->getByTour($tourId));
             $guideStats['total_feedbacks'] = count($feedbackModel->getByTour($tourId));
         } else {
-            // Lấy tất cả tours để tính tổng
+
             $allTours = $this->tourModel->getAll();
             foreach ($allTours as $tour) {
                 $guideStats['total_daily_logs'] += count($dailyLogModel->getByTour($tour['id']));
@@ -83,7 +80,7 @@ class ReportController
             }
         }
         
-        // Tính điểm đánh giá trung bình
+
         $allFeedbacks = $feedbackModel->getAll();
         if (!empty($allFeedbacks)) {
             $totalRating = 0;
@@ -97,7 +94,7 @@ class ReportController
             $guideStats['avg_rating'] = $count > 0 ? round($totalRating / $count, 1) : 0;
         }
         
-        // Thống kê theo tháng (doanh thu)
+
         $monthlyRevenue = [];
         for ($m = 1; $m <= 12; $m++) {
             $monthFilters = [
@@ -112,9 +109,7 @@ class ReportController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xem chi tiết danh sách hướng dẫn viên
-     */
+
     public function guidesList()
     {
         requireAdmin();
@@ -122,7 +117,7 @@ class ReportController
         $userModel = new UserModel();
         $guideUsers = $userModel->getAll('guide');
         
-        // Lấy thống kê cho mỗi HDV
+
         $guides = [];
         foreach ($guideUsers as $guide) {
             $dailyLogModel = new TourDailyLogModel();
@@ -130,7 +125,7 @@ class ReportController
             $feedbackModel = new TourFeedbackModel();
             $assignmentModel = new TourAssignmentModel();
             
-            // Lấy tất cả tour của HDV
+ 
             $guideAssignments = $assignmentModel->getByGuide($guide['id']);
             $tourIds = array_column($guideAssignments, 'tour_id');
             
