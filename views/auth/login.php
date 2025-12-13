@@ -1,14 +1,14 @@
 <div class="login-container">
     <div class="row g-0 h-100">
-        <!-- Sidebar trái - Form đăng nhập -->
+       
         <div class="col-md-4 login-sidebar">
             <div class="login-content">
-                <!-- Tiêu đề dọc -->
+              
                 <div class="login-title-vertical">
                     <h1 class="fw-bold">Hệ thống Quản lý tour nội bộ</h1>
                 </div>
 
-                <!-- Form đăng nhập -->
+            
                 <div class="login-form-wrapper">
                     <?php if (isset($error)): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
