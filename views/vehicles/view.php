@@ -5,6 +5,11 @@
             <a href="<?= BASE_URL ?>?action=vehicles/edit&id=<?= $vehicle['id'] ?>" class="btn btn-warning">
                 <i class="bi bi-pencil"></i> Chỉnh sửa
             </a>
+            <a href="<?= BASE_URL ?>?action=vehicles/delete&id=<?= $vehicle['id'] ?>" 
+               class="btn btn-danger"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa xe này?')">
+                <i class="bi bi-trash"></i> Xóa
+            </a>
             <a href="<?= BASE_URL ?>?action=vehicles/index" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Quay lại
             </a>

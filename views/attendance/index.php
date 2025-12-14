@@ -82,8 +82,15 @@
 
     <!-- Danh sách khách và điểm danh -->
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Danh sách khách (<?= count($customers) ?>)</h5>
+            <div>
+                <a href="<?= BASE_URL ?>?action=attendance/attendance-all&tour_id=<?= $tour['id'] ?>&date=<?= $date ?>" 
+                   class="btn btn-sm btn-success"
+                   onclick="return confirm('Điểm danh tất cả khách chưa được điểm danh với trạng thái Có mặt?')">
+                    <i class="bi bi-check2-all"></i> Điểm danh tất cả
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <?php if (!empty($customers)): ?>

@@ -113,5 +113,28 @@ class VehicleController
         $view = 'vehicles/edit';
         require_once PATH_VIEW_MAIN;
     }
+
+    public function delete()
+    {
+        requireAdmin();
+        
+        $id = $_GET['id'] ?? 0;
+        $vehicle = $this->vehicleModel->getById($id);
+        
+        if (!$vehicle) {
+            $_SESSION['error'] = 'Xe không tồn tại';
+            header('Location: ' . BASE_URL . '?action=vehicles/index');
+            exit;
+        }
+
+        if ($this->vehicleModel->delete($id)) {
+            $_SESSION['success'] = 'Xóa xe thành công!';
+        } else {
+            $_SESSION['error'] = 'Có lỗi xảy ra khi xóa xe';
+        }
+
+        header('Location: ' . BASE_URL . '?action=vehicles/index');
+        exit;
+    }
 }
 

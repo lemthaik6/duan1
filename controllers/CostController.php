@@ -92,6 +92,58 @@ class CostController
         $view = 'costs/my-costs';
         require_once PATH_VIEW_MAIN;
     }
+    public function view()
+    {
+        requireLogin();
+        
+        $id = $_GET['id'] ?? 0;
+        $cost = $this->costModel->getById($id);
+        
+        if (!$cost) {
+            if (isAdmin()) {
+                header('Location: ' . BASE_URL . '?action=costs/index');
+            } else {
+                header('Location: ' . BASE_URL . '?action=costs/my-costs');
+            }
+            exit;
+        }
+
+        $tour = $this->tourModel->getById($cost['tour_id']);
+        
+        if (!$tour) {
+            if (isAdmin()) {
+                header('Location: ' . BASE_URL . '?action=costs/index');
+            } else {
+                header('Location: ' . BASE_URL . '?action=costs/my-costs');
+            }
+            exit;
+        }
+
+        // Kiểm tra quyền: HDV chỉ có thể xem chi phí của tour được phân công
+        if (isGuide()) {
+            $user = getCurrentUser();
+            
+            $assignments = $this->assignmentModel->getByTour($cost['tour_id']);
+            $isAssigned = false;
+            foreach ($assignments as $assignment) {
+                if ($assignment['guide_id'] == $user['id']) {
+                    $isAssigned = true;
+                    break;
+                }
+            }
+            
+            if (!$isAssigned) {
+                $_SESSION['error'] = 'Bạn không có quyền xem chi phí của tour này';
+                header('Location: ' . BASE_URL . '?action=costs/my-costs');
+                exit;
+            }
+        }
+
+        $title = 'Chi tiết Chi phí - ' . $tour['name'];
+        $view = 'costs/view';
+        require_once PATH_VIEW_MAIN;
+    }
+
     public function create()
     {
         requireLogin();

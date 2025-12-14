@@ -118,7 +118,8 @@
                                         <small><?= htmlspecialchars($log['guide_name'] ?? 'N/A') ?></small>
                                     </td>
                                     <td>
-                                        <small class="text-muted">Tour <?= $log['tour_id'] ?></small>
+                                        <small><strong><?= htmlspecialchars($log['tour_name']) ?></strong></small><br>
+                                        <small class="text-muted">Mã: <?= htmlspecialchars($log['tour_code']) ?></small>
                                     </td>
                                     <td>
                                         <small><?= htmlspecialchars(substr($log['content'] ?? '', 0, 50)) ?>...</small>

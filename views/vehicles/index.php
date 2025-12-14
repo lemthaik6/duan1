@@ -78,6 +78,12 @@
                                            class="btn btn-sm btn-warning" title="Sửa">
                                             <i class="bi bi-pencil"></i>
                                         </a>
+                                        <a href="<?= BASE_URL ?>?action=vehicles/delete&id=<?= $vehicle['id'] ?>" 
+                                           class="btn btn-sm btn-danger" 
+                                           title="Xóa"
+                                           onclick="return confirm('Bạn có chắc chắn muốn xóa xe này?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

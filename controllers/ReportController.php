@@ -204,6 +204,13 @@ class ReportController
             });
         }
         
+        // Thêm tên tour vào mỗi log
+        foreach ($dailyLogs as &$log) {
+            $tour = $this->tourModel->getById($log['tour_id']);
+            $log['tour_name'] = $tour ? $tour['name'] : 'Tour #' . $log['tour_id'];
+            $log['tour_code'] = $tour ? $tour['code'] : 'N/A';
+        }
+        
         $tours = $this->tourModel->getAll();
         
         $title = 'Nhật ký Hành trình';
@@ -246,6 +253,13 @@ class ReportController
             });
         }
         
+        // Thêm tên tour vào mỗi incident
+        foreach ($incidents as &$incident) {
+            $tour = $this->tourModel->getById($incident['tour_id']);
+            $incident['tour_name'] = $tour ? $tour['name'] : 'Tour #' . $incident['tour_id'];
+            $incident['tour_code'] = $tour ? $tour['code'] : 'N/A';
+        }
+        
         $tours = $this->tourModel->getAll();
         
         $title = 'Sự cố';
@@ -280,6 +294,13 @@ class ReportController
             $feedbacks = array_filter($feedbacks, function($feedback) use ($rating) {
                 return (int)$feedback['rating'] === $rating;
             });
+        }
+        
+        // Thêm tên tour vào mỗi feedback
+        foreach ($feedbacks as &$feedback) {
+            $tour = $this->tourModel->getById($feedback['tour_id']);
+            $feedback['tour_name'] = $tour ? $tour['name'] : 'Tour #' . $feedback['tour_id'];
+            $feedback['tour_code'] = $tour ? $tour['code'] : 'N/A';
         }
         
         $tours = $this->tourModel->getAll();

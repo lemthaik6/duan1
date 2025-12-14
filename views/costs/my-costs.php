@@ -130,6 +130,10 @@
                                         <td><?= htmlspecialchars($cost['description'] ?? '') ?></td>
                                         <td><strong><?= number_format($cost['amount'], 0, ',', '.') ?> VNĐ</strong></td>
                                         <td>
+                                            <a href="<?= BASE_URL ?>?action=costs/view&id=<?= $cost['id'] ?>" 
+                                               class="btn btn-sm btn-info" title="Xem chi tiết">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
                                             <?php if ($canEdit): ?>
                                                 <a href="<?= BASE_URL ?>?action=costs/edit&id=<?= $cost['id'] ?>" 
                                                    class="btn btn-sm btn-warning" title="Chỉnh sửa">

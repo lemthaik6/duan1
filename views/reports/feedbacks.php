@@ -167,7 +167,8 @@
                                         <small class="text-muted"><?= htmlspecialchars($feedback['rated_by_name'] ?? 'Khách hàng') ?></small>
                                     </td>
                                     <td>
-                                        <small><?= htmlspecialchars($feedback['tour_name'] ?? '') ?></small>
+                                        <small><strong><?= htmlspecialchars($feedback['tour_name']) ?></strong></small><br>
+                                        <small class="text-muted">Mã: <?= htmlspecialchars($feedback['tour_code']) ?></small>
                                     </td>
                                     <td class="text-center">
                                         <div style="color: #ffc107; font-weight: bold;">

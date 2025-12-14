@@ -139,12 +139,13 @@
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr class="table-header-bg">
-                                <th style="width: 15%">Ngày báo cáo</th>
-                                <th style="width: 25%">Tiêu đề</th>
-                                <th style="width: 15%">Mức độ</th>
-                                <th style="width: 15%">Trạng thái</th>
-                                <th style="width: 15%">Báo cáo bởi</th>
-                                <th style="width: 15%">Thao tác</th>
+                                <th style="width: 12%">Ngày báo cáo</th>
+                                <th style="width: 20%">Tiêu đề</th>
+                                <th style="width: 20%">Tour</th>
+                                <th style="width: 10%">Mức độ</th>
+                                <th style="width: 12%">Trạng thái</th>
+                                <th style="width: 13%">Báo cáo bởi</th>
+                                <th style="width: 13%">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -156,6 +157,10 @@
                                     </td>
                                     <td>
                                         <strong><?= htmlspecialchars($incident['title'] ?? '') ?></strong>
+                                    </td>
+                                    <td>
+                                        <small><strong><?= htmlspecialchars($incident['tour_name']) ?></strong></small><br>
+                                        <small class="text-muted">Mã: <?= htmlspecialchars($incident['tour_code']) ?></small>
                                     </td>
                                     <td>
                                         <?php 

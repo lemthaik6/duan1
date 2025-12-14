@@ -86,8 +86,14 @@
                                         <td><strong><?= number_format($cost['amount'], 0, ',', '.') ?> VNĐ</strong></td>
                                         <td><?= htmlspecialchars($cost['created_by_name'] ?? 'N/A') ?></td>
                                         <td>
-                                            <a href="#" class="btn btn-sm btn-info" title="Xem">
+                                            <a href="<?= BASE_URL ?>?action=costs/view&id=<?= $cost['id'] ?>" class="btn btn-sm btn-info" title="Xem chi tiết">
                                                 <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="<?= BASE_URL ?>?action=costs/edit&id=<?= $cost['id'] ?>" class="btn btn-sm btn-warning" title="Chỉnh sửa">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="<?= BASE_URL ?>?action=costs/delete&id=<?= $cost['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa chi phí này?')" title="Xóa">
+                                                <i class="bi bi-trash"></i>
                                             </a>
                                         </td>
                                     </tr>
