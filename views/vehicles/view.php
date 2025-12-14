@@ -12,7 +12,7 @@
     </div>
 
     <div class="row g-4">
-        <!-- Thông tin chính -->
+      
         <div class="col-md-8">
             <div class="card mb-4">
                 <div class="card-header">
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <!-- Thông tin tài xế -->
+         
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">Thông tin tài xế</h5>
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <!-- Ghi chú -->
+         
             <?php if (!empty($vehicle['notes'])): ?>
                 <div class="card">
                     <div class="card-header">

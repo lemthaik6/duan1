@@ -12,7 +12,7 @@
     </div>
 
     <div class="row g-4">
-        <!-- Thông tin chính -->
+    
         <div class="col-md-8">
             <div class="card mb-4">
                 <div class="card-header">
@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            <!-- Lịch trình -->
+          
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Lịch trình chi tiết</h5>
@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            <!-- Nhật ký tour -->
+         
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="bi bi-journal-text"></i> Nhật ký tour</h5>
@@ -154,7 +154,7 @@
                 </div>
             </div>
 
-            <!-- Sự cố -->
+          
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Sự cố</h5>
@@ -208,9 +208,9 @@
             </div>
         </div>
 
-        <!-- Sidebar -->
+       
         <div class="col-md-4">
-            <!-- QR Code -->
+           
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-qr-code"></i> Mã QR Tour</h5>
@@ -226,7 +226,7 @@
                 </div>
             </div>
 
-            <!-- Xe vận chuyển -->
+         
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-truck"></i> Xe vận chuyển</h5>
@@ -255,7 +255,7 @@
                 </div>
             </div>
 
-            <!-- Chính sách tour -->
+           
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-file-text"></i> Chính sách tour</h5>
@@ -281,7 +281,7 @@
                 </div>
             </div>
 
-            <!-- Phân phòng khách sạn -->
+          
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-building"></i> Phân phòng</h5>
@@ -311,7 +311,7 @@
                 </div>
             </div>
 
-            <!-- Khách -->
+          
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="bi bi-person-check"></i> Khách (<?= count($customers) ?>)</h5>
@@ -341,7 +341,7 @@
                 </div>
             </div>
 
-            <!-- Chi phí -->
+          
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-cash-stack"></i> Tổng chi phí</h5>
@@ -354,7 +354,7 @@
                 </div>
             </div>
 
-            <!-- Công cụ nhanh -->
+         
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-tools"></i> Công cụ</h5>
@@ -384,13 +384,13 @@
 </div>
 
 <script>
-// Tạo QR code cho tour
+
 document.addEventListener('DOMContentLoaded', function() {
     const qrUrl = '<?= BASE_URL ?>?action=tours/public-view&code=<?= urlencode($tour['code']) ?>';
     const qrContainer = document.getElementById('qrcode-guide');
     
     if (typeof QRCode !== 'undefined') {
-        // Tạo canvas element
+     
         const canvas = document.createElement('canvas');
         qrContainer.appendChild(canvas);
         
@@ -404,14 +404,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }, function (error) {
             if (error) {
                 console.error('Lỗi tạo QR code:', error);
-                // Fallback: sử dụng API online
+               
                 qrContainer.innerHTML = 
                     '<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + 
                     encodeURIComponent(qrUrl) + '" alt="QR Code" class="img-fluid">';
             }
         });
     } else {
-        // Fallback: sử dụng API online nếu thư viện không tải được
+     
         qrContainer.innerHTML = 
             '<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + 
             encodeURIComponent(qrUrl) + '" alt="QR Code" class="img-fluid">';
