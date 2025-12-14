@@ -30,15 +30,17 @@
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <label class="form-label">Tên tour <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="name" required>
+                                <input type="text" class="form-control" name="name" required value="<?= htmlspecialchars($_POST['name'] ?? '') ?>">
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Danh mục <span class="text-danger">*</span></label>
                                 <select name="category_id" class="form-select" required>
-                                    <option value="">Chọn danh mục</option>
+                                    <option value="">-- Chọn danh mục --</option>
                                     <?php foreach ($categories as $cat): ?>
-                                        <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name']) ?></option>
+                                        <option value="<?= $cat['id'] ?>" <?= (isset($_POST['category_id']) && $_POST['category_id'] == $cat['id']) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($cat['name']) ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -46,46 +48,46 @@
                             <div class="col-md-6">
                                 <label class="form-label">Cấp độ ưu tiên</label>
                                 <select name="priority_level" class="form-select">
-                                    <option value="low">Thấp</option>
-                                    <option value="medium" selected>Trung bình</option>
-                                    <option value="high">Cao</option>
-                                    <option value="urgent">Khẩn cấp</option>
+                                    <option value="low" <?= (isset($_POST['priority_level']) && $_POST['priority_level'] == 'low') ? 'selected' : '' ?>>Thấp</option>
+                                    <option value="medium" <?= (!isset($_POST['priority_level']) || $_POST['priority_level'] == 'medium') ? 'selected' : '' ?>>Trung bình</option>
+                                    <option value="high" <?= (isset($_POST['priority_level']) && $_POST['priority_level'] == 'high') ? 'selected' : '' ?>>Cao</option>
+                                    <option value="urgent" <?= (isset($_POST['priority_level']) && $_POST['priority_level'] == 'urgent') ? 'selected' : '' ?>>Khẩn cấp</option>
                                 </select>
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" name="start_date" required>
+                                <input type="date" class="form-control" name="start_date" required value="<?= $_POST['start_date'] ?? '' ?>">
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Ngày kết thúc <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" name="end_date" required>
+                                <input type="date" class="form-control" name="end_date" required value="<?= $_POST['end_date'] ?? '' ?>">
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Giá nội bộ (VNĐ)</label>
-                                <input type="number" class="form-control" name="internal_price" min="0" step="1000">
+                                <input type="number" class="form-control" name="internal_price" min="0" step="1000" value="<?= $_POST['internal_price'] ?? '' ?>">
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Trạng thái</label>
                                 <select name="status" class="form-select">
-                                    <option value="upcoming" selected>Sắp diễn ra</option>
-                                    <option value="ongoing">Đang diễn ra</option>
-                                    <option value="completed">Đã hoàn thành</option>
-                                    <option value="cancelled">Đã hủy</option>
+                                    <option value="upcoming" <?= (!isset($_POST['status']) || $_POST['status'] == 'upcoming') ? 'selected' : '' ?>>Sắp diễn ra</option>
+                                    <option value="ongoing" <?= (isset($_POST['status']) && $_POST['status'] == 'ongoing') ? 'selected' : '' ?>>Đang diễn ra</option>
+                                    <option value="completed" <?= (isset($_POST['status']) && $_POST['status'] == 'completed') ? 'selected' : '' ?>>Đã hoàn thành</option>
+                                    <option value="cancelled" <?= (isset($_POST['status']) && $_POST['status'] == 'cancelled') ? 'selected' : '' ?>>Đã hủy</option>
                                 </select>
                             </div>
 
                             <div class="col-md-12">
                                 <label class="form-label">Mô tả</label>
-                                <textarea class="form-control" name="description" rows="3"></textarea>
+                                <textarea class="form-control" name="description" rows="3"><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
                             </div>
 
                             <div class="col-md-12">
                                 <label class="form-label">Lịch trình tổng quan</label>
-                                <textarea class="form-control" name="schedule" rows="4"></textarea>
+                                <textarea class="form-control" name="schedule" rows="4"><?= htmlspecialchars($_POST['schedule'] ?? '') ?></textarea>
                             </div>
 
                             <div class="col-md-12">

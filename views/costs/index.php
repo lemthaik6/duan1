@@ -29,7 +29,7 @@
                             <div class="fs-6"><?= number_format($internalPrice, 0, ',', '.') ?> đ</div>
                         </div>
                         <div class="mb-2">
-                            <small>Chi phí phát sinh:</small>
+                            <small>Chi phí dịch vụ:</small>
                             <div class="fs-6"><?= number_format($costsOnly, 0, ',', '.') ?> đ</div>
                         </div>
                         <hr class="my-2" style="border-color: rgba(255,255,255,0.3);">

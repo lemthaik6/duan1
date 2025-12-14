@@ -35,11 +35,11 @@ class ReportController
             $profitFilters['date_to'] = "$year-$month-" . date('t', strtotime("$year-$month-01"));
         }
         
-        // Tính lợi nhuận theo công thức: profit = (number_of_guests * price_per_guest) - (fixed_cost + (variable_cost_per_guest * number_of_guests))
+        // Tính lợi nhuận theo công thức: profit = total_revenue - ((internal_price - service_cost_per_guest) * number_of_guests)
         $profitData = $this->costModel->calculateProfitByFormulaWithFilters($profitFilters);
         
         $totalRevenue = $profitData['total_revenue'];
-        $totalCost = $profitData['fixed_cost'] + $profitData['total_variable_cost'];
+        $totalCost = $profitData['total_cost'];
         $profit = $profitData['profit'];
         $profitMargin = $profitData['profit_margin'];
         

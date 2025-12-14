@@ -79,7 +79,7 @@
                         <label class="form-label">Tổng tiền (VNĐ)</label>
                         <input type="number" name="total_amount" id="totalAmount" class="form-control" 
                                value="0" min="0" step="1000" required readonly>
-                        <small class="text-muted">Tự động tính: (Giá tour + Chi phí phát sinh ÷ Số khách tour) × Số khách booking</small>
+                        <small class="text-muted">Tự động tính: (Giá tour + Chi phí dịch vụ ÷ Số khách tour) × Số khách booking</small>
                     </div>
 
                     <div class="col-md-4">
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 breakdownText += `Giá tour: ${number_format(data.internal_price)} đ`;
                 
                 if (data.total_cost > 0) {
-                    breakdownText += ` + Chi phí phát sinh: ${number_format(data.total_cost)} đ ÷ ${data.tour_guest_count} khách = ${number_format(data.additional_cost_per_guest)} đ/khách`;
+                    breakdownText += ` + Chi phí dịch vụ: ${number_format(data.total_cost)} đ ÷ ${data.tour_guest_count} khách = ${number_format(data.additional_cost_per_guest)} đ/khách`;
                 }
                 
                 tourCostBreakdown.innerHTML = breakdownText;

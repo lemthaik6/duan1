@@ -348,7 +348,7 @@
                             <strong><?= number_format($internalPrice, 0, ',', '.') ?> đ</strong>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span>Chi phí phát sinh:</span>
+                            <span>Chi phí dịch vụ:</span>
                             <strong><?= number_format($costsOnly, 0, ',', '.') ?> đ</strong>
                         </div>
                         <hr>

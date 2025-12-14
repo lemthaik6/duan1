@@ -108,7 +108,15 @@ class TourModel extends BaseModel
             'created_by' => $data['created_by']
         ];
         
-        return $stmt->execute($params);
+        try {
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            // Log the error for debugging
+            error_log('Tour Create Error: ' . $e->getMessage());
+            error_log('SQL: ' . $sql);
+            error_log('Params: ' . json_encode($params));
+            return false;
+        }
     }
 
     /**
@@ -140,18 +148,27 @@ class TourModel extends BaseModel
     }
 
     /**
-     * Tạo mã tour tự động
+     * Tạo mã tour tự động (dùng timestamp + random để tránh duplicate)
      */
     private function generateTourCode()
     {
         $prefix = 'TOUR';
-        $year = date('Y');
-        $sql = "SELECT COUNT(*) as count FROM {$this->table} WHERE code LIKE :pattern";
+        $timestamp = date('YmdHis');
+        $random = str_pad(mt_rand(0, 999), 3, '0', STR_PAD_LEFT);
+        $code = $prefix . $timestamp . $random;
+        
+        // Double-check để tránh duplicate (extremely unlikely nhưng an toàn)
+        $sql = "SELECT COUNT(*) as count FROM {$this->table} WHERE code = :code";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['pattern' => $prefix . $year . '%']);
+        $stmt->execute(['code' => $code]);
         $result = $stmt->fetch();
-        $number = ($result['count'] ?? 0) + 1;
-        return $prefix . $year . str_pad($number, 4, '0', STR_PAD_LEFT);
+        
+        if ($result['count'] > 0) {
+            // Nếu xảy ra trùng (rất hiếm), thêm một số random khác
+            return $this->generateTourCode();
+        }
+        
+        return $code;
     }
 
     /**

@@ -272,7 +272,7 @@ class BookingController
     }
 
     /**
-     * API: Tính giá per guest cho tour (bao gồm chi phí phát sinh chia đều)
+     * API: Tính giá per guest cho tour (bao gồm chi phí dịch vụ chia đều)
      */
     public function calculatePricePerGuest()
     {
@@ -290,7 +290,7 @@ class BookingController
             exit;
         }
 
-        // Lấy chi phí phát sinh
+        // Lấy chi phí dịch vụ
         $costModel = new TourCostModel();
         $totalCost = $costModel->getCostsOnly($tourId);
 
@@ -300,7 +300,7 @@ class BookingController
         // Nếu chưa có khách nào, giả định 1 khách để tính
         $tourGuestCount = max($existingGuests, 1);
 
-        // Giá per khách = Giá tour nội bộ + (Chi phí phát sinh ÷ Số khách tour)
+        // Giá per khách = Giá tour nội bộ + (Chi phí dịch vụ ÷ Số khách tour)
         $internalPrice = $tour['internal_price'] ?? 0;
         $additionalCostPerGuest = $totalCost / $tourGuestCount;
         $pricePerGuest = $internalPrice + $additionalCostPerGuest;

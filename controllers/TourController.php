@@ -88,7 +88,7 @@ class TourController
         $customers = $this->customerModel->getByTour($id);
         $costs = $this->costModel->getByTour($id);
         $totalCost = $this->costModel->getTotalCost($id, true); // Bao gồm giá gốc nội bộ
-        $costsOnly = $this->costModel->getCostsOnly($id); // Chỉ chi phí phát sinh
+        $costsOnly = $this->costModel->getCostsOnly($id); // Chỉ chi phí dịch vụ
         $dailyLogs = $this->dailyLogModel->getByTour($id);
         $incidents = $this->incidentModel->getByTour($id);
         $vehicleAssignments = $this->vehicleAssignmentModel->getByTour($id);
@@ -113,27 +113,36 @@ class TourController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
-                'name' => $_POST['name'] ?? '',
-                'category_id' => $_POST['category_id'] ?? 0,
-                'description' => $_POST['description'] ?? '',
-                'schedule' => $_POST['schedule'] ?? '',
+                'name' => trim($_POST['name'] ?? ''),
+                'category_id' => intval($_POST['category_id'] ?? 0),
+                'description' => trim($_POST['description'] ?? ''),
+                'schedule' => trim($_POST['schedule'] ?? ''),
                 'start_date' => $_POST['start_date'] ?? '',
                 'end_date' => $_POST['end_date'] ?? '',
-                'internal_price' => !empty($_POST['internal_price']) ? $_POST['internal_price'] : null,
+                'internal_price' => !empty($_POST['internal_price']) ? intval($_POST['internal_price']) : null,
                 'priority_level' => $_POST['priority_level'] ?? 'medium',
                 'status' => $_POST['status'] ?? 'upcoming',
                 'pdf_program_path' => null,
                 'created_by' => getCurrentUser()['id']
             ];
 
-            if (empty($data['name']) || empty($data['start_date']) || empty($data['end_date'])) {
-                $error = 'Vui lòng điền đầy đủ thông tin bắt buộc';
+            // Validation
+            if (empty($data['name'])) {
+                $error = 'Vui lòng nhập tên tour';
+            } elseif (empty($data['category_id']) || $data['category_id'] === 0) {
+                $error = 'Vui lòng chọn danh mục';
+            } elseif (empty($data['start_date'])) {
+                $error = 'Vui lòng chọn ngày bắt đầu';
+            } elseif (empty($data['end_date'])) {
+                $error = 'Vui lòng chọn ngày kết thúc';
+            } elseif (strtotime($data['start_date']) >= strtotime($data['end_date'])) {
+                $error = 'Ngày bắt đầu phải trước ngày kết thúc';
             } else {
                 if ($this->tourModel->create($data)) {
                     $success = 'Tạo tour thành công!';
                     header('refresh:2;url=' . BASE_URL . '?action=tours/index');
                 } else {
-                    $error = 'Có lỗi xảy ra khi tạo tour';
+                    $error = 'Có lỗi xảy ra khi tạo tour. Vui lòng kiểm tra dữ liệu và thử lại.';
                 }
             }
         }

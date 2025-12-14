@@ -36,11 +36,11 @@ class TourCostModel extends BaseModel
     }
 
     /**
-     * Tính tổng chi phí tour (bao gồm giá gốc nội bộ + chi phí phát sinh)
+     * Tính tổng chi phí tour (bao gồm giá gốc nội bộ + chi phí dịch vụ)
      */
     public function getTotalCost($tourId, $includeInternalPrice = true)
     {
-        // Tính tổng chi phí phát sinh
+        // Tính tổng chi phí dịch vụ
         $sql = "SELECT SUM(amount) as total FROM {$this->table} WHERE tour_id = :tour_id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['tour_id' => $tourId]);
@@ -66,7 +66,7 @@ class TourCostModel extends BaseModel
      */
     public function getTotalCostByTour($tourId = null, $includeInternalPrice = true)
     {
-        // Tính tổng chi phí phát sinh
+        // Tính tổng chi phí dịch vụ
         $sql = "SELECT SUM(amount) as total FROM {$this->table}";
         $params = [];
         
@@ -102,7 +102,7 @@ class TourCostModel extends BaseModel
     }
     
     /**
-     * Tính chỉ chi phí phát sinh (không bao gồm giá gốc)
+     * Tính chỉ chi phí dịch vụ (không bao gồm giá gốc)
      */
     public function getCostsOnly($tourId)
     {
@@ -202,11 +202,10 @@ class TourCostModel extends BaseModel
 
     /**
      * Tính lợi nhuận theo công thức:
-     * profit = (number_of_guests * price_per_guest) - (fixed_cost + (variable_cost_per_guest * number_of_guests))
+     * profit = total_revenue - (((internal_price - service_cost_per_guest) * number_of_guests) + total_service_cost)
      * 
      * @param int|null $tourId - ID tour, null để tính cho tất cả
-     * @return array ['number_of_guests' => ..., 'total_revenue' => ..., 'fixed_cost' => ..., 
-     *               'variable_cost_per_guest' => ..., 'total_variable_cost' => ..., 'profit' => ...]
+     * @return array ['number_of_guests' => ..., 'total_revenue' => ..., 'total_cost' => ..., 'profit' => ...]
      */
     public function calculateProfitByFormula($tourId = null)
     {
@@ -218,10 +217,7 @@ class TourCostModel extends BaseModel
         $filters = $tourId ? ['tour_id' => $tourId] : [];
         $totalRevenue = $bookingModel->getTotalRevenue($filters);
         
-        // Tính giá trung bình per guest
-        $pricePerGuest = $totalGuests > 0 ? ($totalRevenue / $totalGuests) : 0;
-        
-        // Lấy chi phí phát sinh (variable costs)
+        // Lấy tổng chi phí dịch vụ
         $sql = "SELECT SUM(amount) as total FROM {$this->table}";
         $params = [];
         if ($tourId) {
@@ -231,34 +227,40 @@ class TourCostModel extends BaseModel
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         $result = $stmt->fetch();
-        $variableCostsTotal = $result['total'] ?? 0;
+        $totalServiceCost = $result['total'] ?? 0;
         
-        // Tính variable cost per guest
-        $variableCostPerGuest = $totalGuests > 0 ? ($variableCostsTotal / $totalGuests) : 0;
+        // Tính chi phí dịch vụ per guest
+        $serviceCostPerGuest = $totalGuests > 0 ? ($totalServiceCost / $totalGuests) : 0;
         
-        // Lấy chi phí cố định (internal price - giá gốc nội bộ)
-        $sql = "SELECT SUM(internal_price) as total FROM tours";
+        // Lấy giá nội bộ
+        $sql = "SELECT AVG(internal_price) as avg_price FROM tours";
         $params = [];
         if ($tourId) {
-            $sql .= " WHERE id = :tour_id";
+            $sql = "SELECT internal_price as avg_price FROM tours WHERE id = :tour_id";
             $params['tour_id'] = $tourId;
         }
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         $result = $stmt->fetch();
-        $fixedCost = $result['total'] ?? 0;
+        $internalPrice = $result['avg_price'] ?? 0;
         
-        // Áp dụng công thức:
-        // profit = (number_of_guests * price_per_guest) - (fixed_cost + (variable_cost_per_guest * number_of_guests))
-        $profit = ($totalGuests * $pricePerGuest) - ($fixedCost + ($variableCostPerGuest * $totalGuests));
+        // Tính chi phí per guest: (giá nội bộ - chi phí dịch vụ per guest)
+        $costPerGuest = $internalPrice - $serviceCostPerGuest;
+        
+        // Tính tổng chi phí: (chi phí per guest × số người) + tổng chi phí dịch vụ
+        $totalCost = ($costPerGuest * $totalGuests) + $totalServiceCost;
+        
+        // Áp dụng công thức: profit = total_revenue - total_cost
+        $profit = $totalRevenue - $totalCost;
         
         return [
             'number_of_guests' => $totalGuests,
-            'price_per_guest' => round($pricePerGuest, 0),
             'total_revenue' => $totalRevenue,
-            'fixed_cost' => $fixedCost,
-            'variable_cost_per_guest' => round($variableCostPerGuest, 0),
-            'total_variable_cost' => $variableCostsTotal,
+            'total_service_cost' => $totalServiceCost,
+            'service_cost_per_guest' => round($serviceCostPerGuest, 0),
+            'internal_price' => round($internalPrice, 0),
+            'cost_per_guest' => round($costPerGuest, 0),
+            'total_cost' => round($totalCost, 0),
             'profit' => round($profit, 0),
             'profit_margin' => $totalRevenue > 0 ? round(($profit / $totalRevenue * 100), 2) : 0
         ];
@@ -266,6 +268,7 @@ class TourCostModel extends BaseModel
 
     /**
      * Tính lợi nhuận theo công thức cho tất cả tours hoặc filter theo điều kiện
+     * profit = total_revenue - (((internal_price - service_cost_per_guest) * number_of_guests) + total_service_cost)
      * Hữu ích cho báo cáo tổng hợp
      */
     public function calculateProfitByFormulaWithFilters($filters = [])
@@ -278,16 +281,14 @@ class TourCostModel extends BaseModel
         // Xây dựng SQL cho khách
         $guestSql = "SELECT SUM(number_of_guests) as total FROM bookings 
                      WHERE status IN ('deposited', 'confirmed', 'completed')";
-        $variableCostSql = "SELECT SUM(amount) as total FROM {$this->table}";
-        $fixedCostSql = "SELECT SUM(internal_price) as total FROM tours";
+        $serviceCostSql = "SELECT SUM(amount) as total FROM {$this->table}";
         
         $params = [];
         
         // Áp dụng filter tour_id
         if (!empty($filters['tour_id'])) {
             $guestSql .= " AND tour_id = :tour_id";
-            $variableCostSql .= " WHERE tour_id = :tour_id";
-            $fixedCostSql .= " WHERE id = :tour_id";
+            $serviceCostSql .= " WHERE tour_id = :tour_id";
             $params['tour_id'] = $filters['tour_id'];
         }
         
@@ -325,34 +326,44 @@ class TourCostModel extends BaseModel
         $result = $stmt->fetch();
         $totalRevenue = $result['total'] ?? 0;
         
-        // Tính giá trung bình per guest
-        $pricePerGuest = $totalGuests > 0 ? ($totalRevenue / $totalGuests) : 0;
-        
-        // Lấy chi phí phát sinh
-        $stmt = $this->pdo->prepare($variableCostSql);
+        // Lấy tổng chi phí dịch vụ
+        $stmt = $this->pdo->prepare($serviceCostSql);
         $stmt->execute($params);
         $result = $stmt->fetch();
-        $variableCostsTotal = $result['total'] ?? 0;
+        $totalServiceCost = $result['total'] ?? 0;
         
-        // Tính variable cost per guest
-        $variableCostPerGuest = $totalGuests > 0 ? ($variableCostsTotal / $totalGuests) : 0;
+        // Tính chi phí dịch vụ per guest
+        $serviceCostPerGuest = $totalGuests > 0 ? ($totalServiceCost / $totalGuests) : 0;
         
-        // Lấy chi phí cố định
-        $stmt = $this->pdo->prepare($fixedCostSql);
+        // Lấy giá nội bộ trung bình từ tour
+        $internalPriceSql = "SELECT AVG(internal_price) as avg_price FROM tours";
+        if (!empty($filters['tour_id'])) {
+            $internalPriceSql = "SELECT internal_price as avg_price FROM tours WHERE id = :tour_id";
+        }
+        $stmt = $this->pdo->prepare($internalPriceSql);
         $stmt->execute($params);
         $result = $stmt->fetch();
-        $fixedCost = $result['total'] ?? 0;
+        $internalPrice = $result['avg_price'] ?? 0;
         
-        // Áp dụng công thức: profit = (number_of_guests * price_per_guest) - (fixed_cost + (variable_cost_per_guest * number_of_guests))
-        $profit = ($totalGuests * $pricePerGuest) - ($fixedCost + ($variableCostPerGuest * $totalGuests));
+        // Tính chi phí per guest: (giá nội bộ - chi phí dịch vụ per guest)
+        $costPerGuest = $internalPrice - $serviceCostPerGuest;
+        
+        // Tính tổng chi phí: (chi phí per guest × số người) + tổng chi phí dịch vụ
+        $totalCost = ($costPerGuest * $totalGuests) + $totalServiceCost;
+        
+        // Áp dụng công thức: profit = total_revenue - total_cost
+        $profit = $totalRevenue - $totalCost;
         
         return [
             'number_of_guests' => $totalGuests,
-            'price_per_guest' => round($pricePerGuest, 0),
             'total_revenue' => round($totalRevenue, 0),
-            'fixed_cost' => round($fixedCost, 0),
-            'variable_cost_per_guest' => round($variableCostPerGuest, 0),
-            'total_variable_cost' => round($variableCostsTotal, 0),
+            'total_service_cost' => round($totalServiceCost, 0),
+            'service_cost_per_guest' => round($serviceCostPerGuest, 0),
+            'internal_price' => round($internalPrice, 0),
+            'cost_per_guest' => round($costPerGuest, 0),
+            'total_cost' => round($totalCost, 0),
+            'fixed_cost' => round($totalCost, 0), // Để compatibility với view hiện tại
+            'total_variable_cost' => round($totalCost, 0),
             'profit' => round($profit, 0),
             'profit_margin' => $totalRevenue > 0 ? round(($profit / $totalRevenue * 100), 2) : 0
         ];

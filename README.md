@@ -41,7 +41,7 @@ Hệ thống quản lý tour nội bộ dành cho công ty du lịch với 2 vai
    - Tình trạng sẵn sàng của xe
 
 5. **Quản lý chi phí – tài chính**
-   - Chi phí theo tour: ăn uống, khách sạn, vé tham quan, xăng xe, chi phí phát sinh
+   - Chi phí theo tour: ăn uống, khách sạn, vé tham quan, xăng xe, chi phí dịch vụ
    - Tự động tính tổng chi phí tour
    - Xuất báo cáo chi phí cuối tour
 
