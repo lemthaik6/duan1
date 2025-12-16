@@ -171,9 +171,7 @@ class ReportController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xem chi tiết nhật ký hành trình
-     */
+
     public function dailyLogs()
     {
         requireAdmin();
@@ -206,9 +204,7 @@ class ReportController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xem chi tiết sự cố
-     */
+
     public function incidents()
     {
         requireAdmin();
@@ -222,19 +218,19 @@ class ReportController
         if ($tourId) {
             $incidents = $incidentModel->getByTour($tourId);
         } else {
-            // Lấy tất cả sự cố từ tất cả tour
+
             $allTours = $this->tourModel->getAll();
             foreach ($allTours as $tour) {
                 $tourIncidents = $incidentModel->getByTour($tour['id']);
                 $incidents = array_merge($incidents, $tourIncidents);
             }
-            // Sắp xếp theo ngày giảm dần
+
             usort($incidents, function($a, $b) {
                 return strtotime($b['incident_date'] ?? $b['created_at']) - strtotime($a['incident_date'] ?? $a['created_at']);
             });
         }
         
-        // Lọc theo status nếu có
+
         if ($status && $status !== 'all') {
             $incidents = array_filter($incidents, function($incident) use ($status) {
                 return $incident['status'] === $status;
@@ -248,9 +244,7 @@ class ReportController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xem chi tiết báo cáo đánh giá
-     */
+
     public function feedbacks()
     {
         requireAdmin();
@@ -308,9 +302,6 @@ class ReportController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xóa nhật ký hành trình
-     */
     public function deleteLog()
     {
         requireAdmin();
@@ -335,9 +326,7 @@ class ReportController
         exit;
     }
 
-    /**
-     * Xóa sự cố
-     */
+
     public function deleteIncident()
     {
         requireAdmin();
@@ -362,9 +351,6 @@ class ReportController
         exit;
     }
 
-    /**
-     * Xóa đánh giá
-     */
     public function deleteFeedback()
     {
         requireAdmin();
