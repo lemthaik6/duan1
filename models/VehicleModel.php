@@ -4,9 +4,6 @@ class VehicleModel extends BaseModel
 {
     protected $table = 'vehicles';
 
-    /**
-     * Lấy tất cả xe
-     */
     public function getAll($status = null)
     {
         $sql = "SELECT * FROM {$this->table}";
@@ -27,9 +24,6 @@ class VehicleModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Lấy xe theo ID
-     */
     public function getById($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = :id";
@@ -38,9 +32,6 @@ class VehicleModel extends BaseModel
         return $stmt->fetch();
     }
 
-    /**
-     * Tạo xe mới
-     */
     public function create($data)
     {
         $sql = "INSERT INTO {$this->table} 
@@ -51,9 +42,7 @@ class VehicleModel extends BaseModel
         return $stmt->execute($data);
     }
 
-    /**
-     * Cập nhật xe
-     */
+
     public function update($id, $data)
     {
         $fields = [];
@@ -69,9 +58,6 @@ class VehicleModel extends BaseModel
         return $stmt->execute($data);
     }
 
-    /**
-     * Xóa xe
-     */
     public function delete($id)
     {
         $sql = "DELETE FROM {$this->table} WHERE id = :id";
@@ -79,9 +65,6 @@ class VehicleModel extends BaseModel
         return $stmt->execute(['id' => $id]);
     }
 
-    /**
-     * Lấy xe sẵn sàng
-     */
     public function getAvailable()
     {
         return $this->getAll('available');

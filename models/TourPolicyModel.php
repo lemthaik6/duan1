@@ -17,9 +17,7 @@ class TourPolicyModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Lấy chính sách theo ID
-     */
+    
     public function getById($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = :id";
@@ -28,9 +26,7 @@ class TourPolicyModel extends BaseModel
         return $stmt->fetch();
     }
 
-    /**
-     * Lấy chính sách theo loại
-     */
+  
     public function getByType($tourId, $policyType)
     {
         $sql = "SELECT * FROM {$this->table} 
@@ -44,9 +40,7 @@ class TourPolicyModel extends BaseModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Tạo chính sách mới
-     */
+   
     public function create($data)
     {
         $sql = "INSERT INTO {$this->table} 

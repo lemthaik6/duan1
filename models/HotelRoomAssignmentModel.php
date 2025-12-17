@@ -25,9 +25,6 @@ class HotelRoomAssignmentModel extends BaseModel
         return $stmt->fetch();
     }
 
-    /**
-     * Lấy phân phòng theo khách
-     */
     public function getByCustomer($customerId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE customer_id = :customer_id ORDER BY check_in_date ASC";
@@ -35,11 +32,7 @@ class HotelRoomAssignmentModel extends BaseModel
         $stmt->execute(['customer_id' => $customerId]);
         return $stmt->fetchAll();
     }
-    /**
-     * Tạo hoặc cập nhật phân phòng
-     * Logic: Nếu đã có phân phòng cho customer trong tour với cùng check_in_date thì update
-     * Nếu không thì tạo mới
-     */
+ 
     public function upsert($data)
     {
         // Validate required fields
@@ -90,10 +83,7 @@ class HotelRoomAssignmentModel extends BaseModel
         return $stmt->execute(['id' => $id]);
     }
 
-    /**
-     * Lấy thống kê phân phòng theo tour
-     * Đếm số phòng unique (nhóm theo hotel_name, room_number, check_in_date, check_out_date)
-     */
+   
     public function getStatsByTour($tourId)
     {
         // Đếm số records (số khách hàng được phân phòng)
@@ -123,7 +113,7 @@ class HotelRoomAssignmentModel extends BaseModel
         $stmtUnique->execute(['tour_id' => $tourId]);
         $uniqueStats = $stmtUnique->fetch();
         
-        // Merge kết quả
+       
         if ($stats && $uniqueStats) {
             $stats['total_rooms'] = $uniqueStats['total_rooms'] ?? 0;
         }

@@ -79,7 +79,7 @@ class VehicleController
         $vehicle = $this->vehicleModel->getById($id);
         
         if (!$vehicle) {
-            header('Location: ' . BASE_URL . '?action=vehicles/index');
+            header(header: 'Location: ' . BASE_URL . '?action=vehicles/index');
             exit;
         }
 

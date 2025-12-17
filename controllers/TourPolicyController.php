@@ -70,9 +70,6 @@ class TourPolicyController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Chỉnh sửa chính sách
-     */
     public function edit()
     {
         requireAdmin();
@@ -114,9 +111,6 @@ class TourPolicyController
         require_once PATH_VIEW_MAIN;
     }
 
-    /**
-     * Xóa chính sách
-     */
     public function delete()
     {
         requireAdmin();
